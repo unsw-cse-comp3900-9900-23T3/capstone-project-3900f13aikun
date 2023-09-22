@@ -1,0 +1,5 @@
+The group has been established and named. We've appointed a Scrum Master and set up the Jira Site. 
+We've also engaged in discussions about the project we intend to undertake, including the programming language and the preliminary selection of libraries and functions. 
+Concurrently, we have outlined rough work allocations for the project, differentiating between backend and frontend tasks. 
+Looking ahead, we are planning to convene another meeting on Tuesday of week 2, to delve deeper into the work allocation proposal. 
+In the interim, we will utilize the time between meetings to enhance our understanding of our project.
