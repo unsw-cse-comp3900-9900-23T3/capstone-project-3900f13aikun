@@ -36,13 +36,13 @@ const InitialDash = () => {
 
 
   useEffect(() => {
-    apiCall(`/get`, 'GET', {}).then((res) => {
-      if (res.error) {
-        alert(res.error);
-      } else {
-        console.log(res)
-      }
-    })
+    // apiCall(`/get`, 'GET', {}).then((res) => {
+    //   if (res.error) {
+    //     alert(res.error);
+    //   } else {
+    //     console.log(res)
+    //   }
+    // })
   }, []);
   function CreateJob() {
     return (
