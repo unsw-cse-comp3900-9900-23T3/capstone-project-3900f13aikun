@@ -1,5 +1,5 @@
 import React from 'react';
-import { apiCall, checkEmail, checkPassword, checkName } from '../components/HelpFunctions';
+import { apiCall, checkEmail, checkPassword, checkName, verifyPassword } from '../components/HelpFunctions';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -22,7 +22,8 @@ const Registerdiv = styled('div')({
 // signup page
 function SignUp() {
   const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [password1, setPassword1] = React.useState('');
+  const [password2, setPassword2] = React.useState('');
   const [name, setName] = React.useState('');
   const [role, setRole] = React.useState('');
 
@@ -41,8 +42,8 @@ function SignUp() {
   }
   // register function
   async function register() {
-    if (checkEmail(email) && checkPassword(password) && checkName(name)) {
-      const res = apiCall('/register', 'POST', { 'email': email, 'password': password, 'role': role });
+    if (checkEmail(email) && checkPassword(password1) && verifyPassword(password1, password2) && checkName(name)) {
+      const res = apiCall('/register', 'POST', { 'email': email, 'password': password1, 'role': role });
       res.then((data) => {
         if (data.error) {
           alert(data.error);
@@ -77,16 +78,20 @@ function SignUp() {
             setEmail(e.target.value);
           }} />
         <br></br>
-        <TextField id="filled-basic" label="password" variant="filled" style={{ width: '400px' }}
+        <TextField id="filled-basic" label="Password" variant="filled" style={{ width: '400px' }}
           onChange={(e) => {
-            setPassword(e.target.value);
+            setPassword1(e.target.value);
+          }} />
+        <br></br>
+        <TextField id="filled-basic" label="Verify Password" variant="filled" style={{ width: '400px' }}
+          onChange={(e) => {
+            setPassword2(e.target.value);
           }} />
         <br></br>
         <TextField id="filled-basic" label="role" variant="filled" style={{ width: '400px' }}
           onChange={(e) => {
             setName(e.target.value);
           }} />
-
       </Box>
 
       <Box sx={{ minWidth: 120 }}>

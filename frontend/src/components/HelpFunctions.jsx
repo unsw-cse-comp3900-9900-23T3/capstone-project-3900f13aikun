@@ -63,11 +63,21 @@ export function checkEmail (email) {
 }
 
 // function to check whether the password is valid
-export function checkPassword (password) {
+export function checkPassword (password1) {
   const passwordmatch = '(?=.*[0-9])(?=.*[a-zA-Z]).{8,30}';
-  if (!password.match(passwordmatch)) {
+  if (!password1.match(passwordmatch)) {
     alert(
       'The password must meet the following criteria:\nAt least 8-digit long\nAt Least 1 number\nAt Least 1 letter'
+    );
+    return false;
+  }
+  return true;
+}
+
+export function verifyPassword (password1, password2) {
+  if (password1 !== password2) {
+    alert(
+      'Ensure that the two passwords are the same'
     );
     return false;
   }

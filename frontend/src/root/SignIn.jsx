@@ -3,8 +3,9 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { apiCall } from '../components/HelpFunctions';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { styled } from '@mui/system';
+import { Typography } from '@mui/material';
 import NavigationBtn from '../components/NavigationBtn';
 
 const Logindiv = styled('div')({
@@ -60,8 +61,9 @@ function SignIn () {
             setPassword(e.target.value);
         }}/>
         <br></br>
-       
-        
+        <Typography>
+          <Link to="/forgot">Forgot password?</Link>
+        </Typography>
       </Box>
           <Button id='loginbutton' role='login' variant="contained" color="success" onKeyDown={keyLogin} onClick={login} sx={{ marginTop: '30px' }}>login</Button>
         </>

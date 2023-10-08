@@ -7,6 +7,7 @@ import SignUp from './root/SignUp';
 import Profile from './root/Profile';
 import SignIn from './root/SignIn';
 import Dashboard from './root/Dashboard';
+import ForgetPassword from './root/ForgotPassword';
 
 
 export const TotalContainer = styled('div')({
@@ -26,6 +27,7 @@ function App () {
             <Route path="/login" element={<SignIn />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/dashboard" element={<Dashboard/>} />
+            <Route path="/forgot" element={<ForgetPassword/>} />
           </Routes>
         </BrowserRouter>
       </TotalContainer>
