@@ -15,3 +15,8 @@ From Tuesday to Thursday, we held a series of meetings to collaborate on the pro
 To enhance efficiency, we adjusted our workload distribution according to our individual strengths and weaknesses we found during the process. 
 My new duty was finishing user stories for all parties and I successfully finished the target. 
 Looking ahead, we intend to schedule another meeting next Sunday or Monday to allocate project-related tasks and further discuss the expectations for delivering cooperation process functionalities.
+
+Week 4
+We divided our workload during a meeting and started work on Sprint 1. 
+It took us a few days to refresh our knowledge of Flask and React, and by the end of this week, we are nearly done with Sprint 1, successfully achieving our target. 
+Our plan is to complete the initial iteration of Sprint 1 next Wednesday and then make improvements on Thursday and Friday.
