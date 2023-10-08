@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
+import NavigationBtn from '../components/NavigationBtn';
 
 const steps = ["Send request code", "Verify code", "Reset password"];
 
@@ -33,136 +34,139 @@ export default function ForgetPassword() {
   };
 
   return (
-    <Box sx={{ width: "80%", marginTop: "100px", marginRight: "30px" }}>
-      <Stepper activeStep={activeStep}>
-        {steps.map((label, index) => {
-          const stepProps = {};
-          const labelProps = {};
+    <>
+      <NavigationBtn></NavigationBtn>
+      <Box sx={{ width: "80%", marginTop: "100px", marginRight: "30px" }}>
+        <Stepper activeStep={activeStep}>
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
 
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel {...labelProps}>{label}</StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
 
-      <>
-        {activeStep === 0 ? (
-          <>
-            <Box
-              component="form"
-              sx={{
-                paddingTop: 10,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-              noValidate
-              autoComplete="off">
-              <TextField
-                label="Email"
-                variant="filled"
-                value={email}
-                style={{ width: "400px" }}
-                onChange={(e) => {
-                  setEmail(e.target.value);
+        <>
+          {activeStep === 0 ? (
+            <>
+              <Box
+                component="form"
+                sx={{
+                  paddingTop: 10,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
-              />
-              <Button
-                variant="contained"
-                color="success"
-                sx={{ marginTop: "30px" }}
-                onClick={() => {
-                  handleSendClick();
-                }}>
-                Send
-              </Button>
-            </Box>
-          </>
-        ) : null}
-        {activeStep === 1 ? (
-          <>
-            <Box
-              component="form"
-              sx={{
-                paddingTop: 10,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-              noValidate
-              autoComplete="off">
-              <Typography sx={{ marginBottom: 2 }}>We have already sent the code to your email.</Typography>
-              <TextField
-                label="Code"
-                variant="filled"
-                value={code}
-                style={{ width: "400px" }}
-                onChange={(e) => {
-                  setCode(e.target.value);
+                noValidate
+                autoComplete="off">
+                <TextField
+                  label="Email"
+                  variant="filled"
+                  value={email}
+                  style={{ width: "400px" }}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  color="success"
+                  sx={{ marginTop: "30px" }}
+                  onClick={() => {
+                    handleSendClick();
+                  }}>
+                  Send
+                </Button>
+              </Box>
+            </>
+          ) : null}
+          {activeStep === 1 ? (
+            <>
+              <Box
+                component="form"
+                sx={{
+                  paddingTop: 10,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
-              />
-              <Button
-                variant="contained"
-                color="success"
-                sx={{ marginTop: "30px" }}
-                onClick={() => {
-                  handleVerifyClick();
-                }}>
-                Verify
-              </Button>
-            </Box>
-          </>
-        ) : null}
-        {activeStep === 2 ? (
-          <>
-            <Box
-              component="form"
-              sx={{
-                paddingTop: 10,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-              noValidate
-              autoComplete="off">
-              <Typography sx={{ marginBottom: 2 }}>Now you can reset your password.</Typography>
-              <TextField
-                label="Password"
-                variant="filled"
-                type="password"
-                value={password}
-                style={{ width: "400px" }}
-                onChange={(e) => {
-                  setPassword(e.target.value);
+                noValidate
+                autoComplete="off">
+                <Typography sx={{ marginBottom: 2 }}>We have already sent the code to your email.</Typography>
+                <TextField
+                  label="Code"
+                  variant="filled"
+                  value={code}
+                  style={{ width: "400px" }}
+                  onChange={(e) => {
+                    setCode(e.target.value);
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  color="success"
+                  sx={{ marginTop: "30px" }}
+                  onClick={() => {
+                    handleVerifyClick();
+                  }}>
+                  Verify
+                </Button>
+              </Box>
+            </>
+          ) : null}
+          {activeStep === 2 ? (
+            <>
+              <Box
+                component="form"
+                sx={{
+                  paddingTop: 10,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
                 }}
-              />
-              <br></br>
-              <TextField
-                label="Confirm Password"
-                variant="filled"
-                type="password"
-                value={confirmPassword}
-                style={{ width: "400px" }}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                }}
-              />
+                noValidate
+                autoComplete="off">
+                <Typography sx={{ marginBottom: 2 }}>Now you can reset your password.</Typography>
+                <TextField
+                  label="Password"
+                  variant="filled"
+                  type="password"
+                  value={password}
+                  style={{ width: "400px" }}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+                <br></br>
+                <TextField
+                  label="Confirm Password"
+                  variant="filled"
+                  type="password"
+                  value={confirmPassword}
+                  style={{ width: "400px" }}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                  }}
+                />
 
-              <Button
-                variant="contained"
-                color="success"
-                sx={{ marginTop: "30px" }}
-                onClick={() => {
-                  handleResetClick();
-                }}>
-                Reset
-              </Button>
-            </Box>
-          </>
-        ) : null}
-      </>
-    </Box>
+                <Button
+                  variant="contained"
+                  color="success"
+                  sx={{ marginTop: "30px" }}
+                  onClick={() => {
+                    handleResetClick();
+                  }}>
+                  Reset
+                </Button>
+              </Box>
+            </>
+          ) : null}
+        </>
+      </Box>
+    </>
   );
 }

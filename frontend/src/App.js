@@ -8,6 +8,8 @@ import Profile from './root/Profile';
 import SignIn from './root/SignIn';
 import Dashboard from './root/Dashboard';
 import ForgetPassword from './root/ForgotPassword';
+import CreateProject from './root/CreateProject';
+
 
 
 export const TotalContainer = styled('div')({
@@ -28,6 +30,7 @@ function App () {
             <Route path="/profile" element={<Profile />} />
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/forgot" element={<ForgetPassword/>} />
+            <Route path="/create-project" element={<CreateProject/>} />
           </Routes>
         </BrowserRouter>
       </TotalContainer>
