@@ -1,9 +1,13 @@
 Week 1
-Our group was formed and named. We selected Jiayang as our Scrum Master and created the Jira Site. 
-We were struggling to choose one of the 25 projects and done some brainstorming on this. We deleted 
-several topics that we were not interested in and analyzed the techniques used in each topic to 
-ensure that the topics we selected were within our acceptable range.
+Our group was formed and named. We selected Jiayang as our Scrum Master and created the Jira Site. We were struggling to choose one of the 25 projects and done some brainstorming on this. We deleted several topics that we were not interested in and analyzed the techniques used in each topic to ensure that the topics we selected were within our acceptable range.
+
 Week2
-We determined the project we wanted to choose and then held a meeting on Tuesday and assigned work. 
-Jiayang was responsible for the background. The other two members and I were responsible for the user stories first. 
-I was responsible for the student part.
+We determined the project we wanted to choose and then held a meeting on Tuesday and assigned work. Jiayang was responsible for the background. The other two members and I were responsible for the user stories first. I was responsible for the student part.
+
+Week3
+Between Tuesday and Thursday, we had a meeting about the proposal. In order to improve efficiency, we adjusted the allocation according to everyone's progress. 
+My new goal is to draw pictures for the corresponding character stories and show the involved fcuntion in the pictures.I successfully achieved my goal.
+We plan to schedule a new meeting next Sunday to discuss the sprint and front-end and back-end allocations as well as our respective ideas for the project.
+
+week4
+We started taking charge of our own section and had an offline discussion on Sunday to discuss the current progress and the reallocation of sprints. We showed the code we have written so far, put forward our own feedback and suggestions, and hope to complete all goals and then make modifications during the meeting next Wednesday.
