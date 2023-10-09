@@ -29,8 +29,10 @@ export default function MyCreatedProject() {
         <Typography variant="h2" gutterBottom>
           My Created Projects
         </Typography>
-        <br></br>
-        <div>
+        <Button variant="contained" color="success" onClick={()=>{navigate('/create-project')}}>
+          New Project
+        </Button>
+        <Box sx={{ mt: 3 }}>
           <Card>
             <CardContent>
               <Typography variant="h4" gutterBottom>
@@ -42,7 +44,7 @@ export default function MyCreatedProject() {
               <Button size="small">Edit</Button>
             </CardActions>
           </Card>
-        </div>
+        </Box>
       </Box>
     </>
   );
