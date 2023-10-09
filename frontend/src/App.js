@@ -9,6 +9,8 @@ import SignIn from './root/SignIn';
 import Dashboard from './root/Dashboard';
 import ForgetPassword from './root/ForgotPassword';
 import CreateProject from './root/CreateProject';
+import MyCreatedProject from './root/MyCreatedProject';
+
 
 
 
@@ -31,6 +33,7 @@ function App () {
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/forgot" element={<ForgetPassword/>} />
             <Route path="/create-project" element={<CreateProject/>} />
+            <Route path="/my-created-project" element={<MyCreatedProject/>} />
           </Routes>
         </BrowserRouter>
       </TotalContainer>

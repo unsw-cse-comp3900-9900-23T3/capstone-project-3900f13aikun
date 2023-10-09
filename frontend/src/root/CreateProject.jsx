@@ -14,8 +14,6 @@ import FormLabel from "@mui/material/FormLabel";
 import { useNavigate } from "react-router-dom";
 import NavigationBtn from "../components/NavigationBtn";
 
-const steps = ["Send request code", "Verify code", "Reset password"];
-
 export default function CreateProject() {
   const navigate = useNavigate();
   const [classification, setClassification] = React.useState("");
