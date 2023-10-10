@@ -4,12 +4,13 @@ from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 import jwt
 
+
 import datetime
 
 app = Flask(__name__)
 
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:jjy0325@localhost:5432/3900pro' # replace by your username and password and 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:jjy0325@localhost:5432/postgres' # replace by your username and password and 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -25,6 +26,7 @@ class article_test(db.Model):
     body = db.Column(db.Text())
     date = db.Column(db.DateTime, default = datetime.datetime.now)
     
+    
     def __init__(self, title, body):
         self.title = title
         self.body = body
@@ -36,12 +38,15 @@ class ArticleSchema(ma.Schema):
 
 
 
-class UserDetail(db.Model):
+class UserInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.String(100))
+    role = db.Column(db.Integer)
     email = db.Column(db.Text())
     password = db.Column(db.String(50))
-    
+    Passport = db.Column(db.String(100))
+    DriverLicense = db.Column(db.String(100))
+    MedicalCard =  db.Column(db.String(100))
+
     def __init__(self, role, email, password):
         self.role = role
         self.email = email
