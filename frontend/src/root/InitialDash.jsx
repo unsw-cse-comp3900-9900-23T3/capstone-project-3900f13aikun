@@ -48,17 +48,6 @@ const InitialDash = () => {
 
   const [age, setAge] = React.useState('');
 
-<<<<<<< HEAD
-  useEffect(() => {
-    // apiCall(`/get`, 'GET', {}).then((res) => {
-    //   if (res.error) {
-    //     alert(res.error);
-    //   } else {
-    //     console.log(res)
-    //   }
-    // })
-  }, []);
-=======
   const handleChange = (event) => {
     setAge(event.target.value);
   };
@@ -72,7 +61,6 @@ const InitialDash = () => {
   //     }
   //   })
   // }, []);
->>>>>>> jjytest
   function CreateJob() {
     return (
       <>
