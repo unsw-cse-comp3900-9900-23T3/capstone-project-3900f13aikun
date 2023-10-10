@@ -28,7 +28,8 @@ export default function CreateProject() {
   const [expectedDel, setExpectedDel] = React.useState("");
 
   const handlePublishClick = () => {
-    //
+    //todo: verify input
+    navigate('/my-created-project')
   };
 
   return (
