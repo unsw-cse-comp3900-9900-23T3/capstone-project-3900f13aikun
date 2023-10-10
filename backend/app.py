@@ -46,6 +46,7 @@ class UserInfo(db.Model):
     Passport = db.Column(db.String(100))
     DriverLicense = db.Column(db.String(100))
     MedicalCard =  db.Column(db.String(100))
+    name = db.Column(db.String(50))
 
     def __init__(self, role, email, password):
         self.role = role
@@ -122,7 +123,7 @@ def regist():
     email = request.json['email']
     password = request.json['password']
     
-    user = UserDetail(role,email,password)
+    user = UserInfo(role,email,password)
     db.session.add(user)
     db.session.commit()
     return user_sc.jsonify(user)
@@ -134,7 +135,7 @@ def login():
     password = request.json['password']
     token = jwt.encode({'user_id': '1'}, app.config['SECRET_KEY'], algorithm='HS256')
     
-    user = UserDetail.query.filter_by(email=email, password=password).first()
+    user = UserInfo.query.filter_by(email=email, password=password).first()
     user_data = user_sc.dump(user)
     usersend = {'token': str(token), 'user': user_data}
     

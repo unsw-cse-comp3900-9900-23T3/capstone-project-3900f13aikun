@@ -19,7 +19,7 @@ function SignIn () {
   const navigate = useNavigate();
   // login function
   async function login () {
-    const res = apiCall('/login', 'POST', { 'email': email, 'password':password });
+    const res = apiCall('/login', 'POST', { 'email': email, 'password': password });
     res.then((data) => {
       if (data.error) {
         alert(data.error)
