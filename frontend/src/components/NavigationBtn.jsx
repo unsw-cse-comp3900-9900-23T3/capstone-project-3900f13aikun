@@ -16,6 +16,8 @@ export const NavigationBtn = () => {
   const [value, setValue] = React.useState('one');
   const [picture, setPicture] = React.useState('https://img2.baidu.com/it/u=3406119999,3272762192&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500')
   const [email, setEmail] = React.useState('')
+  const [role, setRole] = React.useState('')
+
   const path = useLocation();
   React.useEffect(() => {
     if (localStorage.getItem('userId')) {
@@ -25,6 +27,7 @@ export const NavigationBtn = () => {
           alert(data.error)
         } else {
           setEmail(data.email)
+          setRole(data.role)
         }
       })
     }
@@ -53,6 +56,8 @@ export const NavigationBtn = () => {
     navigate('/')
   }
 
+  
+
   return (
     <>
       <Box sx={{ width: '100%', borderBottom: '2px black solid', paddingBottom: '18px' }}>
@@ -70,6 +75,8 @@ export const NavigationBtn = () => {
             >
               <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
               <Tab value="two" label="Profile" onClick={() => { navigate('/profile') }} />
+              {role === 'Industry partner' && <Button sx={{marginLeft:'60px'}} variant="contained" color="success" onClick={() => navigate('/create-project')}>create project</Button>}
+              
             </Tabs>
           </Box>}
 
@@ -79,14 +86,16 @@ export const NavigationBtn = () => {
             backgroundSize: 'cover',
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',
-            borderRadius: '50%', marginRight: '150px'
+            borderRadius: '50%', marginRight: '60px'
             }}>
             </div>)
           }
 
-          {islog && (<div style={{ position: 'relative', top: '20px', right: '130px' }}>
-            {email}
-          </div>)
+          {islog && (<div style={{ position: 'relative', top: '20px', right: '50px' }}>
+                        <div style={{ width:'180px' }}><b>[{role}]</b></div>
+                        <div>{email}</div>
+                    </div> 
+          )
           }
 
           {(isshow && !islog) ?

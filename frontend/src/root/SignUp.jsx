@@ -16,7 +16,7 @@ import Select from '@mui/material/Select';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import styled from '@emotion/styled';
+
 
 
 
@@ -79,7 +79,7 @@ function SignUp() {
   }
 
   function recievecode() {
-    const res = apiCall('/sendcode', 'POST', {'email':email})
+    const res = apiCall('/sendcode', 'POST', { 'email': email })
     res.then((data) => {
       if (data.error) {
         alert(data.error)
@@ -88,10 +88,6 @@ function SignUp() {
 
       }
     })
-
-
-
-
     setIsButtonDisabled(true);
     setCountdown(60);
 
@@ -134,6 +130,7 @@ function SignUp() {
       <div style={{ background: '#E2E6E6', width: '1540px' }}>
         <div style={{ width: '550px', height: '700px', background: 'white', margin: 'auto', marginTop: '50px' }}>
           <div style={{ position: 'relative', top: '10px', left: '220px', marginBottom: '30px', fontSize: '30px' }}>Sign up</div>
+            
           <Box
             component="form"
             sx={{
