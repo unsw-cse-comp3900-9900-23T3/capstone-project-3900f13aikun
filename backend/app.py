@@ -6,6 +6,7 @@ import jwt
 from functools import wraps
 
 
+from sqlalchemy import Sequence, MetaData, ForeignKey
 import datetime
 
 app = Flask(__name__)
