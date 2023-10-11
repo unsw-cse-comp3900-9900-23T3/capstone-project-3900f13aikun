@@ -1,6 +1,7 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import NavigationBtn from '../components/NavigationBtn';
 import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
@@ -11,15 +12,15 @@ import { apiCall, checkEmail, checkName, checkSkills, checkWorkRight, extractUId
 // })
 
 function Profile() {
+  const param = useParams();
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [workRight, setWorkRight] = React.useState('');
   const [skill, setSkill] = React.useState('');
 
   React.useEffect(() => {
-    apiCall('/profile/details', 'GET', {
-      'email': email, 'name': name
-    }).then(( data ) => {
+    apiCall(`/profile/details/${param.userId}`, 'GET', {})
+    .then(( data ) => {
       if (data.error) {
         alert(data.error)
       } else {
@@ -29,8 +30,8 @@ function Profile() {
     })
   });
   
-  async function updateName() {
-    const res = apiCall('/profile/setname', 'PUT', { 'name': name });
+  async function updateProfile1() {
+    const res = apiCall(`/updateprofile/f1/${param.userId}/`, 'PUT', { 'name': name, 'email': email });
     res.then((data) => {
       if (data.error) {
         alert(data.error)
@@ -40,30 +41,8 @@ function Profile() {
     })
   }
 
-  async function updateEmail() {
-    const res = apiCall('/profile/setemail', 'PUT', { 'email': email });
-    res.then((data) => {
-      if (data.error) {
-        alert(data.error)
-      } else {
-        console.log(data)
-      }
-    })
-  }
-
-  async function updateWorkright() {
-    const res = apiCall('/profile/setworkright', 'POST', { 'workright': workRight });
-    res.then((data) => {
-      if (data.error) {
-        alert(data.error);
-      } else {
-        console.log(data)
-      }
-    })
-  }
-
-  async function updateSkills() {
-    const res = apiCall('/profile/setskills', 'POST', { 'skill': skill });
+  async function updateProfile2() {
+    const res = apiCall(`/updateprofile/f2/${param.userId}/`, 'POST', { 'workright': workRight, 'skill': skill });
     res.then((data) => {
       if (data.error) {
         alert(data.error);
@@ -91,10 +70,8 @@ function Profile() {
 
   function checkProfile() {
     if (checkEmail(email) && checkName(name) && checkWorkRight(workRight) && checkSkills(skill)) {
-      updateEmail();
-      updateName();
-      updateWorkright();
-      updateSkills();
+      updateProfile1();
+      updateProfile2();
     }
   }
 
