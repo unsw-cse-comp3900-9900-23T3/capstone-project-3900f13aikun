@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -26,6 +26,9 @@ function Profile() {
     setOpen(false);
   };
 
+  useEffect(() => {
+    console.log(workRight)
+  },[workRight])
   async function profile() {
     if (checkEmail(email) && checkName(name) && checkWorkRight(workRight) && checkSkills(skill)) {
       const res = apiCall('/profile', 'POST', { 'email': email }, { 'name': name }, { 'workRight': workRight }, { 'skill': skill });

@@ -17,7 +17,6 @@ function SignIn () {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
-  // localStorage.clear()
   // login function
   async function login () {
     const res = apiCall('/login', 'POST', { 'email': email, 'password': password });
@@ -27,7 +26,17 @@ function SignIn () {
       } else {
         console.log(data)
         localStorage.setItem('token', data.token);
-        navigate('/dashboard')
+        localStorage.setItem('userId', data.user.id);
+
+        if (data.user.role === 'Industry partner') {
+            navigate('/dashboard/industryp')
+        } else if(data.user.role === 'Student') {
+            navigate('/dashboard/student')
+        } else if(data.user.role === 'Academic supervisor') {
+            navigate('/dashboard/academics')
+          
+        }
+        
       }
     })
   }

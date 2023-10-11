@@ -12,12 +12,10 @@ import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Stack from '@mui/material/Stack';
 
-
-export const Dashbackground = styled('div')({
+const Dashbackground = styled('div')({
   backgroundImage: `url('/background.jpg')`,
   backgroundSize: 'cover',
   backgroundPosition: 'center center',
@@ -29,7 +27,7 @@ export const Dashbackground = styled('div')({
   zIndex: '1'
 })
 
-export const Dashtextfield = styled('div')({
+const Dashtextfield = styled('div')({
   display: 'flex',
   justifyContent: 'center', // Center items horizontally
   alignItems: 'center',     // Center items vertically
@@ -52,15 +50,6 @@ const InitialDash = () => {
     setAge(event.target.value);
   };
 
-  // useEffect(() => {
-  //   apiCall(`/get`, 'GET', {}).then((res) => {
-  //     if (res.error) {
-  //       alert(res.error);
-  //     } else {
-  //       console.log(res)
-  //     }
-  //   })
-  // }, []);
   function CreateJob() {
     return (
       <>

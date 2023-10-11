@@ -4,6 +4,7 @@ from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 import jwt
 from functools import wraps
+import random
 
 
 import datetime
@@ -71,6 +72,17 @@ class UserInfo(db.Model):
 class UserSchema(ma.Schema):
     class Meta:
         fields = ('id', 'role','email','password','passport','DriverLicense', 'MedicalCard','name')
+        
+
+class UserCode(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    vcode = db.Column(db.Integer)
+    email = db.Column(db.Text())
+    
+    def __init__(self,  vcode,email):
+        self. vcode =  vcode
+        self.email = email
+
 
 user_sc = UserSchema()
 users_sc = UserSchema(many=True)
@@ -79,25 +91,29 @@ users_sc = UserSchema(many=True)
 with app.app_context():
     db.create_all()
 
-#test function
-@app.route('/get', methods=['GET'])
-def get_articles():
-    all_articles = article_test.query.all()
-    print(type(all_articles))
-    results = article_schema2.dump(all_articles)
 
-
+@app.route('/getUserInfo/<id>', methods=['GET'])
+def get_UserInfo(id):
+    userInfo = UserInfo.query.get(id)
+    results = user_sc.dump(userInfo)
     return jsonify(results)
+
 #test function
-@app.route('/add', methods=['POST'])
-def add_article():
-    title = request.json['title']
-    body = request.json['body']
-    
-    articles = article_test(title, body)
-    db.session.add(articles)
+@app.route('/sendcode', methods=['POST'])
+def sendcode():
+    email = request.json['email']
+    code = ""
+    for _ in range(4):
+        digit = random.randint(0, 9)  
+        code += str(digit)
+    code = int(code)
+    usercode = UserCode(code, email)
+    db.session.add(usercode)
     db.session.commit()
-    return article_schema1.jsonify(articles)
+        
+    return jsonify({'code': code})
+
+
 #test function
 @app.route('/get/<id>/', methods=['GET'])
 def post_details(id):

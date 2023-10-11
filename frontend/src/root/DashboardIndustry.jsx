@@ -1,12 +1,12 @@
 import InitialDash from "./InitialDash";
 
 
-function Dashboard () {
+function DashboardIndustry () {
     return(
         <>
             <InitialDash></InitialDash>
-    </>
+        </>
     )
 }
 
-export default Dashboard;
+export default DashboardIndustry;
