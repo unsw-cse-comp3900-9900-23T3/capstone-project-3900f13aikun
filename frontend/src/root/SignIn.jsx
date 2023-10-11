@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,6 +17,7 @@ function SignIn () {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
+  // localStorage.clear()
   // login function
   async function login () {
     const res = apiCall('/login', 'POST', { 'email': email, 'password': password });
@@ -25,19 +26,13 @@ function SignIn () {
         alert(data.error)
       } else {
         console.log(data)
-        console.log(data.token)
-        localStorage.setItem('toke3n', data.token);
+        localStorage.setItem('token', data.token);
         navigate('/dashboard')
       }
     })
   }
 
-  function keyLogin (e) {
-    if (e.key === 'Enter') {
-      login();
-    }
-  }
-
+ 
   return (
         <>
           <NavigationBtn></NavigationBtn>
@@ -65,7 +60,7 @@ function SignIn () {
           <Link to="/forgot">Forgot password?</Link>
         </Typography>
       </Box>
-          <Button id='loginbutton' role='login' variant="contained" color="success" onKeyDown={keyLogin} onClick={login} sx={{ marginTop: '30px' }}>login</Button>
+          <Button id='loginbutton' role='login' variant="contained" color="success" onClick={login} sx={{ marginTop: '30px' }}>login</Button>
         </>
   )
 }

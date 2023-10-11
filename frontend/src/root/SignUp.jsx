@@ -31,6 +31,11 @@ function SignUp() {
   const [role, setRole] = React.useState(0);
   const [authvalur, setAuthvalue] = React.useState(0)
 
+  const [passport, setPassport] = React.useState('');
+  const [medicalCard, setMedicalCard] = React.useState('');
+  const [driverLicense, setDriverLicense] = React.useState('')
+
+
   const [isChecked1, setChecked1] = React.useState(false);
   const [isChecked2, setChecked2] = React.useState(false);
   const [isChecked3, setChecked3] = React.useState(false);
@@ -48,9 +53,7 @@ function SignUp() {
 
 
   const handleChange = (event) => {
-    // setRole(event.target.value);
-    setRole(1)
-    console.log(event.target.value)
+    setRole(event.target.value)
   };
   const navigate = useNavigate();
 
@@ -64,7 +67,9 @@ function SignUp() {
   // register function
   async function register() {
     if (checkEmail(email) && checkPassword(password1) && verifyPassword(password1, password2) && checkName(name)) {
-      const res = apiCall('/register', 'POST', { 'email': email, 'password': password1, 'role': role });
+      const res = apiCall('/register', 'POST', 
+      { 'email': email, 'password': password1, 'role': role, 'name':name, 'passport': passport, 'medicalCard': medicalCard, 'driverLicense':driverLicense});
+      
       res.then((data) => {
         if (data.error) {
           alert(data.error);
@@ -111,6 +116,8 @@ function SignUp() {
                 setName(e.target.value);
               }} />
           </Box>
+          
+          
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">role</InputLabel>
@@ -118,7 +125,6 @@ function SignUp() {
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={role}
-                label="Age"
                 onChange={handleChange}
                 sx={{ width: '200px' }}
               >
@@ -128,15 +134,21 @@ function SignUp() {
               </Select>
             </FormControl>
           </Box>
+          
+          
           <FormGroup>
             <div style={{ display: 'flex' }}>
               <FormControlLabel control={<Checkbox />} label="Passport" onChange={(e) => setChecked1(e.target.checked)} />
               <div>
                 <TextField
-                  label="Enter your Passporte"
+                  label="Enter your Passport"
                   id="filled-size-small"
                   variant="filled"
                   size="small"
+                  onChange={(e) => {
+                    setPassport(e.target.value)
+                   
+                  }} 
                 />
 
               </div>
@@ -149,6 +161,10 @@ function SignUp() {
                   id="filled-size-small"
                   variant="filled"
                   size="small"
+                  onChange={(e) => {
+                    setDriverLicense(e.target.value)
+                   
+                  }} 
                 />
 
               </div>
@@ -162,6 +178,9 @@ function SignUp() {
                   id="filled-size-small"
                   variant="filled"
                   size="small"
+                  onChange={(e) => {
+                    setMedicalCard(e.target.value)
+                  }} 
                 />
 
               </div>

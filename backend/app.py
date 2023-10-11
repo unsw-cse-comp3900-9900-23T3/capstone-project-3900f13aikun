@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 import jwt
+from functools import wraps
 
 
 import datetime
@@ -37,10 +38,20 @@ class ArticleSchema(ma.Schema):
         fields = ('id', 'title','body','date')
 
 
+article_schema1 = ArticleSchema()
+article_schema2 = ArticleSchema(many= True)
+
+
+
+
+
+
+
+
 
 class UserInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.Integer)
+    role = db.Column(db.String(50))
     email = db.Column(db.Text())
     password = db.Column(db.String(50))
     Passport = db.Column(db.String(100))
@@ -48,18 +59,18 @@ class UserInfo(db.Model):
     MedicalCard =  db.Column(db.String(100))
     name = db.Column(db.String(50))
 
-    def __init__(self, role, email, password):
+    def __init__(self, role, email, password, passport , DriverLicense, MedicalCard, name):
         self.role = role
         self.email = email
         self.password = password
+        self.passport = passport
+        self.DriverLicense = DriverLicense
+        self.MedicalCard = MedicalCard
+        self.name = name 
         
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'role','email','password')
-
-
-article_schema1 = ArticleSchema()
-article_schema2 = ArticleSchema(many= True)
+        fields = ('id', 'role','email','password','passport','DriverLicense', 'MedicalCard','name')
 
 user_sc = UserSchema()
 users_sc = UserSchema(many=True)
@@ -122,28 +133,57 @@ def regist():
     role = request.json['role']
     email = request.json['email']
     password = request.json['password']
+    passport = request.json['passport']
+    DriverLicense = request.json['driverLicense']
+    MedicalCard = request.json['medicalCard']
+    name = request.json['name']
     
-    user = UserInfo(role,email,password)
+    
+    user = UserInfo(role,email,password,passport,DriverLicense, MedicalCard, name)
     db.session.add(user)
     db.session.commit()
     return user_sc.jsonify(user)
+
+
+# def token_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         auth_header = request.headers.get('Authorization')
+#         if not auth_header or not auth_header.startswith('Bearer '):
+#             return jsonify({'error': 'Missing or invalid token'}), 401
+
+#         token = auth_header.split('Bearer ')[1]
+        
+#         try:
+#             # Decode the token
+#             decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+#         except jwt.ExpiredSignatureError:
+#             return jsonify({'error': 'Token has expired'}), 401
+#         except jwt.InvalidTokenError:
+#             return jsonify({'error': 'Invalid token'}), 401
+
+#         return f(*args, **kwargs)
+
+#     return decorated_function
 
 #sign in function for system
 @app.route('/login', methods=['POST'])
 def login():
     email = request.json['email']
     password = request.json['password']
-    token = jwt.encode({'user_id': '1'}, app.config['SECRET_KEY'], algorithm='HS256')
+    token = jwt.encode({'user_id': email}, app.config['SECRET_KEY'], algorithm='HS256')
     
     user = UserInfo.query.filter_by(email=email, password=password).first()
     user_data = user_sc.dump(user)
     usersend = {'token': str(token), 'user': user_data}
     
+    if not email or not password:
+        return jsonify({'error': 'empty email or password'}), 400
+
+    if not user:
+        return jsonify({'error': 'invalid email or password'}), 401
 
     return jsonify(usersend)
-
-
-
 
 
 
