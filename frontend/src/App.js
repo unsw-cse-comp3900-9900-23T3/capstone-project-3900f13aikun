@@ -1,4 +1,3 @@
-import './App.css';
 import React from 'react';
 import { styled } from '@mui/system';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -21,6 +20,7 @@ export const TotalContainer = styled('div')({
   alignItems: 'center',
   margin: '5px 25px'
 })
+
 function App () {
   return (
       <TotalContainer>
