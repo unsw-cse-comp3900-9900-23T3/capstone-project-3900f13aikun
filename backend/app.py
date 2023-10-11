@@ -3,16 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 import jwt
-from functools import wraps
-
 
 from sqlalchemy import Sequence, MetaData, ForeignKey
+from sqlalchemy.dialects.postgresql import ARRAY
 import datetime
+from sqlalchemy.orm import relationship
 
 app = Flask(__name__)
 
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:jjy0325@localhost:5432/postgres' # replace by your username and password and 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/3900pro' # replace by your username and password and 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -21,28 +21,34 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your actual secret key
 
-#test table 
-class article_test(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    body = db.Column(db.Text())
-    date = db.Column(db.DateTime, default = datetime.datetime.now)
-    
-    
-    def __init__(self, title, body):
-        self.title = title
-        self.body = body
 
-#test data 
-class ArticleSchema(ma.Schema):
+
+
+
+
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60), nullable=False)
+    email = db.Column(db.String(60), nullable=False)
+    avatar_url = db.Column(db.String(255), nullable=True) 
+    availability = db.Column(ARRAY(db.Integer), nullable=False)
+    skill = db.Column(db.Text(), nullable=False)
+  
+
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+        self.avatar_url = 'https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-512.png' # default avatar
+        self.availability = []
+        self.skill = ''
+
+
+class ProfileSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'title','body','date')
+        fields = ('id', 'name', 'email', 'avatar_url', 'availability', 'skill')
 
-
-article_schema1 = ArticleSchema()
-article_schema2 = ArticleSchema(many= True)
-
-
+profile_sc = ProfileSchema()
+profiles_sc = ProfileSchema(many=True)
 
 
 
@@ -50,122 +56,128 @@ article_schema2 = ArticleSchema(many= True)
 
 
 
-class UserInfo(db.Model):
+# ================================================
+
+
+# ================================================
+
+
+class ProjectSystem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.String(50))
-    email = db.Column(db.Text())
-    password = db.Column(db.String(50))
-    Passport = db.Column(db.String(100))
-    DriverLicense = db.Column(db.String(100))
-    MedicalCard =  db.Column(db.String(100))
-    name = db.Column(db.String(50))
+    pids = db.Column(ARRAY(db.Integer), nullable=False)
 
-    def __init__(self, role, email, password, passport , DriverLicense, MedicalCard, name):
-        self.role = role
+    def __init__(self):
+        self.pids = []
+
+
+
+class ProjectSystemSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'pids')
+
+profile_sc = ProjectSystemSchema()
+profiles_sc = ProjectSystemSchema(many=True)
+
+# ================================================
+class User(db.Model):
+    uid = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(60), unique=True, nullable=False)
+    password = db.Column(db.String(30), nullable=False)
+    role = db.Column(db.Integer, nullable=False)
+    profile_id = db.Column(db.Integer, ForeignKey('profile.id'), unique=True, nullable=True)
+    project_system_id = db.Column(db.Integer, ForeignKey('project_system.id'), unique=True, nullable=True)
+
+    profile = relationship('Profile', foreign_keys=[profile_id])
+    project_system = relationship('ProjectSystem', foreign_keys=[project_system_id])
+
+
+    def __init__(self, email, password, role):
         self.email = email
         self.password = password
-        self.passport = passport
-        self.DriverLicense = DriverLicense
-        self.MedicalCard = MedicalCard
-        self.name = name 
-        
+        self.role = role
+
+
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'role','email','password','passport','DriverLicense', 'MedicalCard','name')
+        fields = ('uid', 'email', 'password', 'role', 'profile_id', 'project_system_id')
 
 user_sc = UserSchema()
 users_sc = UserSchema(many=True)
 
+
+# ================================================
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.Integer, nullable=False)
+    job_classification = db.Column(db.Integer, nullable=False)
+    problem_statement = db.Column(db.Text(), nullable=False)
+    requirement = db.Column(db.Text(), nullable=False)
+    payment_type = db.Column(db.Integer, nullable=False)
+
+    desired_outcomes = db.Column(db.Text(), nullable=True)
+    required_skills = db.Column(db.Text(), nullable=True)
+    potential_eliverables = db.Column(db.Text(), nullable=True)
+    expected_delivery_cycle = db.Column(db.Text(), nullable=True)
+
+
+    def __init__(self, location, job_classification, problem_statement, requirement, payment_type):
+        self.location = location
+        self.job_classification = job_classification
+        self.problem_statement = problem_statement
+        self.requirement = requirement
+        self.payment_type = payment_type
+
+
+
+class ProjectSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'location', 'job_classification', 'problem_statement', 'requirement', 'payment_type', 'desired_outcomes', 'required_skills', 'potential_eliverables', 'expected_delivery_cycle')
+
+project_sc = ProjectSchema()
+project_sc = ProjectSchema(many=True)
+# ================================================
 #create table
 with app.app_context():
     db.create_all()
-
-#test function
-@app.route('/get', methods=['GET'])
-def get_articles():
-    all_articles = article_test.query.all()
-    print(type(all_articles))
-    results = article_schema2.dump(all_articles)
-
-
-    return jsonify(results)
-#test function
-@app.route('/add', methods=['POST'])
-def add_article():
-    title = request.json['title']
-    body = request.json['body']
-    
-    articles = article_test(title, body)
-    db.session.add(articles)
-    db.session.commit()
-    return article_schema1.jsonify(articles)
-#test function
-@app.route('/get/<id>/', methods=['GET'])
-def post_details(id):
-    article = article_test.query.get(id)
-    return article_schema1.jsonify(article)
-
-#test function
-@app.route('/update/<id>/', methods=['PUT'])
-def update_article(id):
-    article = article_test.query.get(id)
-    
-    title = request.json['title']
-    body = request.json['body']
-    article.title = title
-    article.body = body
-    db.session.commit()
-    return article_schema1.jsonify(article)
-#test function
-@app.route('/delete/<id>/', methods=['DELETE'])
-def delete_article(id):
-    article = article_test.query.get(id)
-    
-    db.session.delete(article)
-    db.session.commit()
-    return article_schema1.jsonify(article)
-
-
-
+# ================================================
 
 #sign up function for system
 @app.route('/register', methods=['POST'])
 def regist():
-    role = request.json['role']
+    
     email = request.json['email']
-    password = request.json['password']
-    passport = request.json['passport']
-    DriverLicense = request.json['driverLicense']
-    MedicalCard = request.json['medicalCard']
+
+    email_test =  User.query.filter_by(email=email).first()
+    if email_test:
+        return jsonify({'error': 'invalid email'}), 401
+
     name = request.json['name']
+    password = request.json['password']
+    role = request.json['role']
+
+    if role == 'Student':
+        role = 0
+    elif role == 'Industry Partner':
+        role = 1
+    else:
+        role = 2
     
-    
-    user = UserInfo(role,email,password,passport,DriverLicense, MedicalCard, name)
-    db.session.add(user)
+    curr_user_profile = Profile(name, email)
+    curr_user_project_system = ProjectSystem()
+    curr_user = User(email, password, role)
+
+    curr_user.profile_id = curr_user.uid 
+    curr_user.project_system_id = curr_user.uid
+
+    db.session.add(curr_user)
+    db.session.add(curr_user_profile)
+    db.session.add(curr_user_project_system)
     db.session.commit()
-    return user_sc.jsonify(user)
 
 
-# def token_required(f):
-#     @wraps(f)
-#     def decorated_function(*args, **kwargs):
-#         auth_header = request.headers.get('Authorization')
-#         if not auth_header or not auth_header.startswith('Bearer '):
-#             return jsonify({'error': 'Missing or invalid token'}), 401
+    return user_sc.jsonify(curr_user)
 
-#         token = auth_header.split('Bearer ')[1]
-        
-#         try:
-#             # Decode the token
-#             decoded_token = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
-#         except jwt.ExpiredSignatureError:
-#             return jsonify({'error': 'Token has expired'}), 401
-#         except jwt.InvalidTokenError:
-#             return jsonify({'error': 'Invalid token'}), 401
 
-#         return f(*args, **kwargs)
-
-#     return decorated_function
 
 #sign in function for system
 @app.route('/login', methods=['POST'])
@@ -174,7 +186,7 @@ def login():
     password = request.json['password']
     token = jwt.encode({'user_id': email}, app.config['SECRET_KEY'], algorithm='HS256')
     
-    user = UserInfo.query.filter_by(email=email, password=password).first()
+    user = User.query.filter_by(email=email, password=password).first()
     user_data = user_sc.dump(user)
     usersend = {'token': str(token), 'user': user_data}
     
@@ -190,6 +202,54 @@ def login():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #todo store the project information to database according to the userid
 @app.route('/projectdetail/<userid>/', methods=['POST'])
 def storeproject(userid):
@@ -200,26 +260,83 @@ def storeproject(userid):
 def storeprofile(userid):
     pass
 
+
+
+
+
+
 #todo get all project information according to the userid
 @app.route('/getproject/<userid>/', methods=['GET'])
 def getproject(userid):
+
     pass
+
+
+
+
+
+
+
+
 
 #todo get profile according to the userid
-@app.route('/getprofile/<userid>/', methods=['GET'])
-def getprofile():
-    pass
+@app.route('/profile/details/<userid>/', methods=['GET'])
+def getprofile(userid):
+    user_profile = Profile.query.get(id=userid).first()
+    return profile_sc.jsonify(user_profile)
 
 #todo update profile according to the userid
-@app.route('/updateprofile/<userid>/', methods=['PUT'])
-def updateprofile():
-    pass
+@app.route('/updateprofile/f1/<userid>/', methods=['PUT'])
+def updateprofilef1(userid):
+    profile = Profile.query.filter_by(uid=userid).first()
+
+    input = request.get_json()
+
+
+    if 'name' in input:
+        profile.name = input['name']
+
+    if 'email' in input:
+        profile.email = input['email']
+
+    if 'avatar_url' in input:
+        profile.avatar_url = input['avatar_url']
+
+    db.session.commit()
+
+    return profile_sc.jsonify(profile)
+
+
+#todo update profile according to the userid
+@app.route('/updateprofile/f2/<userid>/', methods=['POST'])
+def updateprofilef2(userid):
+    profile = Profile.query.filter_by(uid=userid).first()
+
+    input = request.get_json()
+
+
+    if 'availability' in input:
+        profile.availability = input['availability']
+
+    if 'skill' in input:
+        profile.skill = input['skill']
+
+    db.session.commit()
+
+    return profile_sc.jsonify(profile)
 
 
 #todo reset password according to the userid
 @app.route('/resetpassword/<userid>/', methods=['PUT'])
-def reset():
-    pass
+def reset(userid):
+    user = User.query.filter_by(uid=userid).first()
+    new_password = request.json['new_password']
+    user.password = new_password
+
+    db.session.commit()
+
+    return user_sc.jsonify(user)
+
 
 
 if __name__ == '__main__':
