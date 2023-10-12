@@ -197,58 +197,6 @@ def login():
 
     return jsonify(usersend)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #todo store the project information to database according to the userid
 @app.route('/projectdetail/<userid>/', methods=['POST'])
 def storeproject(userid):
@@ -286,27 +234,25 @@ def storeproject(userid):
 
     return project_sc.jsonify(curr_project)
 
-# #todo get all project information according to the userid
-# @app.route('/getproject/<userid>/', methods=['GET'])
-# def getproject(userid):
-#     curr_project_system = ProjectSystem.query.filter_by(id=userid).first()
-#     curr_pids = curr_project_system.pids
-#     curr_permissions = curr_project_system.permissions
+
+
+
+#todo get all project information according to the userid
+@app.route('/getproject/<userid>/', methods=['GET'])
+def getproject(userid):
+    curr_project_system = ProjectSystem.query.filter_by(id=userid).first()
+    curr_pids = curr_project_system.pids
+    curr_permissions = curr_project_system.permissions
     
 
-#     post_project_ids = []
-#     for index in range(len(curr_permissions)):
-#         if curr_permissions[index] == 1:
-#             post_project_ids.append(curr_pids[index])
+    post_project_ids = []
+    for index in range(len(curr_permissions)):
+        if curr_permissions[index] == 1:
+            post_project_ids.append(curr_pids[index])
     
-#     projects = Project.query.filter_by()
+    post_projects = Project.query.filter(Project.id.in_(post_project_ids)).all()
 
-
-
-
-
-
-#     return projects_sc.jsonify(post_projects)
+    return projects_sc.jsonify(post_projects)
 
 
 
