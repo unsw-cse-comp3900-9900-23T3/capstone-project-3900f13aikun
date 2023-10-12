@@ -12,7 +12,7 @@ import datetime
 app = Flask(__name__)
 
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:jjy0325@localhost:5432/postgres' # replace by your username and password and 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:Yj042889@localhost:5432/postgres' # replace by your username and password and 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
