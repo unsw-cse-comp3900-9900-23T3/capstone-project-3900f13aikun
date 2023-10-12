@@ -53,6 +53,33 @@ class UserCode(db.Model):
 user_sc = UserSchema()
 users_sc = UserSchema(many=True)
 
+
+
+
+
+
+class Profile(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.Text())
+    name = db.Column(db.String(50))
+    workrights = db.Column(db.ARRAY(db.String), nullable=False)
+    skill = db.Column(db.Text())
+    uid = db.Column(db.Integer, db.ForeignKey('user_info.id'), nullable=False)
+    
+    def __init__(self,email,name,workrights,skill,uid):
+        self.email =  email
+        self.name = name
+        self.workrights = workrights
+        self.skill = skill
+        self.uid = uid
+
+
+class ProfileSchema(ma.Schema):
+    class Meta:
+        fields = ('id', ' email','name',' workrights ','skill','uid')
+        
+
+
 #create table
 with app.app_context():
     db.create_all()
@@ -188,11 +215,11 @@ def login():
     return jsonify(usersend)
 
 
-#todo reset password according to the userid
-@app.route('/resetpassword', methods=['PUT'])
-def reset():
+@app.route('/resetpassword/sendcode', methods=['POST'])
+def resetSend():
     email = request.json['email']
     userInfo = UserInfo.query.filter_by(email=email).first()
+    userId = userInfo.id
     if not userInfo:
         return jsonify({'error': 'empty email or password'}), 400
     
@@ -220,10 +247,43 @@ def reset():
     smtp.login(sender_email, sender_password)
     smtp.sendmail(sender_email, receiver_email, email.as_string())
     
-    
-        
-    
+    return jsonify({'code': code, 'userId': userId})
 
+
+@app.route('/reset/<id>', methods=['PUT'])
+def reset(id):
+    password = request.json['password']
+    userInfo = UserInfo.query.get(id)
+    userInfo.password = password
+
+    db.session.commit()
+    return jsonify({'password':password})
+
+
+#todo update profile according to the userid
+@app.route('/updateprofile/<userid>', methods=['PUT'])
+def updateprofile(userid):
+    email = request.json['email']
+    name = request.json['name']
+    workright = request.json['workright']
+    skill = request.json['skill']
+    
+    profileInfo = Profile.query.filter_by(uid=userid).first()
+    userInfo = UserInfo.query.get(userid)
+    if not profileInfo:
+        profile = Profile(email,name , workright,skill,userid)
+        db.session.add( profile)
+        db.session.commit()
+    else:
+        profileInfo.email = email
+        profileInfo.name  =  name 
+        profileInfo.workrights = workright
+        profileInfo.skill = skill
+        userInfo.email = email
+        userInfo.name  =  name 
+        db.session.commit()
+
+    return '1'
 
 
 
@@ -234,25 +294,6 @@ def reset():
 def storeproject(userid):
     pass
 
-#todo store the profile information to database according to the userid
-@app.route('/profiledetail/<userid>/', methods=['POST'])
-def storeprofile(userid):
-    pass
-
-#todo get all project information according to the userid
-@app.route('/getproject/<userid>/', methods=['GET'])
-def getproject(userid):
-    pass
-
-#todo get profile according to the userid
-@app.route('/getprofile/<userid>/', methods=['GET'])
-def getprofile():
-    pass
-
-#todo update profile according to the userid
-@app.route('/updateprofile/<userid>/', methods=['PUT'])
-def updateprofile():
-    pass
 
 
 

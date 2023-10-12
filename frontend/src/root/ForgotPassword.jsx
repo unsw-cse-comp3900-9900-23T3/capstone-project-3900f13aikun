@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
 import NavigationBtn from '../components/NavigationBtn';
+import { apiCall, checkPassword } from "../components/HelpFunctions";
 
 const steps = ["Send request code", "Verify code", "Reset password"];
 
@@ -19,18 +20,55 @@ export default function ForgetPassword() {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
+  const [rececode, setReceCode] = React.useState("");
+  const [userId, setUserId] = React.useState(0);
+
+
+
+
   const handleSendClick = () => {
-    console.log(email);
-    setActiveStep(1);
+    const res = apiCall(`/resetpassword/sendcode`, 'POST', { 'email': email })
+    res.then((data) => {
+      if (data.error) {
+        alert(data.error)
+      } else {
+        setUserId(data.userId)
+        setReceCode(data.code)
+        setActiveStep(1);
+      }
+    })
+
   };
 
   const handleVerifyClick = () => {
-    console.log(code);
-    setActiveStep(2);
+    if (rececode == code) {
+      setActiveStep(2);
+    } else {
+      alert('Invalid code')
+    }
+
   };
 
   const handleResetClick = () => {
-    navigate("/login");
+    if (!password) {
+      alert('empty password')
+    }
+    if (checkPassword(password) && (password == confirmPassword) ) {
+      const res = apiCall(`/reset/${userId}`, 'PUT', { 'password': password });
+      res.then((data) => {
+        if (data.error) {
+          alert(data.error)
+        } else {
+          navigate("/login");
+        }
+      })
+    } else {
+      alert('unequal password')
+    }
+
+
+
+
   };
 
   return (
