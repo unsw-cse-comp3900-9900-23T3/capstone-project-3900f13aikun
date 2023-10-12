@@ -5,9 +5,10 @@ from flask_cors import CORS
 import jwt
 from functools import wraps
 import random
-
-
 import datetime
+from email.message import EmailMessage
+import ssl
+import smtplib
 
 app = Flask(__name__)
 
@@ -21,26 +22,10 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your actual secret key
 
-#test table 
-class article_test(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    body = db.Column(db.Text())
-    date = db.Column(db.DateTime, default = datetime.datetime.now)
-    
-    
-    def __init__(self, title, body):
-        self.title = title
-        self.body = body
-
-#test data 
-class ArticleSchema(ma.Schema):
-    class Meta:
-        fields = ('id', 'title','body','date')
 
 
-article_schema1 = ArticleSchema()
-article_schema2 = ArticleSchema(many= True)
+
+
 
 
 
@@ -91,18 +76,18 @@ users_sc = UserSchema(many=True)
 with app.app_context():
     db.create_all()
 
-
+#get user information according to the user id
 @app.route('/getUserInfo/<id>', methods=['GET'])
 def get_UserInfo(id):
     userInfo = UserInfo.query.get(id)
     results = user_sc.dump(userInfo)
     return jsonify(results)
 
-#test function
+#send the code to frontend
 @app.route('/sendcode', methods=['POST'])
 def sendcode():
-    email = request.json['email']
     code = ""
+    email = request.json['email']
     for _ in range(4):
         digit = random.randint(0, 9)  
         code += str(digit)
@@ -110,35 +95,51 @@ def sendcode():
     usercode = UserCode(code, email)
     db.session.add(usercode)
     db.session.commit()
+    
+
+    sender_email = 'iKun3900@gmail.com'
+    sender_password = 'unfchthqfmcfdobc'
+
+
+    receiver_email = email
+    subject = 'code'
+    body = str(code)
+
+    email = EmailMessage()
+    email['From'] = sender_email
+    email['To'] = receiver_email
+    email['subject'] = subject
+    email.set_content(body)
+
+
+    smtp = smtplib.SMTP('smtp.gmail.com', 587)
+    smtp.starttls()
+    smtp.login(sender_email, sender_password)
+    smtp.sendmail(sender_email, receiver_email, email.as_string())
+
         
     return jsonify({'code': code})
 
 
-#test function
-@app.route('/get/<id>/', methods=['GET'])
-def post_details(id):
-    article = article_test.query.get(id)
-    return article_schema1.jsonify(article)
-
-#test function
-@app.route('/update/<id>/', methods=['PUT'])
-def update_article(id):
-    article = article_test.query.get(id)
+# #test function
+# @app.route('/update/<id>/', methods=['PUT'])
+# def update_article(id):
+#     article = article_test.query.get(id)
     
-    title = request.json['title']
-    body = request.json['body']
-    article.title = title
-    article.body = body
-    db.session.commit()
-    return article_schema1.jsonify(article)
+#     title = request.json['title']
+#     body = request.json['body']
+#     article.title = title
+#     article.body = body
+#     db.session.commit()
+#     return article_schema1.jsonify(article)
 #test function
-@app.route('/delete/<id>/', methods=['DELETE'])
-def delete_article(id):
-    article = article_test.query.get(id)
+# @app.route('/delete/<id>/', methods=['DELETE'])
+# def delete_article(id):
+#     article = article_test.query.get(id)
     
-    db.session.delete(article)
-    db.session.commit()
-    return article_schema1.jsonify(article)
+#     db.session.delete(article)
+#     db.session.commit()
+#     return article_schema1.jsonify(article)
 
 
 
