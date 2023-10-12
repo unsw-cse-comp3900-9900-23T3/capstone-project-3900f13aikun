@@ -1,51 +1,55 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
-import { useNavigate, Link, Form } from 'react-router-dom';
 import NavigationBtn from '../components/NavigationBtn';
 import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-import { apiCall, checkEmail, checkName, checkSkills, checkWorkRight } from '../components/HelpFunctions';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-
+import { apiCall, checkEmail, checkName, checkSkills, checkWorkRight, extractUId } from '../components/HelpFunctions';
 
 // const ProfileDiv = styled('div')({
 //   padding: '10px'
 // })
 
 function Profile() {
+  const param = useParams();
   const [name, setName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [workRight, setWorkRight] = React.useState('');
   const [skill, setSkill] = React.useState('');
 
-  const [open, setOpen] = React.useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    console.log(workRight)
-  },[workRight])
-  async function profile() {
-    if (checkEmail(email) && checkName(name) && checkWorkRight(workRight) && checkSkills(skill)) {
-      const res = apiCall('/profile', 'POST', { 'email': email }, { 'name': name }, { 'workRight': workRight }, { 'skill': skill });
-      res.then((data) => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          setOpen(true);
-        }
-      })
-    }
+  // React.useEffect(() => {
+  //   apiCall(`/profile/details/${param.userId}`, 'GET', {})
+  //   .then(( data ) => {
+  //     if (data.error) {
+  //       alert(data.error)
+  //     } else {
+  //       console.log(data)
+  //       console.log(data.token)
+  //     }
+  //   })
+  // });
+  
+  async function updateProfile1() {
+    const res = apiCall(`/updateprofile/f1/${param.userId}/`, 'PUT', { 'name': name, 'email': email });
+    res.then((data) => {
+      if (data.error) {
+        alert(data.error)
+      } else {
+        console.log(data)
+      }
+    })
   }
 
-  function keyProfile(e) {
-    if (e.key === 'Enter') {
-      profile();
-    }
+  async function updateProfile2() {
+    const res = apiCall(`/updateprofile/f2/${param.userId}/`, 'POST', { 'workright': workRight, 'skill': skill });
+    res.then((data) => {
+      if (data.error) {
+        alert(data.error);
+      } else {
+        console.log(data)
+      }
+    })
   }
 
   const handleCheckboxChange = (event) => {
@@ -58,9 +62,18 @@ function Profile() {
   };
 
 
-  const handleSubmitClick = () => {
-    //
-  };
+  function keyProfile(e) {
+    if (e.key === 'Enter') {
+      checkProfile();
+    }
+  }
+
+  function checkProfile() {
+    if (checkEmail(email) && checkName(name) && checkWorkRight(workRight) && checkSkills(skill)) {
+      updateProfile1();
+      updateProfile2();
+    }
+  }
 
   return (
     <>
@@ -155,22 +168,8 @@ function Profile() {
               setSkill(e.target.value);
             }} />
         </FormControl>
-        <Button id='registerbutton' role="profile" variant="contained" color="success" onKeyDown={keyProfile} onClick={profile} sx={{ marginTop: '30px' }}>Save</Button>
+        <Button id='registerbutton' role="profile" variant="contained" color="success" onKeyDown={keyProfile} onClick={checkProfile} sx={{ marginTop: '30px' }}>Save</Button>
       </Box >
-      <div>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              You have successfully saved!
-            </DialogContentText>
-          </DialogContent>
-        </Dialog>
-      </div>
     </>
   )
 }

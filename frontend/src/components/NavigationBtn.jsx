@@ -6,6 +6,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { apiCall } from './HelpFunctions';
 import { Iconchicken, Topselection } from './StyledElement';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 
 
@@ -17,6 +19,22 @@ export const NavigationBtn = () => {
   const [picture, setPicture] = React.useState('https://img2.baidu.com/it/u=3406119999,3272762192&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500')
   const [email, setEmail] = React.useState('')
   const [role, setRole] = React.useState('')
+
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  function switchAccount() {
+    navigate('/login')
+    localStorage.clear()
+  }
+
 
   const path = useLocation();
   React.useEffect(() => {
@@ -56,7 +74,15 @@ export const NavigationBtn = () => {
     navigate('/')
   }
 
-  
+  function testLogin() {
+    if (!localStorage.getItem('token')) {
+      alert('please login in')
+    } else {
+      navigate('/profile')
+    }
+  }
+
+
 
   return (
     <>
@@ -74,9 +100,9 @@ export const NavigationBtn = () => {
               aria-label="wrapped label tabs example"
             >
               <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
-              <Tab value="two" label="Profile" onClick={() => { navigate('/profile') }} />
-              {role === 'Industry partner' && <Button sx={{marginLeft:'60px'}} variant="contained" color="success" onClick={() => navigate('/create-project')}>create project</Button>}
-              
+              <Tab value="two" label="Profile" onClick={testLogin} />
+              {role === 'Industry partner' && <Button sx={{ marginLeft: '60px' }} variant="contained" color="success" onClick={() => navigate('/create-project')}>create project</Button>}
+
             </Tabs>
           </Box>}
 
@@ -87,14 +113,35 @@ export const NavigationBtn = () => {
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',
             borderRadius: '50%', marginRight: '60px'
-            }}>
-            </div>)
+          }}>
+          </div>)
           }
 
           {islog && (<div style={{ position: 'relative', top: '20px', right: '50px' }}>
-                        <div style={{ width:'180px' }}><b>[{role}]</b></div>
-                        <div>{email}</div>
-                    </div> 
+            <div style={{ width: '180px' }}><b>[{role}]</b></div>
+            <div>
+            <Button
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            >
+              {email}
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={switchAccount}>switch account</MenuItem>
+            </Menu>
+          </div>
+          </div>
           )
           }
 
@@ -106,6 +153,8 @@ export const NavigationBtn = () => {
             : islog ? (<Button variant="contained" color="error" size='large' sx={{ marginTop: '13px', marginRight: '20px' }} onClick={logout}>logout</Button>)
               :
               <Button variant="contained" color="error" size='large' sx={{ marginTop: '13px', marginRight: '20px' }} onClick={() => navigate('/')}>return home</Button>}
+
+
         </Topselection>
 
 
