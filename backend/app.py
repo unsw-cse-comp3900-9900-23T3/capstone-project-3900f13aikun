@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
+from sqlalchemy import func
 import jwt
 
 from sqlalchemy import Sequence, MetaData, ForeignKey
@@ -65,7 +66,6 @@ class ProjectSystem(db.Model):
         self.pids = []
         self.permission = []
         self.user = user
-
 
 class ProjectSystemSchema(ma.Schema):
     class Meta:
@@ -150,12 +150,6 @@ def register():
     email_test =  User.query.filter_by(email=email).first()
     if email_test:
         return jsonify({'error': 'Email has been registered already'}), 401
-    
-
-    # ID_test = ID.query.filter_by(type=type, id=id).first()
-    # if not ID_test:
-    #     return fa
-
 
     name = request.json['name']
     password = request.json['password']
@@ -168,13 +162,14 @@ def register():
     else:
         role = 2
     
-    curr_user = User(email, password, role, curr_user)
+    curr_user = User(email, password, role)
     curr_user_profile = Profile(name, email, curr_user)
-    curr_user_project_system = ProjectSystem()
+    curr_user_project_system = ProjectSystem(curr_user)
 
     db.session.add(curr_user)
     db.session.add(curr_user_profile)
     db.session.add(curr_user_project_system)
+    
     db.session.commit()
 
     return user_sc.jsonify(curr_user)
@@ -203,7 +198,7 @@ def login():
 ########################################
 #########        Project       #########
 ########################################
-#todo store the project information to database according to the userid
+# Indusrty partner can create opportunities
 @app.route('/project/create/<userid>/', methods=['POST'])
 def storeproject(userid):
     input = request.get_json()
@@ -231,9 +226,10 @@ def storeproject(userid):
     db.session.add(curr_project)
 
     project_system = ProjectSystem.query.filter_by(uid=userid).first()
+    project_system.pids = func.array_append(project_system.pids, curr_project.pid)
+    project_system.permission = func.array_append(project_system.permission, 1)
 
-    project_system.pids.append(curr_project.id)
-    project_system.permissions.append(1)
+
 
     db.session.commit()
 
@@ -242,17 +238,17 @@ def storeproject(userid):
 
 
 
-#todo get all project information according to the userid
+# Industry partner can browse the opportunities been post for this sprint
 @app.route('/project/browse/<userid>/', methods=['GET'])
 def getproject(userid):
     curr_project_system = ProjectSystem.query.filter_by(uid=userid).first()
 
     curr_pids = curr_project_system.pids
-    curr_permissions = curr_project_system.permissions
+    curr_permission = curr_project_system.permission
 
     post_project_ids = []
-    for index in range(len(curr_permissions)):
-        if curr_permissions[index] == 1:
+    for index in range(len(curr_permission)):
+        if curr_permission[index] == 1:
             post_project_ids.append(curr_pids[index])
     
     post_projects = Project.query.filter(Project.pid.in_(post_project_ids)).all()
@@ -266,14 +262,14 @@ def getproject(userid):
 #########        Profile       #########
 ########################################
 
-#todo get profile according to the userid
+# Get all info in profile for the user
 @app.route('/profile/details/<userid>/', methods=['GET'])
 def getprofile(userid):
     print(userid)
     profile = Profile.query.filter_by(uid=userid).first()
     return profile_sc.jsonify(profile)
 
-#todo update profile according to the userid
+# Update any section of info in profile for the user
 @app.route('/profile/update/<userid>/', methods=['PUT'])
 def updateprofilef1(userid):
     profile = Profile.query.filter_by(uid=userid).first()
@@ -302,7 +298,7 @@ def updateprofilef1(userid):
     return profile_sc.jsonify(profile)
 
 
-#todo reset password according to the userid
+# Reset the password of the user
 @app.route('/resetpassword/<userid>/', methods=['PUT'])
 def reset(userid):
     user = User.query.filter_by(uid=userid).first()
