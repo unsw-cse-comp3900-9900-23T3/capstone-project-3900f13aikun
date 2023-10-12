@@ -29,27 +29,24 @@ function SignUp() {
   const [role, setRole] = React.useState(0);
   const [authvalur, setAuthvalue] = React.useState(0)
   const [passport, setPassport] = React.useState('');
-  const [medicalCard, setMedicalCard] = React.useState('');
-  const [driverLicense, setDriverLicense] = React.useState('')
   const [code, setCode] = React.useState('')
   const [codeinput, setCodeinput] = React.useState('')
 
 
   const [isChecked1, setChecked1] = React.useState(false);
-  const [isChecked2, setChecked2] = React.useState(false);
-  const [isChecked3, setChecked3] = React.useState(false);
+
 
 
   const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
   const [countdown, setCountdown] = React.useState(60);
 
   useEffect(() => {
-    if (isChecked1 === true || isChecked2 === true || isChecked3 === true) {
+    if (isChecked1 === true) {
       setAuthvalue(1)
     } else {
       setAuthvalue(0)
     }
-  }, [isChecked1, isChecked2, isChecked3]);
+  }, [isChecked1]);
 
   useEffect(() => {
     if (countdown > 0 && isButtonDisabled) {
@@ -106,18 +103,22 @@ function SignUp() {
   // register function
   async function register() {
     if (checkEmail(email) && checkPassword(password1) && verifyPassword(password1, password2) && checkName(name)) {
-      if (code == codeinput) {
+      if (!role) {
+        alert('Please select a role')
+      } else if (!codeinput) {
+        alert('empty code');
+      } else if (code == codeinput) {
         const res = apiCall('/register', 'POST',
-          { 'email': email, 'password': password1, 'role': role, 'name': name, 'passport': passport, 'medicalCard': medicalCard, 'driverLicense': driverLicense });
+        { 'email': email, 'password': password1, 'role': role, 'name': name, 'passport': passport});
         res.then((data) => {
-          if (data.error) {
-            alert(data.error);
-          } else {
-            setOpen(true);
-          }
-        })
-      } else {
-        alert('invalid code');
+            if (data.error) {
+              alert(data.error);
+            } else {
+              setOpen(true);
+            }
+          })
+        } else {
+          alert('invalid code');
       }
 
     }
@@ -196,38 +197,8 @@ function SignUp() {
                 />
               </div>
             </div>
-            <div style={{ display: 'flex', marginLeft: '60px', marginTop: '10px' }}>
-              <FormControlLabel control={<Checkbox />} label="Driver License" onChange={(e) => setChecked2(e.target.checked)} />
-              <div>
-                <TextField
-                  label="Enter your Driver License"
-                  id="filled-size-small"
-                  variant="filled"
-                  size="small"
-                  onChange={(e) => {
-                    setDriverLicense(e.target.value)
-
-                  }}
-                />
-
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', marginLeft: '60px', marginTop: '10px' }}>
-              <FormControlLabel control={<Checkbox />} label="Medical Card" onChange={(e) => setChecked3(e.target.checked)} />
-              <div>
-                <TextField
-                  label="Enter your Medical Card"
-                  id="filled-size-small"
-                  variant="filled"
-                  size="small"
-                  onChange={(e) => {
-                    setMedicalCard(e.target.value)
-                  }}
-                />
-
-              </div>
-            </div>
+            
+            
           </FormGroup>
           {authvalur === 1 && <div style={{ marginLeft: '60px', marginTop: '10px' }}>
             <input

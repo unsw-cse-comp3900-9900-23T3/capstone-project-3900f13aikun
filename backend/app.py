@@ -21,18 +21,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your actual secret key
-
-
-
-
-
-
-
-
-
-
-
-
+passportlist = ['EH6727996','EH6727995','EH6727994','EH6727993','EH6727992']
 
 
 class UserInfo(db.Model):
@@ -40,34 +29,26 @@ class UserInfo(db.Model):
     role = db.Column(db.String(50))
     email = db.Column(db.Text())
     password = db.Column(db.String(50))
-    Passport = db.Column(db.String(100))
-    DriverLicense = db.Column(db.String(100))
-    MedicalCard =  db.Column(db.String(100))
     name = db.Column(db.String(50))
 
-    def __init__(self, role, email, password, passport , DriverLicense, MedicalCard, name):
+    def __init__(self, role, email, password, name):
         self.role = role
         self.email = email
         self.password = password
-        self.passport = passport
-        self.DriverLicense = DriverLicense
-        self.MedicalCard = MedicalCard
         self.name = name 
         
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'role','email','password','passport','DriverLicense', 'MedicalCard','name')
+        fields = ('id', 'role','email','password','name')
         
-
 class UserCode(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     vcode = db.Column(db.Integer)
     email = db.Column(db.Text())
     
-    def __init__(self,  vcode,email):
+    def __init__(self,vcode,email):
         self. vcode =  vcode
         self.email = email
-
 
 user_sc = UserSchema()
 users_sc = UserSchema(many=True)
@@ -96,10 +77,8 @@ def sendcode():
     db.session.add(usercode)
     db.session.commit()
     
-
     sender_email = 'iKun3900@gmail.com'
     sender_password = 'unfchthqfmcfdobc'
-
 
     receiver_email = email
     subject = 'code'
@@ -110,7 +89,6 @@ def sendcode():
     email['To'] = receiver_email
     email['subject'] = subject
     email.set_content(body)
-
 
     smtp = smtplib.SMTP('smtp.gmail.com', 587)
     smtp.starttls()
@@ -151,12 +129,17 @@ def regist():
     email = request.json['email']
     password = request.json['password']
     passport = request.json['passport']
-    DriverLicense = request.json['driverLicense']
-    MedicalCard = request.json['medicalCard']
     name = request.json['name']
     
+    if passport not in passportlist:
+         return jsonify({'error': 'Invalid passport'}), 400
+     
+    databaseEmail = UserInfo.query.filter_by(email=email).first()
+
+    if databaseEmail:
+        return jsonify({'error': 'This email has been registed'}), 400
     
-    user = UserInfo(role,email,password,passport,DriverLicense, MedicalCard, name)
+    user = UserInfo(role,email,password,name)
     db.session.add(user)
     db.session.commit()
     return user_sc.jsonify(user)
@@ -183,6 +166,8 @@ def regist():
 
 #     return decorated_function
 
+
+
 #sign in function for system
 @app.route('/login', methods=['POST'])
 def login():
@@ -201,6 +186,44 @@ def login():
         return jsonify({'error': 'invalid email or password'}), 401
 
     return jsonify(usersend)
+
+
+#todo reset password according to the userid
+@app.route('/resetpassword', methods=['PUT'])
+def reset():
+    email = request.json['email']
+    userInfo = UserInfo.query.filter_by(email=email).first()
+    if not userInfo:
+        return jsonify({'error': 'empty email or password'}), 400
+    
+    code = ""
+    email = request.json['email']
+    for _ in range(4):
+        digit = random.randint(0, 9)  
+        code += str(digit)
+    code = int(code)
+    sender_email = 'iKun3900@gmail.com'
+    sender_password = 'unfchthqfmcfdobc'
+
+    receiver_email = email
+    subject = 'code'
+    body = str(code)
+
+    email = EmailMessage()
+    email['From'] = sender_email
+    email['To'] = receiver_email
+    email['subject'] = subject
+    email.set_content(body)
+
+    smtp = smtplib.SMTP('smtp.gmail.com', 587)
+    smtp.starttls()
+    smtp.login(sender_email, sender_password)
+    smtp.sendmail(sender_email, receiver_email, email.as_string())
+    
+    
+        
+    
+
 
 
 
@@ -232,10 +255,6 @@ def updateprofile():
     pass
 
 
-#todo reset password according to the userid
-@app.route('/resetpassword/<userid>/', methods=['PUT'])
-def reset():
-    pass
 
 
 if __name__ == '__main__':
