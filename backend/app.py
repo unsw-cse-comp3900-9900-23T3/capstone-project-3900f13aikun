@@ -23,21 +23,23 @@ app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your actual secret 
 
 class Profile(db.Model):
     pid = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(60), nullable=False)
     email = db.Column(db.String(60), nullable=False)
     avatar_url = db.Column(db.String(255), nullable=False) 
     availability = db.Column(ARRAY(db.Integer), nullable=False)
     skill = db.Column(db.Text(), nullable=False)
-  
 
-    def __init__(self, name, email):
-        self.uid = -1 # temp uid before registering
+    uid = db.Column(db.Integer, ForeignKey('user.uid'), unique=True, nullable=True)
+    user = relationship('User', foreign_keys=[uid])
+
+
+    def __init__(self, name, email, user):
         self.name = name
         self.email = email
         self.avatar_url = 'https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-512.png' # default avatar
         self.availability = []
         self.skill = ''
+        self.user = user
 
 
 class ProfileSchema(ma.Schema):
@@ -53,14 +55,16 @@ profiles_sc = ProfileSchema(many=True)
 
 class ProjectSystem(db.Model):
     sid = db.Column(db.Integer, primary_key=True)
-    uid = db.Column(db.Integer, nullable=False)
     pids = db.Column(ARRAY(db.Integer), nullable=False)
     permission = db.Column(ARRAY(db.Integer), nullable=False)
 
-    def __init__(self):
-        self.uid = -1 # temp uid before registering
+    uid = db.Column(db.Integer, ForeignKey('user.uid'), unique=True, nullable=True)
+    user = relationship('User', foreign_keys=[uid])
+
+    def __init__(self, user):
         self.pids = []
-        self.permissions = []
+        self.permission = []
+        self.user = user
 
 
 class ProjectSystemSchema(ma.Schema):
@@ -77,22 +81,17 @@ class User(db.Model):
     password = db.Column(db.String(30), nullable=False)
     role = db.Column(db.Integer, nullable=False)
 
-    profile_id = db.Column(db.Integer, ForeignKey('profile.id'), unique=True, nullable=True)
-    project_system_id = db.Column(db.Integer, ForeignKey('project_system.id'), unique=True, nullable=True)
-
-    profile = relationship('Profile', foreign_keys=[profile_id])
-    project_system = relationship('ProjectSystem', foreign_keys=[project_system_id])
-
 
     def __init__(self, email, password, role):
         self.email = email
         self.password = password
         self.role = role
+        self.project_system_id = -1
 
 
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ('uid', 'email', 'password', 'role', 'profile_id', 'project_system_id')
+        fields = ('uid', 'email', 'password', 'role')
 
 user_sc = UserSchema()
 users_sc = UserSchema(many=True)
@@ -101,7 +100,7 @@ users_sc = UserSchema(many=True)
 # ================================================
 class Project(db.Model):
     pid = db.Column(db.Integer, primary_key=True)
-    location = db.Column(db.Integer, nullable=False)
+    location = db.Column(db.Text(), nullable=False)
     job_classification = db.Column(db.Integer, nullable=False)
     problem_statement = db.Column(db.Text(), nullable=False)
     requirement = db.Column(db.Text(), nullable=False)
@@ -144,13 +143,19 @@ with app.app_context():
 
 #sign up function for system
 @app.route('/register', methods=['POST'])
-def regist():
+def register():
     
     email = request.json['email']
 
     email_test =  User.query.filter_by(email=email).first()
     if email_test:
         return jsonify({'error': 'Email has been registered already'}), 401
+    
+
+    # ID_test = ID.query.filter_by(type=type, id=id).first()
+    # if not ID_test:
+    #     return fa
+
 
     name = request.json['name']
     password = request.json['password']
@@ -163,20 +168,13 @@ def regist():
     else:
         role = 2
     
-    curr_user_profile = Profile(name, email)
+    curr_user = User(email, password, role, curr_user)
+    curr_user_profile = Profile(name, email, curr_user)
     curr_user_project_system = ProjectSystem()
-    curr_user = User(email, password, role)
 
-    curr_user.profile_id = curr_user_profile.pid 
-    curr_user.project_system_id = curr_user_project_system.sid
-
-    curr_user_profile.uid = curr_user.uid
-
-    curr_user_project_system.uid = curr_user.uid
-
+    db.session.add(curr_user)
     db.session.add(curr_user_profile)
     db.session.add(curr_user_project_system)
-    db.session.add(curr_user)
     db.session.commit()
 
     return user_sc.jsonify(curr_user)
@@ -193,7 +191,7 @@ def login():
         return jsonify({'error': 'empty email or password'}), 400
     
     user = User.query.filter_by(email=email).first()
-    if not user or user.passowrd != password:
+    if not user or user.password != password:
         return jsonify({'error': 'invalid email or password'}), 401
 
     token = jwt.encode({'user_id': email}, app.config['SECRET_KEY'], algorithm='HS256')
@@ -214,7 +212,6 @@ def storeproject(userid):
     job_classification = input['job_classification']
     problem_statement = input['problem_statement']
     requirement = input['requirement']
-
     payment_type = input['payment_type']
 
     curr_project = Project(location, job_classification, problem_statement, requirement, payment_type)
@@ -246,7 +243,7 @@ def storeproject(userid):
 
 
 #todo get all project information according to the userid
-@app.route('/getproject/<userid>/', methods=['GET'])
+@app.route('/project/browse/<userid>/', methods=['GET'])
 def getproject(userid):
     curr_project_system = ProjectSystem.query.filter_by(uid=userid).first()
 
@@ -272,16 +269,12 @@ def getproject(userid):
 #todo get profile according to the userid
 @app.route('/profile/details/<userid>/', methods=['GET'])
 def getprofile(userid):
+    print(userid)
     profile = Profile.query.filter_by(uid=userid).first()
-
-    # if not profile :
-    #     return jsonify({'error': 'user not exist'}), 400
-    
-
     return profile_sc.jsonify(profile)
 
 #todo update profile according to the userid
-@app.route('/updateprofile/<userid>/', methods=['PUT'])
+@app.route('/profile/update/<userid>/', methods=['PUT'])
 def updateprofilef1(userid):
     profile = Profile.query.filter_by(uid=userid).first()
 
