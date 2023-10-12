@@ -34,7 +34,7 @@ function Profile() {
   });
 
   async function updateProfile() {
-    const res = apiCall(`/updateprofile/${localStorage.getItem('userId')}`, 'PUT', { 'name': inputname, 'email': inputemail, 'workright': workRight, 'skill': skill });
+    const res = apiCall(`/updateprofile/${localStorage.getItem('userId')}`, 'PUT', { 'name': inputname, 'email': inputemail, 'workright': workRight, 'skill': skill,'avatarUrl':avatarUrl });
     res.then((data) => {
       if (data.error) {
         alert(data.error)

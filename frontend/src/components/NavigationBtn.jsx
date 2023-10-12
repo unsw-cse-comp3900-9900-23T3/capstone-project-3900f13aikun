@@ -16,7 +16,7 @@ export const NavigationBtn = () => {
   const [isshow, setIsshow] = React.useState(true);
   const [islog, setIslog] = React.useState(false);
   const [value, setValue] = React.useState('one');
-  const [picture, setPicture] = React.useState('https://img2.baidu.com/it/u=3406119999,3272762192&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500')
+  const [picture, setPicture] = React.useState('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fda0b06cb-b769-4c8d-b95c-e29b60b50e21%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1699602551&t=56a7074535ae9fd82e0d783badd8ae21')
   const [email, setEmail] = React.useState('')
   const [role, setRole] = React.useState('')
 
@@ -66,6 +66,12 @@ export const NavigationBtn = () => {
       setIslog(true);
       setIsshow(true);
     }
+
+    // const res2 = apiCall(`/getUserProfile/${localStorage.getItem('userId')}`, 'GET')
+    // res2.then((data) => {
+    //   setPicture(data.avatarUrl)
+    //   console.log(data.avatarUrl)
+    // })
   }, []);
 
   function logout() {
@@ -108,7 +114,7 @@ export const NavigationBtn = () => {
 
           {islog && (<div style={{
             width: '160px', height: '70px',
-            background: `url('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fda0b06cb-b769-4c8d-b95c-e29b60b50e21%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1699602551&t=56a7074535ae9fd82e0d783badd8ae21')`,
+            background: `url(${picture})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center center',
             backgroundRepeat: 'no-repeat',

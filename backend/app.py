@@ -65,18 +65,23 @@ class Profile(db.Model):
     workrights = db.Column(db.ARRAY(db.String), nullable=False)
     skill = db.Column(db.Text())
     uid = db.Column(db.Integer, db.ForeignKey('user_info.id'), nullable=False)
+    avatarUrl = db.Column(db.Text())
     
-    def __init__(self,email,name,workrights,skill,uid):
+    def __init__(self,email,name,workrights,skill,uid,avatarUrl):
         self.email =  email
         self.name = name
         self.workrights = workrights
         self.skill = skill
         self.uid = uid
+        self.avatarUrl = avatarUrl
 
 
 class ProfileSchema(ma.Schema):
     class Meta:
-        fields = ('id', ' email','name',' workrights ','skill','uid')
+        fields = ('id', ' email','name',' workrights ','skill','uid','avatarUrl')
+        
+profile_sc = ProfileSchema()
+profiles_sc = ProfileSchema(many=True)
         
 
 
@@ -89,6 +94,13 @@ with app.app_context():
 def get_UserInfo(id):
     userInfo = UserInfo.query.get(id)
     results = user_sc.dump(userInfo)
+    return jsonify(results)
+
+#get user information according to the user id
+@app.route('/getUserProfile/<id>', methods=['GET'])
+def get_UserProfile(id):
+    ProfileInfo = Profile.query.filter_by(uid=id).first()
+    results = profile_sc.dump(ProfileInfo)
     return jsonify(results)
 
 #send the code to frontend
@@ -124,29 +136,6 @@ def sendcode():
 
         
     return jsonify({'code': code})
-
-
-# #test function
-# @app.route('/update/<id>/', methods=['PUT'])
-# def update_article(id):
-#     article = article_test.query.get(id)
-    
-#     title = request.json['title']
-#     body = request.json['body']
-#     article.title = title
-#     article.body = body
-#     db.session.commit()
-#     return article_schema1.jsonify(article)
-#test function
-# @app.route('/delete/<id>/', methods=['DELETE'])
-# def delete_article(id):
-#     article = article_test.query.get(id)
-    
-#     db.session.delete(article)
-#     db.session.commit()
-#     return article_schema1.jsonify(article)
-
-
 
 
 #sign up function for system
@@ -267,18 +256,20 @@ def updateprofile(userid):
     name = request.json['name']
     workright = request.json['workright']
     skill = request.json['skill']
+    avatarUrl = request.json['avatarUrl']
     
     profileInfo = Profile.query.filter_by(uid=userid).first()
     userInfo = UserInfo.query.get(userid)
     if not profileInfo:
-        profile = Profile(email,name , workright,skill,userid)
-        db.session.add( profile)
+        profile = Profile(email,name, workright,skill, userid, avatarUrl)
+        db.session.add(profile)
         db.session.commit()
     else:
         profileInfo.email = email
         profileInfo.name  =  name 
         profileInfo.workrights = workright
         profileInfo.skill = skill
+        profileInfo.avatarUrl = avatarUrl
         userInfo.email = email
         userInfo.name  =  name 
         db.session.commit()
