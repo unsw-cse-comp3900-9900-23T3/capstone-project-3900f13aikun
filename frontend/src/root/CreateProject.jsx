@@ -30,7 +30,10 @@ export default function CreateProject() {
 
     const handlePublishClick = () => {
         //todo: verify input
-        apiCall(`/project/create/${localStorage.getItem('userId')}`, "POST", {
+
+        //token 
+
+        apiCall(`/project/${localStorage.getItem('userId')}`, "POST", {
             location,
             job_classification: classification,
             problem_statement: problemStatement,
@@ -85,9 +88,9 @@ export default function CreateProject() {
                         onChange={(e) => {
                             setOpportunityType(e.target.value);
                         }}>
-                        <FormControlLabel value="internship" control={<Radio />} label="Internship" />
-                        <FormControlLabel value="individualProject" control={<Radio />} label="Individual Project" />
-                        <FormControlLabel value="groupProject" control={<Radio />} label="Group Project" />
+                        <FormControlLabel value="1" control={<Radio />} label="Internship" />
+                        <FormControlLabel value="2" control={<Radio />} label="Individual Project" />
+                        <FormControlLabel value="3" control={<Radio />} label="Group Project" />
                     </RadioGroup>
                 </FormControl>
 
@@ -124,8 +127,8 @@ export default function CreateProject() {
                         onChange={(e) => {
                             setPaymentType(e.target.value);
                         }}>
-                        <FormControlLabel value="paid" control={<Radio />} label="Paid" />
-                        <FormControlLabel value="non-paid" control={<Radio />} label="Non-paid" />
+                        <FormControlLabel value="1" control={<Radio />} label="Paid" />
+                        <FormControlLabel value="2" control={<Radio />} label="Non-paid" />
                     </RadioGroup>
                 </FormControl>
 

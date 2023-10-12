@@ -13,7 +13,9 @@ import smtplib
 app = Flask(__name__)
 
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:jjy0325@localhost:5432/postgres' # replace by your username and password and 
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:jjy0325@localhost:5432/postgres' # replace by your username and password and 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgrespw@localhost:5432/3900pro' # replace by your username and password and 
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
@@ -54,6 +56,42 @@ user_sc = UserSchema()
 users_sc = UserSchema(many=True)
 
 
+class Project(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    location = db.Column(db.Text())
+    job_classification = db.Column(db.Integer)
+    problem_statement = db.Column(db.Text())
+    requirement = db.Column(db.Text())
+    payment_type = db.Column(db.Integer)
+
+    desired_outcomes = db.Column(db.Text())
+    required_skill = db.Column(db.Text())
+    potential_deliverable = db.Column(db.Text())
+    expected_delivery_cycle = db.Column(db.Text())
+    user_id = db.Column(db.ForeignKey(UserInfo.id))
+    user = db.relationship(
+        "UserInfo",
+        primaryjoin="UserInfo.id == Project.user_id",
+        lazy=True,
+    )
+
+
+    def __init__(self, location, job_classification, problem_statement, requirement, payment_type):
+        self.location = location
+        self.job_classification = job_classification
+        self.problem_statement = problem_statement
+        self.requirement = requirement
+        self.payment_type = payment_type
+
+
+
+class ProjectSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'location', 'job_classification', 'problem_statement', 'requirement', 'payment_type', 'desired_outcomes', 'required_skills', 'potential_eliverables', 'expected_delivery_cycle')
+
+project_sc = ProjectSchema()
+projects_sc = ProjectSchema(many=True)
+
 
 
 
@@ -77,6 +115,7 @@ class Profile(db.Model):
 class ProfileSchema(ma.Schema):
     class Meta:
         fields = ('id', ' email','name',' workrights ','skill','uid')
+
         
 
 
@@ -204,7 +243,7 @@ def login():
     
     user = UserInfo.query.filter_by(email=email, password=password).first()
     user_data = user_sc.dump(user)
-    usersend = {'token': str(token), 'user': user_data}
+    usersend = {'token': str(token,'utf-8'), 'user': user_data}
     
     if not email or not password:
         return jsonify({'error': 'empty email or password'}), 400
@@ -289,13 +328,39 @@ def updateprofile(userid):
 
 
 
-#todo store the project information to database according to the userid
-@app.route('/projectdetail/<userid>/', methods=['POST'])
+@app.route('/project/<userid>', methods=['POST'])
 def storeproject(userid):
-    pass
+    input = request.get_json()
+    location = input['location']
+    job_classification = input['job_classification']
+    problem_statement = input['problem_statement']
+    requirement = input['requirement']
+    payment_type = input['payment_type']
+
+    curr_project = Project(location, job_classification, problem_statement, requirement, payment_type)
+
+    if 'desired_outcomes' in input:
+        curr_project.desired_outcomes = input['desired_outcomes']
+
+    if 'required_skill' in input:
+        curr_project.required_skill = input['required_skill']
+
+    if 'potential_deliverable' in input:
+        curr_project.potential_deliverable = input['potential_deliverable']
+
+    if 'expected_delivery_cycle' in input:
+        curr_project.expected_delivery_cycle = input['expected_delivery_cycle']
+
+    curr_project.user_id = userid
+    db.session.add(curr_project)
+    db.session.commit()
+    return project_sc.jsonify(curr_project)
 
 
-
+@app.route('/project/<userid>', methods=['GET'])
+def  getprojects(userid):
+    projects = db.session.query(Project).filter(Project.user_id == userid)
+    return projects_sc.jsonify(projects)
 
 
 if __name__ == '__main__':
