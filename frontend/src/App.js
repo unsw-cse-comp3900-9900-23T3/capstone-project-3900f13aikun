@@ -5,10 +5,12 @@ import InitialDash from './root/InitialDash';
 import SignUp from './root/SignUp';
 import Profile from './root/Profile';
 import SignIn from './root/SignIn';
-import Dashboard from './root/Dashboard';
 import ForgetPassword from './root/ForgotPassword';
 import CreateProject from './root/CreateProject';
 import MyCreatedProject from './root/MyCreatedProject';
+import DashboardStudent from './root/DashboardSupervisor';
+import DashboardIndustry from './root/DashboardIndustry';
+import DashboardSupervisor from './root/DashboardSupervisor';
 
 
 
@@ -30,10 +32,12 @@ function App () {
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<SignIn />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/forgot" element={<ForgetPassword/>} />
             <Route path="/create-project" element={<CreateProject/>} />
             <Route path="/my-created-project" element={<MyCreatedProject/>} />
+            <Route path="/dashboard/student" element={<DashboardStudent/>} />
+            <Route path="/dashboard/academics" element={<DashboardSupervisor/>} />
+            <Route path="/dashboard/industryp" element={<DashboardIndustry/>} />
           </Routes>
         </BrowserRouter>
       </TotalContainer>

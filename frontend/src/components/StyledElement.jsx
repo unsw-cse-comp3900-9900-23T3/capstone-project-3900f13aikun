@@ -17,3 +17,4 @@ export const Iconchicken = styled('div')({
     width: '80px',
   
   })
+
