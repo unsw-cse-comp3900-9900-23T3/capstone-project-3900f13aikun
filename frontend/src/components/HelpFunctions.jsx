@@ -93,6 +93,22 @@ export function checkName (name) {
   return true;
 }
 
+export function checkWorkRight(workRight) {
+  if (workRight.length === 0) {
+    alert('Select at least one option');
+    return false;
+  }
+  return true;
+}
+
+export function checkSkills(skill) {
+  if (skill.trim() === '') {
+    alert('You have to fill in your skills');
+    return false;
+  }
+  return true;
+}
+
 // function to sort the game list
 export function sortGame (gamelist) {
   return gamelist.sort((a, b) => {

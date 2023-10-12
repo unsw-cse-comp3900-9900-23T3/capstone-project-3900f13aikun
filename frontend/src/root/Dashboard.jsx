@@ -1,8 +1,11 @@
+import InitialDash from "./InitialDash";
 
 
 function Dashboard () {
     return(
-        <>welcome dashboard</>
+        <>
+            <InitialDash></InitialDash>
+    </>
     )
 }
 
