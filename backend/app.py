@@ -51,11 +51,6 @@ profile_sc = ProfileSchema()
 profiles_sc = ProfileSchema(many=True)
 
 
-
-
-
-
-
 # ================================================
 
 
@@ -65,18 +60,19 @@ profiles_sc = ProfileSchema(many=True)
 class ProjectSystem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pids = db.Column(ARRAY(db.Integer), nullable=False)
+    permissions = db.Column(ARRAY(db.Integer), nullable=False)
 
     def __init__(self):
         self.pids = []
-
+        self.permissions = []
 
 
 class ProjectSystemSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'pids')
+        fields = ('id', 'pids', 'permissions')
 
-profile_sc = ProjectSystemSchema()
-profiles_sc = ProjectSystemSchema(many=True)
+project_system_sc = ProjectSystemSchema()
+project_systems_sc = ProjectSystemSchema(many=True)
 
 # ================================================
 class User(db.Model):
@@ -134,7 +130,10 @@ class ProjectSchema(ma.Schema):
         fields = ('id', 'location', 'job_classification', 'problem_statement', 'requirement', 'payment_type', 'desired_outcomes', 'required_skills', 'potential_eliverables', 'expected_delivery_cycle')
 
 project_sc = ProjectSchema()
-project_sc = ProjectSchema(many=True)
+projects_sc = ProjectSchema(many=True)
+
+
+
 # ================================================
 #create table
 with app.app_context():
@@ -149,7 +148,7 @@ def regist():
 
     email_test =  User.query.filter_by(email=email).first()
     if email_test:
-        return jsonify({'error': 'invalid email'}), 401
+        return jsonify({'error': 'Email has been registered already'}), 401
 
     name = request.json['name']
     password = request.json['password']
@@ -169,9 +168,9 @@ def regist():
     curr_user.profile_id = curr_user.uid 
     curr_user.project_system_id = curr_user.uid
 
-    db.session.add(curr_user)
     db.session.add(curr_user_profile)
     db.session.add(curr_user_project_system)
+    db.session.add(curr_user)
     db.session.commit()
 
 
@@ -253,26 +252,61 @@ def login():
 #todo store the project information to database according to the userid
 @app.route('/projectdetail/<userid>/', methods=['POST'])
 def storeproject(userid):
-    pass
+    input = request.get_json()
 
-#todo store the profile information to database according to the userid
-@app.route('/profiledetail/<userid>/', methods=['POST'])
-def storeprofile(userid):
-    pass
+    location = input['location']
+    job_classification = input['job_classification']
+    problem_statement = input['problem_statement']
+    requirement = input['requirement']
+
+    payment_type = input['payment_type']
+
+    curr_project = Project(location, job_classification, problem_statement, requirement, payment_type)
+
+    if 'desired_outcomes' in input:
+        curr_project.desired_outcomes = input['desired_outcomes']
+
+    if 'required_skills' in input:
+        curr_project.required_skills = input['required_skills']
+
+    if 'potential_eliverables' in input:
+        curr_project.potential_eliverables = input['potential_eliverables']
+
+    if 'expected_delivery_cycle' in input:
+        curr_project.expected_delivery_cycle = input['expected_delivery_cycle']
+
+    db.session.add(curr_project)
+
+    project_system = ProjectSystem.query.filter_by(uid=userid).first()
+
+    project_system.pids.append(curr_project.id)
+    project_system.permissions.append(1)
+
+    db.session.commit()
+
+    return project_sc.jsonify(curr_project)
+
+# #todo get all project information according to the userid
+# @app.route('/getproject/<userid>/', methods=['GET'])
+# def getproject(userid):
+#     curr_project_system = ProjectSystem.query.filter_by(id=userid).first()
+#     curr_pids = curr_project_system.pids
+#     curr_permissions = curr_project_system.permissions
+    
+
+#     post_project_ids = []
+#     for index in range(len(curr_permissions)):
+#         if curr_permissions[index] == 1:
+#             post_project_ids.append(curr_pids[index])
+    
+#     projects = Project.query.filter_by()
 
 
 
 
 
 
-#todo get all project information according to the userid
-@app.route('/getproject/<userid>/', methods=['GET'])
-def getproject(userid):
-
-    pass
-
-
-
+#     return projects_sc.jsonify(post_projects)
 
 
 
