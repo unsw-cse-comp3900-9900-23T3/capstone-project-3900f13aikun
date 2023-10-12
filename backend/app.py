@@ -21,21 +21,18 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with your actual secret key
 
-
-
-
-
-
 class Profile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    pid = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(60), nullable=False)
     email = db.Column(db.String(60), nullable=False)
-    avatar_url = db.Column(db.String(255), nullable=True) 
+    avatar_url = db.Column(db.String(255), nullable=False) 
     availability = db.Column(ARRAY(db.Integer), nullable=False)
     skill = db.Column(db.Text(), nullable=False)
   
 
     def __init__(self, name, email):
+        self.uid = -1 # temp uid before registering
         self.name = name
         self.email = email
         self.avatar_url = 'https://cdn4.iconfinder.com/data/icons/iconsimple-logotypes/512/github-512.png' # default avatar
@@ -45,7 +42,7 @@ class Profile(db.Model):
 
 class ProfileSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'name', 'email', 'avatar_url', 'availability', 'skill')
+        fields = ('pid', 'uid', 'name', 'email', 'avatar_url', 'availability', 'skill')
 
 profile_sc = ProfileSchema()
 profiles_sc = ProfileSchema(many=True)
@@ -54,22 +51,21 @@ profiles_sc = ProfileSchema(many=True)
 # ================================================
 
 
-# ================================================
-
-
 class ProjectSystem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    sid = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, nullable=False)
     pids = db.Column(ARRAY(db.Integer), nullable=False)
-    permissions = db.Column(ARRAY(db.Integer), nullable=False)
+    permission = db.Column(ARRAY(db.Integer), nullable=False)
 
     def __init__(self):
+        self.uid = -1 # temp uid before registering
         self.pids = []
         self.permissions = []
 
 
 class ProjectSystemSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'pids', 'permissions')
+        fields = ('sid', 'uid', 'pids', 'permission')
 
 project_system_sc = ProjectSystemSchema()
 project_systems_sc = ProjectSystemSchema(many=True)
@@ -80,6 +76,7 @@ class User(db.Model):
     email = db.Column(db.String(60), unique=True, nullable=False)
     password = db.Column(db.String(30), nullable=False)
     role = db.Column(db.Integer, nullable=False)
+
     profile_id = db.Column(db.Integer, ForeignKey('profile.id'), unique=True, nullable=True)
     project_system_id = db.Column(db.Integer, ForeignKey('project_system.id'), unique=True, nullable=True)
 
@@ -103,7 +100,7 @@ users_sc = UserSchema(many=True)
 
 # ================================================
 class Project(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    pid = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.Integer, nullable=False)
     job_classification = db.Column(db.Integer, nullable=False)
     problem_statement = db.Column(db.Text(), nullable=False)
@@ -111,8 +108,8 @@ class Project(db.Model):
     payment_type = db.Column(db.Integer, nullable=False)
 
     desired_outcomes = db.Column(db.Text(), nullable=True)
-    required_skills = db.Column(db.Text(), nullable=True)
-    potential_eliverables = db.Column(db.Text(), nullable=True)
+    required_skill = db.Column(db.Text(), nullable=True)
+    potential_deliverable = db.Column(db.Text(), nullable=True)
     expected_delivery_cycle = db.Column(db.Text(), nullable=True)
 
 
@@ -127,7 +124,7 @@ class Project(db.Model):
 
 class ProjectSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'location', 'job_classification', 'problem_statement', 'requirement', 'payment_type', 'desired_outcomes', 'required_skills', 'potential_eliverables', 'expected_delivery_cycle')
+        fields = ('pid', 'location', 'job_classification', 'problem_statement', 'requirement', 'payment_type', 'desired_outcomes', 'required_skills', 'potential_eliverables', 'expected_delivery_cycle')
 
 project_sc = ProjectSchema()
 projects_sc = ProjectSchema(many=True)
@@ -139,6 +136,11 @@ projects_sc = ProjectSchema(many=True)
 with app.app_context():
     db.create_all()
 # ================================================
+
+
+########################################
+#########         Auth        #########
+########################################
 
 #sign up function for system
 @app.route('/register', methods=['POST'])
@@ -165,14 +167,17 @@ def regist():
     curr_user_project_system = ProjectSystem()
     curr_user = User(email, password, role)
 
-    curr_user.profile_id = curr_user.uid 
-    curr_user.project_system_id = curr_user.uid
+    curr_user.profile_id = curr_user_profile.pid 
+    curr_user.project_system_id = curr_user_project_system.sid
+
+    curr_user_profile.uid = curr_user.uid
+
+    curr_user_project_system.uid = curr_user.uid
 
     db.session.add(curr_user_profile)
     db.session.add(curr_user_project_system)
     db.session.add(curr_user)
     db.session.commit()
-
 
     return user_sc.jsonify(curr_user)
 
@@ -183,22 +188,25 @@ def regist():
 def login():
     email = request.json['email']
     password = request.json['password']
-    token = jwt.encode({'user_id': email}, app.config['SECRET_KEY'], algorithm='HS256')
-    
-    user = User.query.filter_by(email=email, password=password).first()
-    user_data = user_sc.dump(user)
-    usersend = {'token': str(token), 'user': user_data}
-    
+
     if not email or not password:
         return jsonify({'error': 'empty email or password'}), 400
-
-    if not user:
+    
+    user = User.query.filter_by(email=email).first()
+    if not user or user.passowrd != password:
         return jsonify({'error': 'invalid email or password'}), 401
+
+    token = jwt.encode({'user_id': email}, app.config['SECRET_KEY'], algorithm='HS256')
+    user_data = user_sc.dump(user)
+    usersend = {'token': str(token), 'user': user_data}
 
     return jsonify(usersend)
 
+########################################
+#########        Project       #########
+########################################
 #todo store the project information to database according to the userid
-@app.route('/projectdetail/<userid>/', methods=['POST'])
+@app.route('/project/create/<userid>/', methods=['POST'])
 def storeproject(userid):
     input = request.get_json()
 
@@ -214,11 +222,11 @@ def storeproject(userid):
     if 'desired_outcomes' in input:
         curr_project.desired_outcomes = input['desired_outcomes']
 
-    if 'required_skills' in input:
-        curr_project.required_skills = input['required_skills']
+    if 'required_skill' in input:
+        curr_project.required_skill = input['required_skill']
 
-    if 'potential_eliverables' in input:
-        curr_project.potential_eliverables = input['potential_eliverables']
+    if 'potential_deliverable' in input:
+        curr_project.potential_deliverable = input['potential_deliverable']
 
     if 'expected_delivery_cycle' in input:
         curr_project.expected_delivery_cycle = input['expected_delivery_cycle']
@@ -240,33 +248,40 @@ def storeproject(userid):
 #todo get all project information according to the userid
 @app.route('/getproject/<userid>/', methods=['GET'])
 def getproject(userid):
-    curr_project_system = ProjectSystem.query.filter_by(id=userid).first()
+    curr_project_system = ProjectSystem.query.filter_by(uid=userid).first()
+
     curr_pids = curr_project_system.pids
     curr_permissions = curr_project_system.permissions
-    
 
     post_project_ids = []
     for index in range(len(curr_permissions)):
         if curr_permissions[index] == 1:
             post_project_ids.append(curr_pids[index])
     
-    post_projects = Project.query.filter(Project.id.in_(post_project_ids)).all()
+    post_projects = Project.query.filter(Project.pid.in_(post_project_ids)).all()
 
     return projects_sc.jsonify(post_projects)
 
 
 
 
-
+########################################
+#########        Profile       #########
+########################################
 
 #todo get profile according to the userid
 @app.route('/profile/details/<userid>/', methods=['GET'])
 def getprofile(userid):
-    user_profile = Profile.query.get(id=userid).first()
-    return profile_sc.jsonify(user_profile)
+    profile = Profile.query.filter_by(uid=userid).first()
+
+    # if not profile :
+    #     return jsonify({'error': 'user not exist'}), 400
+    
+
+    return profile_sc.jsonify(profile)
 
 #todo update profile according to the userid
-@app.route('/updateprofile/f1/<userid>/', methods=['PUT'])
+@app.route('/updateprofile/<userid>/', methods=['PUT'])
 def updateprofilef1(userid):
     profile = Profile.query.filter_by(uid=userid).first()
 
@@ -282,24 +297,12 @@ def updateprofilef1(userid):
     if 'avatar_url' in input:
         profile.avatar_url = input['avatar_url']
 
-    db.session.commit()
-
-    return profile_sc.jsonify(profile)
-
-
-#todo update profile according to the userid
-@app.route('/updateprofile/f2/<userid>/', methods=['POST'])
-def updateprofilef2(userid):
-    profile = Profile.query.filter_by(uid=userid).first()
-
-    input = request.get_json()
-
-
     if 'availability' in input:
         profile.availability = input['availability']
 
     if 'skill' in input:
         profile.skill = input['skill']
+
 
     db.session.commit()
 
