@@ -7,7 +7,8 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
-import NavigationBtn from '../components/NavigationBtn';
+import NavigationBtn from "../components/NavigationBtn";
+import { apiCall } from "../components/HelpFunctions";
 
 const steps = ["Send request code", "Verify code", "Reset password"];
 
@@ -20,13 +21,16 @@ export default function ForgetPassword() {
   const [confirmPassword, setConfirmPassword] = React.useState("");
 
   const handleSendClick = () => {
-    console.log(email);
-    setActiveStep(1);
+    apiCall("/sendcode", "POST", { email: email }).then((res) => {
+      setActiveStep(1);
+    });
   };
 
   const handleVerifyClick = () => {
     console.log(code);
-    setActiveStep(2);
+    if (code) {
+      setActiveStep(2);
+    }
   };
 
   const handleResetClick = () => {
