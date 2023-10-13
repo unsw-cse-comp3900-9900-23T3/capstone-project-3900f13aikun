@@ -40,8 +40,8 @@ export default function CreateProject() {
             requirement: availabilityRequirement,
             payment_type: paymentType,
             desired_outcomes: desiredOutcomes,
-            required_skill: requiredSkills,
-            potential_deliverable: potentialDel,
+            required_skills: requiredSkills,
+            potential_deliverables: potentialDel,
             expected_delivery_cycle: expectedDel,
         }).then((res) => {
             navigate("/my-created-project");
