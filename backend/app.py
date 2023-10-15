@@ -243,7 +243,7 @@ def login():
     
     user = UserInfo.query.filter_by(email=email, password=password).first()
     user_data = user_sc.dump(user)
-    usersend = {'token': str(token,'utf-8'), 'user': user_data}
+    usersend = {'token': str(token), 'user': user_data}
     
     if not email or not password:
         return jsonify({'error': 'empty email or password'}), 400
