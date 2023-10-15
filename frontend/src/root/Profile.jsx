@@ -34,7 +34,7 @@ function Profile() {
   });
 
   async function updateProfile() {
-    const res = apiCall(`/updateprofile/${localStorage.getItem('userId')}`, 'PUT', { 'name': inputname, 'email': inputemail, 'workright': workRight, 'skill': skill,'avatarUrl':avatarUrl });
+    const res = apiCall(`/updateprofile/${localStorage.getItem('userId')}`, 'PUT', { 'name': inputname, 'email': inputemail, 'workright': workRight, 'skill': skill });
     res.then((data) => {
       if (data.error) {
         alert(data.error)
@@ -84,7 +84,7 @@ function Profile() {
       >
         <FormControl style={{ textAlign: 'center', position: 'relative' }}>
           <div style={{ width: '130px', height: '130px', border: '2px solid #3489db', borderRadius: '50%', overflow: 'hidden' }}>
-            <img src={avatarUrl || 'empty-avatar.png'} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }} />
+            <img src={avatarUrl || '/frontend/src/gray.png'} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }} />
           </div>
           {!avatarUrl && (
             <div>
