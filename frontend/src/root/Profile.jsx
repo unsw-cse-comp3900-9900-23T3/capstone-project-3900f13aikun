@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import NavigationBtn from '../components/NavigationBtn';
-import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, formControlClasses } from '@mui/material';
 import { apiCall, checkEmail, checkName, checkSkills, checkWorkRight, extractUId, fileToDataUrl } from '../components/HelpFunctions';
 
 
@@ -17,7 +17,7 @@ function Profile() {
   const [inputname, setInputname] = React.useState('');
   const [inputemail, setInputEmail] = React.useState('');
 
-  const [avatarUrl, setAvatarUrl] = React.useState(null);
+  const [avatarUrl, setAvatarUrl] = React.useState('https://img2.baidu.com/it/u=3406119999,3272762192&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500');
 
 
   React.useEffect(() => {
@@ -43,8 +43,6 @@ function Profile() {
       }
     })
   }
-
-
 
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
@@ -84,7 +82,7 @@ function Profile() {
       >
         <FormControl style={{ textAlign: 'center', position: 'relative' }}>
           <div style={{ width: '130px', height: '130px', border: '2px solid #3489db', borderRadius: '50%', overflow: 'hidden' }}>
-            <img src={avatarUrl || '/frontend/src/gray.png'} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }} />
+            <img src={avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }} />
           </div>
           {!avatarUrl && (
             <div>
@@ -97,7 +95,7 @@ function Profile() {
             </div>
           )}
           {avatarUrl && (
-            <Button onClick={handleReplaceAvatar} style={{ left: '50%', transform: 'translateX(-50%)', backgroundColor: 'transparent', color: '#3489db' }}>
+            <Button htmlFor="upload" onClick={handleReplaceAvatar} style={{ left: '50%', transform: 'translateX(-50%)', backgroundColor: 'transparent', color: '#3489db' }}>
               Replace
             </Button>
           )}

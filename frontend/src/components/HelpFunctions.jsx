@@ -15,7 +15,7 @@ export const apiCall = async (path, method, body) => {
     options.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   }
 
-  const response = await fetch(`http://127.0.0.1:5000${path}`, options);
+  const response = await fetch(`http://localhost:5000${path}`, options);
   const data = await response.json();
   return data;
 };
