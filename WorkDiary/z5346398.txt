@@ -20,3 +20,10 @@ Week 4
 We divided our workload during a meeting and started work on Sprint 1. 
 It took us a few days to refresh our knowledge of Flask and React, and by the end of this week, we are nearly done with Sprint 1, successfully achieving our target. 
 Our plan is to complete the initial iteration of Sprint 1 next Wednesday and then make improvements on Thursday and Friday.
+
+Week 5
+We successfully completed the initial iteration of Sprint 1, making substantial improvements to various functionalities based on the identified issues. 
+In addition, we conducted a thorough review and summary of the work process for Demo A delivery, concluding with the Retrospective A.
+However, I encountered some technical challenges while working with the SQLAlchemy library to set up the database. I devoted over 20 hours to learning more about the API and searching for solutions to the encountered issues. 
+Additionally, as I made modifications to certain functionalities, it incurred extra communication efforts. To address this challenge, we organized a face-to-face meeting.
+We have scheduled a meeting for next week to delve into the work allocation for Sprint 2 and enhance our existing codebase based on received feedback.
