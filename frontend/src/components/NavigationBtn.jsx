@@ -55,6 +55,8 @@ export const NavigationBtn = () => {
       setIsshow(true);
     } else if (path.pathname === '/profile') {
       setValue('two');
+    } else if (path.pathname === '/my-created-project') {
+      setValue('three');
     } else if (path.pathname === '/register') {
       setIsshow(false);
     } else if (path.pathname === '/login') {
@@ -107,7 +109,7 @@ export const NavigationBtn = () => {
             >
               <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
               <Tab value="two" label="Profile" onClick={testLogin} />
-              {role === 'Industry partner' && <Button sx={{ marginLeft: '60px' }} variant="contained" color="success" onClick={() => navigate('/create-project')}>create project</Button>}
+              {role === 'Industry partner' && <Tab value="three" label="Create Project" onClick={() => { navigate('/my-created-project') }}></Tab>}
 
             </Tabs>
           </Box>}

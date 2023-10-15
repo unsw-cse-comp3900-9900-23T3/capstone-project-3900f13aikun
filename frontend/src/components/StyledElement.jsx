@@ -15,6 +15,13 @@ export const Iconchicken = styled('div')({
     borderRadius: '50%',
     height: '80px',
     width: '80px',
-  
-  })
 
+})
+
+export const Pagebackground = styled('Typography')({
+    fontSize: '30px',
+    backgroundColor: '#00008B',
+    width: '1515px',
+    color: 'white',
+    padding: '40px',
+})

@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 import NavigationBtn from '../components/NavigationBtn';
 import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, formControlClasses } from '@mui/material';
 import { apiCall, checkEmail, checkName, checkSkills, checkWorkRight, extractUId, fileToDataUrl } from '../components/HelpFunctions';
-
+import { Pagebackground } from '../components/StyledElement';
 
 function Profile() {
   const [name, setName] = React.useState('');
@@ -19,6 +19,12 @@ function Profile() {
 
   const [avatarUrl, setAvatarUrl] = React.useState('https://img2.baidu.com/it/u=3406119999,3272762192&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500');
 
+  const headerStyle = {
+    backgroundColor: '#007BFF', // 背景颜色为蓝色
+    color: 'white', // 文字颜色为白色
+    textAlign: 'center', // 文字居中
+    padding: '20px' // 上下左右的内边距，可根据需要调整
+  };
 
   React.useEffect(() => {
     apiCall(`/getUserInfo/${localStorage.getItem('userId')}`, 'GET')
@@ -69,10 +75,11 @@ function Profile() {
   return (
     <>
       <NavigationBtn></NavigationBtn>
+      <Pagebackground>My Profile</Pagebackground>
       <Box
         component="form"
         sx={{
-          py: 10,
+          py: 2,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -80,7 +87,7 @@ function Profile() {
         noValidate
         autoComplete="off"
       >
-        <FormControl style={{ textAlign: 'center', position: 'relative' }}>
+        <FormControl style={{ textAlign: 'center', position: 'relative'}}>
           <div style={{ width: '130px', height: '130px', border: '2px solid #3489db', borderRadius: '50%', overflow: 'hidden' }}>
             <img src={avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center center' }} />
           </div>
@@ -101,9 +108,7 @@ function Profile() {
           )}
         </FormControl>
         <br></br>
-
-
-        <FormControl style={{ width: "400px" }}>
+        <FormControl style={{ width: "400px", backgroundColor: '#F5F5F5', borderRadius: '10px', padding: '100px'}}>
           <FormLabel style={{ fontWeight: 'bold', color: 'black' }}>Email:</FormLabel>
           <TextField id="filled-basic" label="email" variant="filled" placeholder={email} value={inputemail} style={{ width: '400px' }}
             onChange={(e) => {
@@ -182,6 +187,7 @@ function Profile() {
               setSkill(e.target.value);
             }} />
         </FormControl>
+
         <Button id='registerbutton' role="profile" variant="contained" color="success" onClick={checkProfile} sx={{ marginTop: '30px' }}>Save</Button>
       </Box >
     </>

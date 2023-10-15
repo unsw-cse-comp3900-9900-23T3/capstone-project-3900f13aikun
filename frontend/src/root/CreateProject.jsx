@@ -1,10 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Stepper from "@mui/material/Stepper";
-import Step from "@mui/material/Step";
-import StepLabel from "@mui/material/StepLabel";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -14,6 +10,7 @@ import FormLabel from "@mui/material/FormLabel";
 import { useNavigate } from "react-router-dom";
 import NavigationBtn from "../components/NavigationBtn";
 import { apiCall } from "../components/HelpFunctions";
+import { Pagebackground } from '../components/StyledElement';
 
 export default function CreateProject() {
     const navigate = useNavigate();
@@ -51,10 +48,11 @@ export default function CreateProject() {
     return (
         <>
             <NavigationBtn></NavigationBtn>
+            <Pagebackground>Opportunity POST</Pagebackground>
             <Box
                 component="form"
                 sx={{
-                    py: 10,
+                    py: 5,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
