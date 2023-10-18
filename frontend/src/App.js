@@ -11,6 +11,11 @@ import MyCreatedProject from './root/MyCreatedProject';
 import DashboardStudent from './root/DashboardSupervisor';
 import DashboardIndustry from './root/DashboardIndustry';
 import DashboardSupervisor from './root/DashboardSupervisor';
+import SavedProjects from './root/SavedProjects';
+import Appliacation from './root/Application';
+import Notification from './root/Notification';
+import MyGroup from './root/MyGroup';
+import MyCreateGroup from './root/MyCreateGroup';
 
 
 
@@ -38,6 +43,11 @@ function App () {
             <Route path="/dashboard/student" element={<DashboardStudent/>} />
             <Route path="/dashboard/academics" element={<DashboardSupervisor/>} />
             <Route path="/dashboard/industryp" element={<DashboardIndustry/>} />
+            <Route path="/saved-projects" element={<SavedProjects/>} />
+            <Route path="/application" element={<Appliacation/>} />
+            <Route path="/notification" element={<Notification/>} />
+            <Route path="/my-group" element={<MyGroup/>} />
+            <Route path="/my-create-group" element={<MyCreateGroup/>} />
           </Routes>
         </BrowserRouter>
       </TotalContainer>

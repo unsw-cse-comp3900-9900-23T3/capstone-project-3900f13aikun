@@ -20,7 +20,6 @@ const Dashbackground = styled('div')({
   backgroundSize: 'cover',
   backgroundPosition: 'center center',
   backgroundRepeat: 'no-repeat',
-  backgroundColor: 'white',
   width: '1470px',
   height: '300px',
   marginTop: '20px',
@@ -29,13 +28,13 @@ const Dashbackground = styled('div')({
 
 const Dashtextfield = styled('div')({
   display: 'flex',
-  justifyContent: 'center', // Center items horizontally
-  alignItems: 'center',     // Center items vertically
-  height: '200px',           // Optional: full viewport height
+  justifyContent: 'center', 
+  alignItems: 'center',     
+  height: '200px',           
   background: 'white',
   width: "1000px",
   position: 'relative',
-  top: '50px',
+  top: '40px',
   left: '250px'
 })
 
@@ -105,13 +104,14 @@ const InitialDash = () => {
                 </MenuItem>
                 <MenuItem value={10}>IT</MenuItem>
                 <MenuItem value={20}>ACCOUNTING</MenuItem>
-                <MenuItem value={30}>Banking</MenuItem>
+                <MenuItem value={30}>Banking</MenuItem>/
+
               </Select>
             </FormControl>
           </div>
           <div style={{ marginRight: "30px" }}>
             <span style={{ position: 'relative', top: '45px', left: '130px' }}><b>Where</b></span>
-            <TextField id="outlined-basic" label="Outlined" variant="outlined" style={{ zIndex: '3', marginTop: '100px', width: '220px' }} />
+            <TextField id="outlined-basic" label="Enter suburb,city or region" variant="outlined" style={{ zIndex: '3', marginTop: '100px', width: '220px' }} />
           </div>
 
           <Button variant="outlined" color='secondary' sx={{ marginTop: '100px' }}>Search</Button>

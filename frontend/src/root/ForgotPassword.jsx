@@ -41,7 +41,7 @@ export default function ForgetPassword() {
   };
 
   const handleVerifyClick = () => {
-    if (rececode == code) {
+    if (rececode === code) {
       setActiveStep(2);
     } else {
       alert('Invalid code')
@@ -53,7 +53,7 @@ export default function ForgetPassword() {
     if (!password) {
       alert('empty password')
     }
-    if (checkPassword(password) && (password == confirmPassword) ) {
+    if (checkPassword(password) && (password === confirmPassword) ) {
       const res = apiCall(`/reset/${userId}`, 'PUT', { 'password': password });
       res.then((data) => {
         if (data.error) {
