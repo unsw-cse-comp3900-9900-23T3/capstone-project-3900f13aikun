@@ -20,7 +20,7 @@ function Profile() {
 
   useEffect(() => {
     setEmail(storedEmail);
-    apiCall(`/getUserInfo/${localStorage.getItem('userId')}`, 'GET')
+    apiCall(`/profile`, 'GET')
       .then((data) => {
         if (data.error) {
           alert(data.error)

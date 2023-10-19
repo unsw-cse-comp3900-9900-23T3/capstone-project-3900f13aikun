@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import TextField from "@mui/material/TextField";
 import { useNavigate } from "react-router-dom";
-import NavigationBtn from '../components/NavigationBtn';
+import NavigationBtn from "../components/NavigationBtn";
 import { apiCall, checkPassword } from "../components/HelpFunctions";
 
 const steps = ["Send request code", "Verify code", "Reset password"];
@@ -23,52 +23,48 @@ export default function ForgetPassword() {
   const [rececode, setReceCode] = React.useState("");
   const [userId, setUserId] = React.useState(0);
 
-
-
-
   const handleSendClick = () => {
-    const res = apiCall(`/resetpassword/sendcode`, 'POST', { 'email': email })
+    const res = apiCall(`/resetPassword/sendCode`, "POST", { email: email });
     res.then((data) => {
       if (data.error) {
-        alert(data.error)
+        alert(data.error);
       } else {
-        setUserId(data.userId)
-        setReceCode(data.code)
         setActiveStep(1);
       }
-    })
-
+    });
   };
 
   const handleVerifyClick = () => {
-    if (rececode === code) {
-      setActiveStep(2);
-    } else {
-      alert('Invalid code')
-    }
+    const res = apiCall(`/verifyCode`, "POST", { email: email, code });
+    res.then((data) => {
 
+      console.log(data);
+
+      if (data.error) {
+        alert(data.error);
+      } else {
+        setActiveStep(2);
+        localStorage.setItem("token", data.token);
+      }
+    });
   };
 
   const handleResetClick = () => {
     if (!password) {
-      alert('empty password')
+      alert("empty password");
     }
-    if (checkPassword(password) && (password === confirmPassword) ) {
-      const res = apiCall(`/reset/${userId}`, 'PUT', { 'password': password });
+    if (checkPassword(password) && password === confirmPassword) {
+      const res = apiCall(`/resetPassword`, "PUT", { password: password });
       res.then((data) => {
         if (data.error) {
-          alert(data.error)
+          alert(data.error);
         } else {
           navigate("/login");
         }
-      })
+      });
     } else {
-      alert('unequal password')
+      alert("unequal password");
     }
-
-
-
-
   };
 
   return (

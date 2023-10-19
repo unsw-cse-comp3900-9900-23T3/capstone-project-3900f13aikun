@@ -20,9 +20,7 @@ function SignIn() {
       if (data.error) {
         alert(data.error)
       } else {
-        console.log(data)
         localStorage.setItem('token', data.token);
-        localStorage.setItem('userId', data.user.id);
 
         if (data.user.role === 'Industry partner') {
           navigate('/dashboard/industryp')
@@ -57,7 +55,7 @@ function SignIn() {
                 setEmail(e.target.value);
               }} />
             <br></br>
-            <TextField id="filled-basic" label="password" variant="filled" style={{ width: '400px', marginLeft:'60px'  }}
+            <TextField id="filled-basic" type="password" label="password" variant="filled" style={{ width: '400px', marginLeft:'60px'  }}
               onChange={(e) => {
                 setPassword(e.target.value);
               }} />

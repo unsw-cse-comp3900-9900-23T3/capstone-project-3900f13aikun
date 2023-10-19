@@ -49,8 +49,8 @@ export const NavigationBtn = () => {
 
   const path = useLocation();
   React.useEffect(() => {
-    if (localStorage.getItem('userId')) {
-      const res = apiCall(`/getUserInfo/${localStorage.getItem('userId')}`, 'GET')
+    if (localStorage.getItem('token')) {
+      const res = apiCall(`/profile`, 'GET')
       res.then((data) => {
         if (data.error) {
           alert(data.error)
