@@ -18,7 +18,7 @@ export const NavigationBtn = () => {
   const [picture, setPicture] = React.useState('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fda0b06cb-b769-4c8d-b95c-e29b60b50e21%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1699602551&t=56a7074535ae9fd82e0d783badd8ae21')
   const [email, setEmail] = React.useState('')
   const [name, setName] = React.useState('')
-  const [role, setRole] = React.useState('')
+  const [role, setRole] = React.useState(0)
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -123,8 +123,8 @@ export const NavigationBtn = () => {
             >
               <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
               <Tab value="two" label="Profile" onClick={testLogin} />
-              {role === 'Industry partner' && <Tab value="three" label="Create Project" onClick={() => { navigate('/my-created-project') }}></Tab>}
-              {role === 'Student' && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group') }}></Tab>}
+              {role === 2 && <Tab value="three" label="Create Project" onClick={() => { navigate('/my-created-project') }}></Tab>}
+              {role === 1 && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group') }}></Tab>}
             </Tabs>
           </Box>}
 
@@ -140,7 +140,6 @@ export const NavigationBtn = () => {
           }
 
           {islog && (<div style={{ position: 'relative', top: '15px', right: '40px' }}>
-            <div style={{ width: '140px' }}><b>{role}:</b></div>
             <div>
               <Button
                 id="basic-button"

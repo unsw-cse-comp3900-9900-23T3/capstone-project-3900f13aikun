@@ -13,27 +13,24 @@ function Profile() {
   const [workRight, setWorkRight] = React.useState('');
   const [skill, setSkill] = React.useState('');
   const [isEditing, setIsEditing] = useState(false);
-
-  const storedEmail = localStorage.getItem('userEmail') || '';
+  const [isDisabled, setDisabled] = useState(true);
 
   const [avatarUrl, setAvatarUrl] = React.useState('https://img2.baidu.com/it/u=3406119999,3272762192&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500');
 
   useEffect(() => {
-    setEmail(storedEmail);
     apiCall(`/profile`, 'GET')
       .then((data) => {
         if (data.error) {
           alert(data.error)
         } else {
           setEmail(data.email)
-          localStorage.setItem('userEmail', data.email);
           setName(data.name)
         }
       })
   }, []);
 
   async function updateProfile() {
-    const res = apiCall(`/updateprofile/${localStorage.getItem('userId')}`, 'PUT', { 'name': name, 'email': email, 'workright': workRight, 'skill': skill, 'avatarUrl': avatarUrl });
+    const res = apiCall(`/profile`, 'PUT', { 'name': name, 'work_rights': workRight, 'skill': skill, 'avatarUrl': avatarUrl });
     res.then((data) => {
       if (data.error) {
         alert(data.error)
@@ -56,6 +53,7 @@ function Profile() {
     if (checkEmail(email) && checkWorkRight(workRight) && checkSkills(skill)) {
       updateProfile();
     }
+    setDisabled(!isDisabled);
     setIsEditing(!isEditing);
   }
 
@@ -75,7 +73,7 @@ function Profile() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: '40%',
+          width: '50%',
         }}
         noValidate
         autoComplete="off"
@@ -105,7 +103,8 @@ function Profile() {
               <TextField id="filled-basic" label="email" variant="filled" value={email} style={{ width: '400px' }}
                 onChange={(e) => {
                   setEmail(e.target.value);
-                }} />
+                }} 
+                disabled={isDisabled}/>
               <br></br>
               <FormLabel style={{ fontWeight: 'bold', color: 'black' }}>Name:</FormLabel>
               <TextField id="filled-basic" label="name" variant="filled" value={name} style={{ width: '400px' }}
