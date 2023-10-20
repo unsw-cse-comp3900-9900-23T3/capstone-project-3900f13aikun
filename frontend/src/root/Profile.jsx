@@ -75,7 +75,7 @@ function Profile() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: '40%',
+          width: '50%',
         }}
         noValidate
         autoComplete="off"

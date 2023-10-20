@@ -147,15 +147,6 @@ def get_UserInfo(id):
     results = user_sc.dump(userInfo)
     return jsonify(results)
 
-
-# get user information according to the user id
-@app.route("/getUserProfile/<id>", methods=["GET"])
-def get_UserProfile(id):
-    ProfileInfo = Profile.query.filter_by(uid=id).first()
-    results = profile_sc.dump(ProfileInfo)
-    return jsonify(results)
-
-
 # send the code to frontend
 @app.route("/sendcode", methods=["POST"])
 def sendcode():
@@ -326,6 +317,12 @@ def updateprofile(userid):
         db.session.commit()
 
     return "1"
+
+# get user information according to the user id
+@app.route("/getUserProfile/<userid>", methods=["GET"])
+def get_UserProfile(userid):
+    ProfileInfo = db.session.query(Profile).filter(Profile.uid == userid)
+    return profile_sc.jsonify(ProfileInfo)
 
 
 @app.route("/project/<userid>", methods=["POST"])
