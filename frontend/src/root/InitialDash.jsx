@@ -108,7 +108,7 @@ const InitialDash = () => {
             <TextField id="outlined-basic" label="Enter suburb,city or region" variant="outlined" style={{ zIndex: "3", marginTop: "100px", width: "220px" }} />
           </div>
 
-          <Button variant="outlined" color="secondary" sx={{ marginTop: "100px" }}>
+          <Button variant="outlined" color="secondary" sx={{ marginTop: "100px" }} onClick={()=>{ navigate("/search-result");}}>
             Search
           </Button>
         </Dashtextfield>
