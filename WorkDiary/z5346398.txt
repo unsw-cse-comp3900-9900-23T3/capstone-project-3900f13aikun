@@ -27,3 +27,10 @@ In addition, we conducted a thorough review and summary of the work process for 
 However, I encountered some technical challenges while working with the SQLAlchemy library to set up the database. I devoted over 20 hours to learning more about the API and searching for solutions to the encountered issues. 
 Additionally, as I made modifications to certain functionalities, it incurred extra communication efforts. To address this challenge, we organized a face-to-face meeting.
 We have scheduled a meeting for next week to delve into the work allocation for Sprint 2 and enhance our existing codebase based on received feedback.
+
+Week 6
+We held a meeting to determine the scope of Sprint 2 and allocate tasks to group members.
+I started working on enhancing the last Sprint database and designing database tables for the current Sprint.
+It's tricky to generate a "tag" for each opportunity to improve the efficiency of information browsing. I'm still googling some feasible solutions.
+Since this week is flexibility week, we didn't assign too much workload.
+We have scheduled a meeting for next week to check the progress of the work of every team member and figure out what we should do more specifically.
