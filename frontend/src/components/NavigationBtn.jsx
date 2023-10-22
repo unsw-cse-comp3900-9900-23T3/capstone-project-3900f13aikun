@@ -83,12 +83,6 @@ export const NavigationBtn = () => {
       setIslog(true);
       setIsshow(true);
     }
-
-    // const res2 = apiCall(`/getUserProfile/${localStorage.getItem('userId')}`, 'GET')
-    // res2.then((data) => {
-    //   setPicture(data.avatarUrl)
-    //   console.log(data.avatarUrl)
-    // })
   }, []);
 
   function logout() {
