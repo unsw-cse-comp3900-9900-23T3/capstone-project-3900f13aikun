@@ -10,7 +10,7 @@ import { Pagebackground } from "../components/StyledElement";
 function Profile() {
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
-  const [workRight, setWorkRight] = React.useState(["date:, "]);
+  const [workRight, setWorkRight] = React.useState([]);
   const [skill, setSkill] = React.useState("");
   const [isEditing, setIsEditing] = useState(false);
 
