@@ -6,12 +6,20 @@ import { Pagebackground } from '../components/StyledElement';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { Table, TableCell, TableHead, TableRow } from '@mui/material';
 
 function MyGroup() {
     const navigate = useNavigate();
     const [groups, setGroups] = useState([]);
-    const [groupName, setGroupName] = useState('');
-    
+
+    const handleCreate = () => {
+        const newRow = {
+            name: `小组${groups.length + 1}`,
+            introduction: `这是小组${groups.length + 1}的介绍`,
+        };
+        setGroups([...groups, newRow]);
+    };
+
     return (
         <>
             <NavigationBtn></NavigationBtn>
@@ -25,7 +33,26 @@ function MyGroup() {
                 }}>
                 create
             </Button>
-            <Typography style={{ fontfontSize: "30px", marginRight:"1000px"}}>Groups you are in</Typography>
+            <Typography style={{ fontSize: "30px", marginRight: "1000px" }}>Groups you are in</Typography>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>小组名</th>
+                            <th>介绍</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {groups.map((group, index) => (
+                            <tr key={index}>
+                                <td>{group.name}</td>
+                                <td>{group.introduction}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <button onClick={handleCreate}>Create</button>
+            </div>
         </>
     );
 
