@@ -16,79 +16,63 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-
-const Dashbackground = styled("div")({
-  backgroundImage: `url('/background.jpg')`,
-  backgroundSize: "cover",
-  backgroundPosition: "center center",
-  backgroundRepeat: "no-repeat",
-  width: "1470px",
-  height: "300px",
-  marginTop: "20px",
-  zIndex: "1",
-});
-
-const Dashtextfield = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "200px",
-  background: "white",
-  width: "1000px",
-  position: "relative",
-  top: "40px",
-  left: "250px",
-  
-});
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 function SearchResult() {
   const navigate = useNavigate();
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const [classification, setClassification] = React.useState("");
+  const [opportunityType, setOpportunityType] = React.useState("");
+  const [paymentType, setPaymentType] = React.useState("");
 
   return (
     <>
       <NavigationBtn></NavigationBtn>
-      <Dashbackground>
-        <Dashtextfield>
-          <div style={{ marginRight: "40px" }}>
-            <span style={{ position: "relative", top: "45px", left: "130px" }}>
-              <b>keywords</b>
-            </span>
-            <TextField id="outlined-basic" label="Enter key words" variant="outlined" style={{ zIndex: "3", marginTop: "100px", width: "220px" }} />
-          </div>
-          <div>
-            <FormControl sx={{ m: 1, minWidth: 210, marginTop: "109px" }}>
-              <InputLabel id="demo-simple-select-helper-label">Any Classification</InputLabel>
-              <Select labelId="demo-simple-select-helper-label" id="demo-simple-select-helper" value={age} label="Classificatgion" onChange={handleChange}>
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>IT</MenuItem>
-                <MenuItem value={20}>ACCOUNTING</MenuItem>
-                <MenuItem value={30}>Banking</MenuItem>/
-              </Select>
-            </FormControl>
-          </div>
-          <div style={{ marginRight: "30px" }}>
-            <span style={{ position: "relative", top: "45px", left: "130px" }}>
-              <b>Where</b>
-            </span>
-            <TextField id="outlined-basic" label="Enter suburb,city or region" variant="outlined" style={{ zIndex: "3", marginTop: "100px", width: "220px" }} />
-          </div>
+      <Box sx={{ my: 3, display: "flex", gap: 3 }}>
+        <TextField fullWidth label="Enter key words" variant="outlined" />
+        <TextField fullWidth label="Enter suburb,city or region" variant="outlined" />
+        <Button fullWidth variant="contained"  color="primary">
+          Search
+        </Button>
+      </Box>
+      <Box sx={{ my: 2, display: "flex", gap: 3 }}>
+        <FormControl sx={{ width: 300 }}>
+          <InputLabel>Any Classification</InputLabel>
+          <Select
+            value={classification}
+            onChange={(e) => {
+              setClassification(e.target.value);
+            }}>
+            <MenuItem value={1}>IT</MenuItem>
+            <MenuItem value={2}>ACCOUNTING</MenuItem>
+            <MenuItem value={3}>Banking</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ width: 300 }}>
+          <InputLabel>Opportunity type</InputLabel>
+          <Select
+            value={opportunityType}
+            onChange={(e) => {
+              setOpportunityType(e.target.value);
+            }}>
+            <MenuItem value={1}>Internship</MenuItem>
+            <MenuItem value={2}>Individual Project</MenuItem>
+            <MenuItem value={2}>Group Project</MenuItem>
+          </Select>
+        </FormControl>
+        <DatePicker label="Publish Date"  />
+      </Box>
 
-          <Button variant="outlined" color="secondary" sx={{ marginTop: "100px" }}>
-            Search
-          </Button>
-        </Dashtextfield>
-      </Dashbackground>
       <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5 }}>
         <Card sx={{ maxWidth: 600 }}>
           <CardContent>
-            <Typography sx={{ textDecorationLine: "underline",cursor:'pointer' }} gutterBottom variant="h5" component="div" onClick={()=>{navigate('/project-detail')}}>
+            <Typography
+              sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+              gutterBottom
+              variant="h5"
+              component="div"
+              onClick={() => {
+                navigate("/project-detail");
+              }}>
               Anytime Fitness Alphington - Club Manager
             </Typography>
             <Typography variant="body1" color="text.secondary" gutterBottom>
@@ -125,8 +109,6 @@ function SearchResult() {
             </Button>
           </CardActions>
         </Card>
-
-
       </Box>
     </>
   );
