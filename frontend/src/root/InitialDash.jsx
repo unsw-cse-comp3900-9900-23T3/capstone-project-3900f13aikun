@@ -15,29 +15,8 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Stack from "@mui/material/Stack";
+import { Dashbackground, Dashtextfield } from "../components/StyledElement";
 
-const Dashbackground = styled("div")({
-  backgroundImage: `url('/background.jpg')`,
-  backgroundSize: "cover",
-  backgroundPosition: "center center",
-  backgroundRepeat: "no-repeat",
-  width: "1470px",
-  height: "300px",
-  marginTop: "20px",
-  zIndex: "1",
-});
-
-const Dashtextfield = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "200px",
-  background: "white",
-  width: "1000px",
-  position: "relative",
-  top: "40px",
-  left: "250px",
-});
 
 const InitialDash = () => {
   const navigate = useNavigate();
