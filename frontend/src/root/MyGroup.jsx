@@ -6,19 +6,16 @@ import { Pagebackground } from '../components/StyledElement';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { Table, TableCell, TableHead, TableRow } from '@mui/material';
+import { Table, TableCell, TableHead, TableRow, TableBody, TableContainer, Paper } from '@mui/material';
 
 function MyGroup() {
     const navigate = useNavigate();
     const [groups, setGroups] = useState([]);
+    const [joinStatus, setJoinStatus] = React.useState({});
 
-    const handleCreate = () => {
-        const newRow = {
-            name: `小组${groups.length + 1}`,
-            introduction: `这是小组${groups.length + 1}的介绍`,
-        };
-        setGroups([...groups, newRow]);
-    };
+    const handleLeave = () => { }
+    const handleEdit = () => { }
+    const handleJoin = () => { }
 
     return (
         <>
@@ -33,26 +30,86 @@ function MyGroup() {
                 }}>
                 create
             </Button>
-            <Typography style={{ fontSize: "30px", marginRight: "1000px" }}>Groups you are in</Typography>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>小组名</th>
-                            <th>介绍</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {groups.map((group, index) => (
-                            <tr key={index}>
-                                <td>{group.name}</td>
-                                <td>{group.introduction}</td>
-                            </tr>
+            <Typography variant="h6" component="div" style={{ marginRight: '840px' }}>
+                Groups you are in
+            </Typography>
+            <br></br>
+            <TableContainer component={Paper} style={{ maxWidth: 1000, margin: '0 auto' }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Group name</TableCell>
+                            <TableCell>Description</TableCell>
+                            <TableCell>Members</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {groups.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell>Project {item.id}</TableCell>
+                                <TableCell>{item.groupName}</TableCell>
+                                <TableCell>{item.description}</TableCell>
+                                <TableCell>
+                                    <Button onClick={() => handleEdit(item.id)}>
+                                        Edit
+                                    </Button>
+                                </TableCell>
+                                <TableCell>
+                                    <Button onClick={() => handleLeave(item.id)}>
+                                        Leave
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
                         ))}
-                    </tbody>
-                </table>
-                <button onClick={handleCreate}>Create</button>
-            </div>
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <br></br>
+            <br></br>
+            <Typography variant="h6" component="div" style={{ marginRight: '810px' }}>
+                Other joinable groups
+            </Typography>
+            <br></br>
+            <TableContainer component={Paper} style={{ maxWidth: 1000, margin: '0 auto' }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Group name</TableCell>
+                            <TableCell>Description</TableCell>
+                            <TableCell>Members</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {groups.map((item) => (
+                            <TableRow key={item.id}>
+                                <TableCell>Project {item.id}</TableCell>
+                                <TableCell>{item.groupName}</TableCell>
+                                <TableCell>{item.description}</TableCell>
+                                <TableCell>
+                                    <Button onClick={() => handleEdit(item.id)}>
+                                        Edit
+                                    </Button>
+                                </TableCell>
+                                <TableCell>
+                                    {joinStatus[item.id] ? (
+                                        <Button onClick={() => handleLeave(item.id)}>
+                                            Leave
+                                        </Button>
+                                    ) : (
+                                        <Button onClick={() => handleJoin(item.id)}>
+                                            Join
+                                        </Button>
+                                    )}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </>
     );
 
