@@ -62,14 +62,40 @@ UPDATE_PROFILE_SCHEMA = Schema(
     }
 )
 
-# CREATE_PROJECT_SCHEMA = Schema(
-#     {
-#         "location": And(str, len),
-#         "job_classification": And(str, len),
-#         "problem_statement": And(str, len),
-#         "requirement": And(str, len),
-#         Optional("passport"): Or(str, lambda x: x == "", None),
-#         Optional("avatarUrl"): Or(str, lambda x: x == "", None),
-#         Optional("skill"): Or(str, lambda x: x == "", None),
-#     }
-# )
+CREATE_PROJECT_SCHEMA = Schema(
+    {
+        "title": And(str, len),
+        "location": And(str, len),
+        "job_classification": And(str, len),
+        "problem_statement": And(str, len),
+        "requirement": And(str, len),
+        "payment_type": And(Use(int), lambda i: i >= 0),
+        Optional("desired_outcomes"): Or(str, lambda x: x == "", None),
+        Optional("required_skill"): Or(str, lambda x: x == "", None),
+        Optional("potential_deliverable"): Or(str, lambda x: x == "", None),
+        Optional("expected_delivery_cycle"): Or(str, lambda x: x == "", None),
+    })
+
+UPDATE_PROJECT_SCHEMA = Schema(
+    {
+        "id": And(Use(int), lambda i: i >= 0),
+        Optional("title"): And(str, len),
+        Optional("location"): And(str, len),
+        Optional("job_classification"): And(str, len),
+        Optional("problem_statement"): And(str, len),
+        Optional("requirement"): And(str, len),
+        Optional("payment_type"): And(Use(int), lambda i: i >= 0),
+        Optional("desired_outcomes"): Or(str, lambda x: x == "", None),
+        Optional("required_skill"): Or(str, lambda x: x == "", None),
+        Optional("potential_deliverable"): Or(str, lambda x: x == "", None),
+        Optional("expected_delivery_cycle"): Or(str, lambda x: x == "", None),
+    }
+)
+
+GET_TASKS_SCHEMA = Schema(
+    {
+        Optional("keyword"): And(str, len),
+        Optional("location"): And(str, len),
+        Optional("job_classification"): And(Use(int), lambda i: i >= 0),
+    }
+)
