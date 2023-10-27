@@ -8,20 +8,20 @@ ma = Marshmallow()
 
 
 class UserRole(Enum):
-    student = 1
-    industryPartner = 2
-    academicSupervisor = 3
+    Student = 1
+    IndustryPartner = 2
+    AcademicSupervisor = 3
 
 
 class OpportunityType(Enum):
-    internship = 1
-    individualProject = 2
-    groupProject = 3
+    Internship = 1
+    IndividualProject = 2
+    GroupProject = 3
 
 
 class PaymentType(Enum):
-    paid = 1
-    nonPaid = 2
+    Paid = 1
+    NonPaid = 2
 
 
 class User(db.Model):

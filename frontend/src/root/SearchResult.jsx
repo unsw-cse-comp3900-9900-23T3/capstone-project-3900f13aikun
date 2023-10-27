@@ -58,13 +58,13 @@ function SearchResult() {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>IT</MenuItem>
-                  <MenuItem value={20}>ACCOUNTING</MenuItem>
-                  <MenuItem value={30}>Banking</MenuItem>/
-                  <MenuItem value={30}>Engineering</MenuItem>/
-                  <MenuItem value={30}>Sport</MenuItem>/
-                  <MenuItem value={30}>Business</MenuItem>/
-                  <MenuItem value={30}>Media</MenuItem>/
+                  <MenuItem value={1}>IT</MenuItem>
+                  <MenuItem value={2}>ACCOUNTING</MenuItem>
+                  <MenuItem value={3}>Banking</MenuItem>/
+                  <MenuItem value={4}>Engineering</MenuItem>/
+                  <MenuItem value={5}>Sport</MenuItem>/
+                  <MenuItem value={6}>Business</MenuItem>/
+                  <MenuItem value={7}>Media</MenuItem>/
                 </Select>
               </FormControl>
               <TextField
