@@ -29,7 +29,7 @@ function SearchResult() {
   const [projectList, setProjectList] = React.useState([]);
 
   const handleSearch = () => {
-    const data = { keyword, location, classification };
+    const data = { keyword, location, job_classification: classification };
     let temp = [];
     Object.keys(data).forEach((key) => {
       if (data[key]) {
