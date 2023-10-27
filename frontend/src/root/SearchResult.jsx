@@ -130,7 +130,7 @@ function SearchResult() {
         </Dashtextfield>
       </Dashbackground >
       
-      <Box sx={{ pt: 5, display: "flex", flexDirection: "column", gap: 5 }}>
+      <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5 }}>
         <Typography>the total numbers of projects</Typography>
         <Card sx={{ maxWidth: 600 }}>
           <CardContent>
