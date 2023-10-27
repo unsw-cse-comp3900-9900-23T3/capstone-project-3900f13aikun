@@ -12,6 +12,13 @@ class UserRole(Enum):
     industryPartner = 2
     academicSupervisor = 3
 
+class OpportunityType(Enum):
+    internship = 1
+    individualProject = 2
+    groupProject = 3
+
+
+
 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
@@ -55,6 +62,8 @@ users_sc = UserSchema(many=True)
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.Text())
+    publish_date = db.Column(db.TIMESTAMP)
     location = db.Column(db.Text())
     job_classification = db.Column(db.Integer)
     problem_statement = db.Column(db.Text())
@@ -73,8 +82,9 @@ class Project(db.Model):
     )
 
     def __init__(
-            self, location, job_classification, problem_statement, requirement, payment_type
+            self, title, location, job_classification, problem_statement, requirement, payment_type
     ):
+        self.title = title
         self.location = location
         self.job_classification = job_classification
         self.problem_statement = problem_statement
@@ -86,6 +96,8 @@ class ProjectSchema(ma.Schema):
     class Meta:
         fields = (
             "id",
+            "title",
+            "publish_date",
             "location",
             "job_classification",
             "problem_statement",

@@ -11,6 +11,8 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from flask_mail import Mail, Message
 from bcrypt import hashpw, gensalt, checkpw
 from sqlalchemy import desc
+from datetime import datetime
+from sqlalchemy import or_
 
 load_dotenv()
 
@@ -227,40 +229,112 @@ def update_profile():
 
 @app.route("/project", methods=["POST"])
 @jwt_required()
-def store_project(userid):
-    input = request.get_json()
-    location = input["location"]
-    job_classification = input["job_classification"]
-    problem_statement = input["problem_statement"]
-    requirement = input["requirement"]
-    payment_type = input["payment_type"]
+def store_project():
+    try:
+        data = CREATE_PROJECT_SCHEMA.validate(request.json)
+    except SchemaError as error:
+        return {"msg": str(error)}, 400
+
+    current_user_id = get_jwt_identity()
+
+    location = data["location"]
+    title = data["title"]
+    job_classification = data["job_classification"]
+    problem_statement = data["problem_statement"]
+    requirement = data["requirement"]
+    payment_type = data["payment_type"]
 
     curr_project = Project(
-        location, job_classification, problem_statement, requirement, payment_type
+        title, location, job_classification, problem_statement, requirement, payment_type
     )
 
-    if "desired_outcomes" in input:
-        curr_project.desired_outcomes = input["desired_outcomes"]
+    if "desired_outcomes" in data:
+        curr_project.desired_outcomes = data["desired_outcomes"]
 
-    if "required_skill" in input:
-        curr_project.required_skill = input["required_skill"]
+    if "required_skill" in data:
+        curr_project.required_skill = data["required_skill"]
 
-    if "potential_deliverable" in input:
-        curr_project.potential_deliverable = input["potential_deliverable"]
+    if "potential_deliverable" in data:
+        curr_project.potential_deliverable = data["potential_deliverable"]
 
-    if "expected_delivery_cycle" in input:
-        curr_project.expected_delivery_cycle = input["expected_delivery_cycle"]
+    if "expected_delivery_cycle" in data:
+        curr_project.expected_delivery_cycle = data["expected_delivery_cycle"]
 
-    curr_project.user_id = userid
+    curr_project.publish_date = datetime.now()
+    curr_project.user_id = current_user_id
     db.session.add(curr_project)
     db.session.commit()
     return project_sc.jsonify(curr_project)
 
 
-@app.route("/project/<userid>", methods=["GET"])
-def getprojects(userid):
-    projects = db.session.query(Project).filter(Project.user_id == userid)
+@app.route("/project>", methods=["GET"])
+def getprojects():
+    try:
+        data = GET_TASKS_SCHEMA.validate(request.args.to_dict())
+    except SchemaError as error:
+        return {"status": "Bad request", "message": str(error)}, 400
+
+    projects = db.session.query(Project)
+
+    if "job_classification" in data:
+        job_classification = data['job_classification']
+        projects = projects.filter(Project.job_classification == job_classification)
+
+    if "location" in data:
+        location = data['location']
+        projects = projects.filter(Project.location.ilike(f"%{location}%"))
+
+    if "keyword" in data:
+        keyword = data['keyword']
+        print(keyword)
+        keyword_filter = or_(
+            Project.title.ilike(f"%{keyword}%"),
+            Project.problem_statement.ilike(f"%{keyword}%")
+        )
+        projects = projects.filter(or_(*keyword_filter))
     return projects_sc.jsonify(projects)
+
+
+@app.route("/project", methods=["PUT"])
+@jwt_required()
+def update_project():
+    try:
+        data = UPDATE_PROJECT_SCHEMA.validate(request.json.copy())
+    except SchemaError as error:
+        return {"status": "Bad request", "message": str(error)}, 400
+    current_user_id = get_jwt_identity()
+    project = db.session.get(Project, data["id"])
+
+    if not project:
+        return {"status": "Not Found"}, 404
+    if project.user_id != current_user_id:
+        return {"status": "Permission denied"}, 401
+
+    if "title" in data:
+        project.title = data["title"]
+    if "location" in data:
+        project.location = data["location"]
+    if "job_classification" in data:
+        project.job_classification = data["job_classification"]
+    if "problem_statement" in data:
+        project.problem_statement = data["problem_statement"]
+    if "requirement" in data:
+        project.requirement = data["requirement"]
+    if "payment_type" in data:
+        project.payment_type = data["payment_type"]
+    if "desired_outcomes" in data:
+        project.desired_outcomes = data["desired_outcomes"]
+    if "required_skill" in data:
+        project.required_skill = data["required_skill"]
+    if "potential_deliverable" in data:
+        project.potential_deliverable = data["potential_deliverable"]
+    if "expected_delivery_cycle" in data:
+        project.expected_delivery_cycle = data["expected_delivery_cycle"]
+
+    db.session.merge(project)
+    db.session.commit()
+
+    return jsonify({"message": "success"})
 
 
 def generate_code():
