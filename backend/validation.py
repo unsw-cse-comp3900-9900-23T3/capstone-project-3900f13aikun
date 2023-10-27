@@ -66,7 +66,7 @@ CREATE_PROJECT_SCHEMA = Schema(
     {
         "title": And(str, len),
         "location": And(str, len),
-        "job_classification": And(str, len),
+        "job_classification": And(Use(int), lambda i: i >= 0),
         "problem_statement": And(str, len),
         "requirement": And(str, len),
         "payment_type": And(Use(int), lambda i: i >= 0),
@@ -81,7 +81,7 @@ UPDATE_PROJECT_SCHEMA = Schema(
         "id": And(Use(int), lambda i: i >= 0),
         Optional("title"): And(str, len),
         Optional("location"): And(str, len),
-        Optional("job_classification"): And(str, len),
+        Optional("job_classification"): And(Use(int), lambda i: i >= 0),
         Optional("problem_statement"): And(str, len),
         Optional("requirement"): And(str, len),
         Optional("payment_type"): And(Use(int), lambda i: i >= 0),

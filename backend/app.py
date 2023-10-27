@@ -267,7 +267,7 @@ def store_project():
     return project_sc.jsonify(curr_project)
 
 
-@app.route("/project>", methods=["GET"])
+@app.route("/project", methods=["GET"])
 def getprojects():
     try:
         data = GET_TASKS_SCHEMA.validate(request.args.to_dict())

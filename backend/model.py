@@ -12,12 +12,16 @@ class UserRole(Enum):
     industryPartner = 2
     academicSupervisor = 3
 
+
 class OpportunityType(Enum):
     internship = 1
     individualProject = 2
     groupProject = 3
 
 
+class PaymentType(Enum):
+    paid = 1
+    nonPaid = 2
 
 
 class User(db.Model):
