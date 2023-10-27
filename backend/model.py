@@ -73,6 +73,7 @@ class Project(db.Model):
     problem_statement = db.Column(db.Text())
     requirement = db.Column(db.Text())
     payment_type = db.Column(db.Integer)
+    opportunity_type = db.Column(db.Integer)
 
     desired_outcomes = db.Column(db.Text())
     required_skill = db.Column(db.Text())
@@ -86,7 +87,7 @@ class Project(db.Model):
     )
 
     def __init__(
-            self, title, location, job_classification, problem_statement, requirement, payment_type
+            self, title, location, job_classification, problem_statement, requirement, payment_type, opportunity_type
     ):
         self.title = title
         self.location = location
@@ -94,6 +95,7 @@ class Project(db.Model):
         self.problem_statement = problem_statement
         self.requirement = requirement
         self.payment_type = payment_type
+        self.opportunity_type = opportunity_type
 
 
 class ProjectSchema(ma.Schema):
@@ -107,9 +109,10 @@ class ProjectSchema(ma.Schema):
             "problem_statement",
             "requirement",
             "payment_type",
+            "opportunity_type",
             "desired_outcomes",
-            "required_skills",
-            "potential_deliverables",
+            "required_skill",
+            "potential_deliverable",
             "expected_delivery_cycle",
         )
 

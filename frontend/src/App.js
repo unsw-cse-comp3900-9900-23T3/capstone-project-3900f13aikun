@@ -41,6 +41,7 @@ function App () {
             <Route path="/profile" element={<Profile />} />
             <Route path="/forgot" element={<ForgetPassword/>} />
             <Route path="/create-project" element={<CreateProject/>} />
+            <Route path="/edit-project/:id" element={<CreateProject/>} />
             <Route path="/my-created-project" element={<MyCreatedProject/>} />
             <Route path="/dashboard/student" element={<DashboardStudent/>} />
             <Route path="/dashboard/academics" element={<DashboardSupervisor/>} />
@@ -50,7 +51,7 @@ function App () {
             <Route path="/notification" element={<Notification/>} />
             <Route path="/my-group" element={<MyGroup/>} />
             <Route path="/my-create-group" element={<MyCreateGroup/>} />
-            <Route path="/project-detail" element={<ProjectDetail/>} />
+            <Route path="/project-detail/:id" element={<ProjectDetail/>} />
             <Route path="/search-result" element={<SearchResult/>} />
           </Routes>
         </BrowserRouter>

@@ -40,18 +40,34 @@ export default function MyCreatedProject() {
           }}>
           New Project
         </Button>
-        <Box sx={{ mt: 3, width: "450px" }}>
+        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5 }}>
+          <Typography>the total numbers of projects: {projects.length}</Typography>
           {projects.map((item) => (
-            <Card key={item.id} sx={{ border: "2px solid", marginBottom: "16px" }}>
+            <Card sx={{ maxWidth: 600, minWidth: 400 }}>
               <CardContent>
-                <Typography variant="h4" gutterBottom>
+                <Typography
+                  sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  onClick={() => {
+                    navigate(`/project-detail/${item.id}`);
+                  }}>
                   {item.title}
                 </Typography>
-                <Typography color="text.secondary">location: {item.location}</Typography>
-                <Typography color="text.secondary"> {item.problem_statement}</Typography>
+                <Typography variant="body1" color="text.secondary" gutterBottom>
+                  {item.problem_statement}
+                </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">Edit</Button>
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => {
+                    navigate(`/edit-project/${item.id}`);
+                  }}>
+                  Edit
+                </Button>
               </CardActions>
             </Card>
           ))}

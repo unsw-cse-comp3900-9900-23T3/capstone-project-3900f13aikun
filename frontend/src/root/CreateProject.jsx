@@ -7,13 +7,14 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NavigationBtn from "../components/NavigationBtn";
 import { apiCall } from "../components/HelpFunctions";
 import { Pagebackground } from "../components/StyledElement";
 
 export default function CreateProject() {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [classification, setClassification] = React.useState("");
   const [title, setTitle] = React.useState("");
 
@@ -27,10 +28,31 @@ export default function CreateProject() {
   const [potentialDel, setPotentialDel] = React.useState("");
   const [expectedDel, setExpectedDel] = React.useState("");
 
-  const handlePublishClick = () => {
-    //todo: verify input
+  React.useEffect(() => {
+    if (id) {
+      getProjectInfo();
+    }
+  }, []);
 
-    //token
+  const handlePublishClick = () => {
+    if (id) {
+      apiCall(`/project`, "PUT", {
+        id,
+        title,
+        location,
+        job_classification: classification,
+        problem_statement: problemStatement,
+        requirement: availabilityRequirement,
+        payment_type: paymentType,
+        desired_outcomes: desiredOutcomes || "",
+        required_skill: requiredSkill || "",
+        potential_deliverable: potentialDel || "",
+        expected_delivery_cycle: expectedDel || "",
+      }).then((res) => {
+        navigate("/my-created-project");
+      });
+      return;
+    }
 
     apiCall(`/project`, "POST", {
       title,
@@ -45,6 +67,22 @@ export default function CreateProject() {
       expected_delivery_cycle: expectedDel,
     }).then((res) => {
       navigate("/my-created-project");
+    });
+  };
+
+  const getProjectInfo = () => {
+    apiCall(`/project/${id}`, "GET").then((res) => {
+      setClassification(res.job_classification);
+      setLocation(res.location)
+      setTitle(res.title);
+      setProblemStatement(res.problem_statement);
+      setAvailabilityRequirement(res.requirement);
+      setPaymentType(res.payment_type);
+      setOpportunityType(res.opportunity_type);
+      setDesiredOutcomes(res.desired_outcomes);
+      setRequiredSkill(res.required_skill);
+      setPotentialDel(res.potential_deliverable);
+      setExpectedDel(res.expected_delivery_cycle);
     });
   };
 

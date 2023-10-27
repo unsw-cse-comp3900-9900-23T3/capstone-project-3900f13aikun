@@ -243,9 +243,10 @@ def store_project():
     problem_statement = data["problem_statement"]
     requirement = data["requirement"]
     payment_type = data["payment_type"]
+    opportunity_type = data["opportunity_type"]
 
     curr_project = Project(
-        title, location, job_classification, problem_statement, requirement, payment_type
+        title, location, job_classification, problem_statement, requirement, payment_type, opportunity_type
     )
 
     if "desired_outcomes" in data:
@@ -264,7 +265,7 @@ def store_project():
     curr_project.user_id = current_user_id
     db.session.add(curr_project)
     db.session.commit()
-    return project_sc.jsonify(curr_project)
+    return jsonify({"message": "success"})
 
 
 @app.route("/project", methods=["GET"])
@@ -295,6 +296,15 @@ def getprojects():
     return projects_sc.jsonify(projects)
 
 
+@app.route("/project/<id>", methods=["GET"])
+def get_project_route(id):
+    project = db.session.get(Project, id)
+
+    if not project:
+        return {"status": "Not Found"}, 404
+    return project_sc.jsonify(project)
+
+
 @app.route("/project", methods=["PUT"])
 @jwt_required()
 def update_project():
@@ -322,6 +332,8 @@ def update_project():
         project.requirement = data["requirement"]
     if "payment_type" in data:
         project.payment_type = data["payment_type"]
+    if "opportunity_type" in data:
+        project.opportunity_type = data["opportunity_type"]
     if "desired_outcomes" in data:
         project.desired_outcomes = data["desired_outcomes"]
     if "required_skill" in data:

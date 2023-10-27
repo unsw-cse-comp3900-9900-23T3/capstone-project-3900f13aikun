@@ -18,13 +18,34 @@ import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import { Dashbackground, Dashtextfield } from "../components/StyledElement";
 
-
 function SearchResult() {
   const navigate = useNavigate();
+  const [keyword, setKeyword] = React.useState("");
+  const [location, setLocation] = React.useState("");
   const [classification, setClassification] = React.useState("");
   const [opportunityType, setOpportunityType] = React.useState("");
   const [paymentType, setPaymentType] = React.useState("");
   const [publishTime, setPublishTime] = React.useState("");
+  const [projectList, setProjectList] = React.useState([]);
+
+  const handleSearch = () => {
+    const data = { keyword, location, classification };
+    let temp = [];
+    Object.keys(data).forEach((key) => {
+      if (data[key]) {
+        temp.push(`${key}=${data[key]}`);
+      }
+    });
+    const qs = temp.join("&");
+
+    apiCall(`/project?${qs}`, "GET").then((res) => {
+      setProjectList(res);
+    });
+  };
+
+  useEffect(() => {
+    handleSearch();
+  }, []);
 
   return (
     <>
@@ -41,12 +62,7 @@ function SearchResult() {
               </Typography>
             </Box>
             <Box display="flex" alignItems="center" marginRight="100px">
-              <TextField
-                id="outlined-basic"
-                label="Enter keywords"
-                variant="outlined"
-                style={{ zIndex: "3", width: "210px", marginTop: "10px" }}
-              />
+              <TextField value={keyword} onChange={(e) => setKeyword(e.target.value)} label="Enter keywords" variant="outlined" style={{ zIndex: "3", width: "210px", marginTop: "10px" }} />
               <FormControl sx={{ m: 1, minWidth: 210, marginTop: "18px", left: "40px" }}>
                 <InputLabel id="demo-simple-select-helper-label">Any Classification</InputLabel>
                 <Select
@@ -54,38 +70,43 @@ function SearchResult() {
                   id="demo-simple-select-helper"
                   label="Any Classification"
                   value={classification}
-                  onChange={(e) => { setClassification(e.target.value); }}>
+                  onChange={(e) => {
+                    setClassification(e.target.value);
+                  }}>
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
                   <MenuItem value={1}>IT</MenuItem>
                   <MenuItem value={2}>ACCOUNTING</MenuItem>
-                  <MenuItem value={3}>Banking</MenuItem>/
-                  <MenuItem value={4}>Engineering</MenuItem>/
-                  <MenuItem value={5}>Sport</MenuItem>/
-                  <MenuItem value={6}>Business</MenuItem>/
-                  <MenuItem value={7}>Media</MenuItem>/
+                  <MenuItem value={3}>Banking</MenuItem>/<MenuItem value={4}>Engineering</MenuItem>/<MenuItem value={5}>Sport</MenuItem>/<MenuItem value={6}>Business</MenuItem>/<MenuItem value={7}>Media</MenuItem>/
                 </Select>
               </FormControl>
-              <TextField
-                id="outlined-basic"
-                label="Enter suburb,city or region"
+              <TextField value={location} onChange={(e) => setLocation(e.target.value)} id="outlined-basic" label="Enter suburb,city or region" variant="outlined" style={{ zIndex: "3", width: "210px", marginTop: "10px", left: "80px" }} />
+              <Button
                 variant="outlined"
-                style={{ zIndex: "3", width: "210px", marginTop: "10px", left: "80px" }}
-              />
-              <Button variant="outlined" color="secondary" sx={{ marginTop: "10px", left: "120px" }}>
+                color="secondary"
+                sx={{ marginTop: "10px", left: "120px" }}
+                onClick={() => {
+                  handleSearch();
+                }}>
                 Search
               </Button>
             </Box>
 
             <Box display="flex" alignItems="center" marginRight="350px">
               <FormControl sx={{ m: 1, minWidth: 170, marginBottom: "26px" }}>
-                <InputLabel sx={{ color: 'purple' }} id="demo-simple-select-helper-label">Opportunity type</InputLabel>
-                <Select sx={{ borderRadius: "50px" }}
+                <InputLabel sx={{ color: "purple" }} id="demo-simple-select-helper-label">
+                  Opportunity type
+                </InputLabel>
+                <Select
+                  sx={{ borderRadius: "50px" }}
                   labelId="demo-simple-select-helper-label"
-                  id="demo-simple-select-helper" label="Opportunity type"
+                  id="demo-simple-select-helper"
+                  label="Opportunity type"
                   value={opportunityType}
-                  onChange={(e) => { setOpportunityType(e.target.value); }}>
+                  onChange={(e) => {
+                    setOpportunityType(e.target.value);
+                  }}>
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
@@ -95,12 +116,18 @@ function SearchResult() {
                 </Select>
               </FormControl>
               <FormControl sx={{ m: 1, minWidth: 150, marginBottom: "26px" }}>
-                <InputLabel sx={{ color: 'purple' }} id="demo-simple-select-helper-label">Publish time</InputLabel>
-                <Select sx={{ borderRadius: "50px" }}
+                <InputLabel sx={{ color: "purple" }} id="demo-simple-select-helper-label">
+                  Publish time
+                </InputLabel>
+                <Select
+                  sx={{ borderRadius: "50px" }}
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  label="Publish time" value={publishTime}
-                  onChange={(e) => { setPublishTime(e.target.value); }}>
+                  label="Publish time"
+                  value={publishTime}
+                  onChange={(e) => {
+                    setPublishTime(e.target.value);
+                  }}>
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
@@ -111,12 +138,18 @@ function SearchResult() {
                 </Select>
               </FormControl>
               <FormControl sx={{ m: 1, minWidth: 150, marginBottom: "26px" }}>
-                <InputLabel sx={{ color: 'purple' }} id="demo-simple-select-helper-label">Payment type</InputLabel>
-                <Select sx={{ borderRadius: "50px" }}
+                <InputLabel sx={{ color: "purple" }} id="demo-simple-select-helper-label">
+                  Payment type
+                </InputLabel>
+                <Select
+                  sx={{ borderRadius: "50px" }}
                   labelId="demo-simple-select-helper-label"
                   id="demo-simple-select-helper"
-                  label="Publish time" value={paymentType}
-                  onChange={(e) => { setPaymentType(e.target.value); }}>
+                  label="Publish time"
+                  value={paymentType}
+                  onChange={(e) => {
+                    setPaymentType(e.target.value);
+                  }}>
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
@@ -126,58 +159,35 @@ function SearchResult() {
               </FormControl>
             </Box>
           </Box>
-
         </Dashtextfield>
-      </Dashbackground >
-      
+      </Dashbackground>
+
       <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5 }}>
-        <Typography>the total numbers of projects</Typography>
-        <Card sx={{ maxWidth: 600 }}>
-          <CardContent>
-            <Typography
-              sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-              gutterBottom
-              variant="h5"
-              component="div"
-              onClick={() => {
-                navigate("/project-detail");
-              }}>
-              Anytime Fitness Alphington - Club Manager
-            </Typography>
-            <Typography variant="body1" color="text.secondary" gutterBottom>
-              Anytime Fitness Alphington
-            </Typography>
-
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              $34 - $37 per hour
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button variant="contained" size="small">
-              Save
-            </Button>
-          </CardActions>
-        </Card>
-
-        <Card sx={{ maxWidth: 600 }}>
-          <CardContent>
-            <Typography sx={{ textDecorationLine: "underline" }} gutterBottom variant="h5" component="div">
-              Anytime Fitness Alphington - Club Manager
-            </Typography>
-            <Typography variant="body1" color="text.secondary" gutterBottom>
-              Anytime Fitness Alphington
-            </Typography>
-
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              $34 - $37 per hour
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button variant="contained" size="small">
-              Save
-            </Button>
-          </CardActions>
-        </Card>
+        <Typography>the total numbers of projects: {projectList.length}</Typography>
+        {projectList.map((item) => (
+          <Card sx={{ maxWidth: 600, minWidth: 400 }}>
+            <CardContent>
+              <Typography
+                sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                gutterBottom
+                variant="h5"
+                component="div"
+                onClick={() => {
+                  navigate(`/project-detail/${item.id}`);
+                }}>
+                {item.title}
+              </Typography>
+              <Typography variant="body1" color="text.secondary" gutterBottom>
+                {item.problem_statement}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              <Button variant="contained" size="small">
+                Save
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
       </Box>
     </>
   );
