@@ -17,7 +17,6 @@ import Notification from './root/Notification';
 import MyGroup from './root/MyGroup';
 import MyCreateGroup from './root/MyCreateGroup';
 import ProjectDetail from './root/ProjectDetail';
-import SearchResult from './root/SearchResult';
 
 
 
@@ -52,7 +51,6 @@ function App () {
             <Route path="/my-group" element={<MyGroup/>} />
             <Route path="/my-create-group" element={<MyCreateGroup/>} />
             <Route path="/project-detail/:id" element={<ProjectDetail/>} />
-            <Route path="/search-result" element={<SearchResult/>} />
           </Routes>
         </BrowserRouter>
       </TotalContainer>
