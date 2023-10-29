@@ -34,3 +34,10 @@ I started working on enhancing the last Sprint database and designing database t
 It's tricky to generate a "tag" for each opportunity to improve the efficiency of information browsing. I'm still googling some feasible solutions.
 Since this week is flexibility week, we didn't assign too much workload.
 We have scheduled a meeting for next week to check the progress of the work of every team member and figure out what we should do more specifically.
+
+Week 7
+We engaged in a productive discussion with the client to define the project specifications and establish the system's design guidelines.
+n the past week, my focus was on constructing the necessary database tables for this sprint. Simultaneously, I initiated the development of the relevant designed functionalities on the backend.
+To ensure seamless coordination of our efforts, we held a team meeting to integrate our work effectively. 
+Since many functionalities are inevitablely interact with multiple database tables, adapting these tables to meet various requirements added complexity while maintaining performance.
+Our immediate goal is to complete the initial iteration of Sprint 2 by next Tuesday and refine our system based on any potential issues identified during our meeting. 
