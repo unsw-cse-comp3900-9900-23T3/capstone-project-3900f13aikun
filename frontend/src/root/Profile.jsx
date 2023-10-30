@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import NavigationBtn from "../components/NavigationBtn";
 import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, Table, TableCell, TableRow, TableContainer, Paper } from "@mui/material";
-import { apiCall, checkEmail, checkName, checkSkills, checkWorkRight, fileToDataUrl } from "../components/HelpFunctions";
+import { apiCall, checkEmail, checkSkills, checkWorkRight, fileToDataUrl } from "../components/HelpFunctions";
 import { Pagebackground } from "../components/StyledElement";
 
 function Profile() {
@@ -13,9 +13,8 @@ function Profile() {
   const [workRight, setWorkRight] = React.useState([]);
   const [skill, setSkill] = React.useState("");
   const [isEditing, setIsEditing] = useState(false);
-  const [isDisabled, setDisabled] = useState(true);
 
-  const [avatarUrl, setAvatarUrl] = React.useState("https://img2.baidu.com/it/u=3406119999,3272762192&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500");
+  const [avatarUrl, setAvatarUrl] = React.useState("https://d2w9rnfcy7mm78.cloudfront.net/8040974/original_ff4f1f43d7b72cc31d2eb5b0827ff1ac.png?1595022778?bc=0");
 
   useEffect(() => {
     apiCall(`/profile`, "GET").then((data) => {
@@ -26,6 +25,7 @@ function Profile() {
         setName(data.name);
         setWorkRight(data.work_rights)
         setSkill(data.skill)
+        setAvatarUrl(data.avatarUrl)
       }
     });
   }, []);
@@ -41,9 +41,11 @@ function Profile() {
     });
   }
 
-  const handleCheckboxChange = (event) => {
+  const handleCheckbox = (event) => {
     const value = event.target.value;
-    if (workRight.includes(value)) {
+    if (workRight === null) {
+      setWorkRight([value]);
+    } else if (workRight.includes(value)) {
       setWorkRight(workRight.filter((item) => item !== value));
     } else {
       setWorkRight([...workRight, value]);
@@ -56,12 +58,10 @@ function Profile() {
         updateProfile();
       }
     }
-
-    // setDisabled(!isDisabled);
     setIsEditing(!isEditing);
   }
 
-  const handleReplaceAvatar = () => {
+  const handleReplace = () => {
     setAvatarUrl(null);
   };
 
@@ -103,7 +103,7 @@ function Profile() {
                 </div>
               )}
               {avatarUrl && (
-                <Button htmlFor="upload" onClick={handleReplaceAvatar} style={{ left: "50%", transform: "translateX(-50%)", backgroundColor: "transparent", color: "#3489db" }}>
+                <Button htmlFor="upload" onClick={handleReplace} style={{ left: "50%", transform: "translateX(-50%)", backgroundColor: "transparent", color: "#3489db" }}>
                   Replace
                 </Button>
               )}
@@ -137,13 +137,13 @@ function Profile() {
               <br></br>
               <FormLabel style={{ fontWeight: "bold", color: "black" }}>WorkRights</FormLabel>
               <FormGroup value={workRight}>
-                <FormControlLabel control={<Checkbox />} label="Monday" value="Monday" checked={workRight.includes("Monday")} onChange={handleCheckboxChange} />
-                <FormControlLabel control={<Checkbox />} label="Tuesday" value="Tuesday" checked={workRight.includes("Tuesday")} onChange={handleCheckboxChange} />
-                <FormControlLabel control={<Checkbox />} label="Wenesday" value="Wenesday" checked={workRight.includes("Wenesday")} onChange={handleCheckboxChange} />
-                <FormControlLabel control={<Checkbox />} label="Thursday" value="Thursday" checked={workRight.includes("Thursday")} onChange={handleCheckboxChange} />
-                <FormControlLabel control={<Checkbox />} label="Friday" value="Friday" checked={workRight.includes("Friday")} onChange={handleCheckboxChange} />
-                <FormControlLabel control={<Checkbox />} label="Saturday" value="Saturday" checked={workRight.includes("Saturday")} onChange={handleCheckboxChange} />
-                <FormControlLabel control={<Checkbox />} label="Sunday" value="Sunday" checked={workRight.includes("Sunday")} onChange={handleCheckboxChange} />
+                <FormControlLabel control={<Checkbox />} label="Monday" value="Monday" checked={workRight !== null && workRight.includes("Monday")} onChange={handleCheckbox} />
+                <FormControlLabel control={<Checkbox />} label="Tuesday" value="Tuesday" checked={workRight !== null && workRight.includes("Tuesday")} onChange={handleCheckbox} />
+                <FormControlLabel control={<Checkbox />} label="Wenesday" value="Wenesday" checked={workRight !== null && workRight.includes("Wenesday")} onChange={handleCheckbox} />
+                <FormControlLabel control={<Checkbox />} label="Thursday" value="Thursday" checked={workRight !== null && workRight.includes("Thursday")} onChange={handleCheckbox} />
+                <FormControlLabel control={<Checkbox />} label="Friday" value="Friday" checked={workRight !== null && workRight.includes("Friday")} onChange={handleCheckbox} />
+                <FormControlLabel control={<Checkbox />} label="Saturday" value="Saturday" checked={workRight !== null && workRight.includes("Saturday")} onChange={handleCheckbox} />
+                <FormControlLabel control={<Checkbox />} label="Sunday" value="Sunday" checked={workRight !== null && workRight.includes("Sunday")} onChange={handleCheckbox} />
               </FormGroup>
               <br></br>
               <FormLabel style={{ fontWeight: "bold", color: "black" }}>Skills:</FormLabel>
@@ -173,7 +173,7 @@ function Profile() {
               </TableRow>
               <TableRow>
                 <TableCell>Workright:</TableCell>
-                <TableCell>{workRight.join(',')}</TableCell>
+                <TableCell>{Array.isArray(workRight) ? workRight.join(', ') : ''}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Skills</TableCell>
