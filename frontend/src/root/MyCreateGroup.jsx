@@ -12,6 +12,10 @@ function MyCreateGroup() {
     const [groupName, setGroupName] = React.useState('');
     const [description, setDescription] = React.useState('');
 
+    const handleCreateClick = () => {
+        navigate('/my-group')
+    }
+
     return (
         <>
             <NavigationBtn></NavigationBtn>
@@ -48,6 +52,15 @@ function MyCreateGroup() {
                     }}
                 />
                 <br></br>
+                <Button
+                    variant="contained"
+                    color="success"
+                    sx={{ marginTop: "30px" }}
+                    onClick={() => {
+                        handleCreateClick();
+                    }}>
+                    Publish
+                </Button>
             </Box>
         </>
     );

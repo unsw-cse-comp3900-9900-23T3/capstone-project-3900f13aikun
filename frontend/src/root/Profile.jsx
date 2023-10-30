@@ -48,9 +48,9 @@ function Profile() {
     } else if (workRight.includes(value)) {
       setWorkRight(workRight.filter((item) => item !== value));
     } else {
-      setWorkRight([...workRight, value]);
+        setWorkRight([...workRight, value]);
     }
-  };
+};
 
   function checkProfile() {
     if (isEditing) {

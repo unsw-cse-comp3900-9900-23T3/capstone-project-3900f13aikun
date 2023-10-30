@@ -15,7 +15,7 @@ export const NavigationBtn = () => {
   const [isshow, setIsshow] = React.useState(true);
   const [islog, setIslog] = React.useState(false);
   const [value, setValue] = React.useState('one');
-  const [picture, setPicture] = React.useState('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fsafe-img.xhscdn.com%2Fbw1%2Fda0b06cb-b769-4c8d-b95c-e29b60b50e21%3FimageView2%2F2%2Fw%2F1080%2Fformat%2Fjpg&refer=http%3A%2F%2Fsafe-img.xhscdn.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1699602551&t=56a7074535ae9fd82e0d783badd8ae21')
+  const [picture, setPicture] = React.useState('')
   const [email, setEmail] = React.useState('')
   const [name, setName] = React.useState('')
   const [role, setRole] = React.useState(0)
@@ -58,6 +58,7 @@ export const NavigationBtn = () => {
           setName(data.name)
           setEmail(data.email)
           setRole(data.role)
+          setPicture(data.avatarUrl)
         }
       })
     }
@@ -82,12 +83,6 @@ export const NavigationBtn = () => {
       setIslog(true);
       setIsshow(true);
     }
-
-    // const res2 = apiCall(`/getUserProfile/${localStorage.getItem('userId')}`, 'GET')
-    // res2.then((data) => {
-    //   setPicture(data.avatarUrl)
-    //   console.log(data.avatarUrl)
-    // })
   }, []);
 
   function logout() {
@@ -128,17 +123,10 @@ export const NavigationBtn = () => {
             </Tabs>
           </Box>}
 
-          {islog && (<div style={{
-            width: '120px', height: '70px',
-            background: `url(${picture})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-            backgroundRepeat: 'no-repeat',
-            borderRadius: '50%', marginRight: '60px'
-          }}>
+          {islog && (<div style={{ width: "120px", height: "70px", marginRight: "50px", borderRadius: "50%", overflow: "hidden" }}>
+            {picture && (<img src={picture} alt='avatarUrl' style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center center" }} ></img>)}
           </div>)
           }
-
           {islog && (<div style={{ position: 'relative', top: '15px', right: '40px' }}>
             <div>
               <Button
