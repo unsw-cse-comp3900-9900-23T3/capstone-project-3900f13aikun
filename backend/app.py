@@ -13,6 +13,7 @@ from bcrypt import hashpw, gensalt, checkpw
 from sqlalchemy import desc
 from datetime import datetime
 from sqlalchemy import or_
+from datetime import timedelta
 
 load_dotenv()
 
@@ -23,7 +24,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # JWT config
-app.config["SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+JWT_ALGORITHM = 'HS256'
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=2)
 
 # Email config
 app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
@@ -269,7 +272,7 @@ def store_project():
 
 
 @app.route("/project", methods=["GET"])
-def getprojects():
+def get_projects_route():
     try:
         data = GET_TASKS_SCHEMA.validate(request.args.to_dict())
     except SchemaError as error:
@@ -346,6 +349,95 @@ def update_project():
     db.session.merge(project)
     db.session.commit()
 
+    return jsonify({"message": "success"})
+
+
+@app.route("/group", methods=["POST"])
+@jwt_required()
+def store_group():
+    try:
+        data = CREATE_GROUP_SCHEMA.validate(request.json)
+    except SchemaError as error:
+        return {"msg": str(error)}, 400
+
+    current_user_id = get_jwt_identity()
+
+    group_name = data["group_name"]
+    group_description = data["group_description"]
+    limit_no = data["limit_no"]
+    is_private = data["is_private"]
+
+    curr_group = Group(
+        group_name, group_description, limit_no, is_private
+    )
+
+    curr_group.creator_id = current_user_id
+    db.session.add(curr_group)
+    db.session.commit()
+    return jsonify({"message": "success"})
+
+
+@app.route("/group/join/<group_id>", methods=["GET"])
+@jwt_required()
+def join_group_route(group_id):
+    current_user_id = get_jwt_identity()
+    user = db.session.get(User, current_user_id)
+    group = db.session.get(Group, group_id)
+
+    if not group:
+        return {"status": "Not Found"}, 404
+
+    if len(group.members) == group.limit_no:
+        return {"msg": "The Group is full"}, 400
+
+    group.members.append(user)
+    db.session.commit()
+    return jsonify({"message": "success"})
+
+
+@app.route("/group/<group_id>", methods=["GET"])
+@jwt_required()
+def get_group_route(group_id):
+    group = db.session.get(Group, group_id)
+
+    if not group:
+        return {"status": "Not Found"}, 400
+
+    return group_sc.jsonify(group)
+
+
+@app.route("/group", methods=["GET"])
+@jwt_required()
+def get_groups_route():
+    groups = db.session.query(Group).filter(Group.is_private == 0)
+    return groups_sc.jsonify(groups)
+
+
+@app.route("/group", methods=["PUT"])
+@jwt_required()
+def update_group_route():
+    try:
+        data = UPDATE_GROUP_SCHEMA.validate(request.json)
+    except SchemaError as error:
+        return {"msg": str(error)}, 400
+
+    current_user_id = get_jwt_identity()
+    group = db.session.get(Group, data["group_id"])
+
+    if current_user_id != group.creator_id:
+        return {"msg": "You don't have permission"}, 400
+
+    if "group_name" in data:
+        group.group_name = data["group_name"]
+    if "group_description" in data:
+        group.group_description = data["group_description"]
+    if "limit_no" in data:
+        group.limit_no = data["limit_no"]
+    if "is_private" in data:
+        group.is_private = data["is_private"]
+
+    db.session.merge(group)
+    db.session.commit()
     return jsonify({"message": "success"})
 
 

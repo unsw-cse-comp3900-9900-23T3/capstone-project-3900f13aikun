@@ -101,3 +101,20 @@ GET_TASKS_SCHEMA = Schema(
         Optional("job_classification"): And(Use(int), lambda i: i >= 0),
     }
 )
+
+CREATE_GROUP_SCHEMA = Schema(
+    {
+        "group_name": And(str, len),
+        "group_description": And(str, len),
+        "limit_no": And(Use(int), lambda i: i >= 0),
+        "is_private": And(Use(int), lambda i: i >= 0),
+    })
+
+UPDATE_GROUP_SCHEMA = Schema(
+    {
+        "group_id": And(Use(int), lambda i: i >= 0),
+        Optional("group_name"): And(str, len),
+        Optional("group_description"): And(str, len),
+        Optional("limit_no"): And(Use(int), lambda i: i >= 0),
+        Optional("is_private"): And(Use(int), lambda i: i >= 0),
+    })

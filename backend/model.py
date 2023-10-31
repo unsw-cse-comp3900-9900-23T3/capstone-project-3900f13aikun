@@ -34,6 +34,8 @@ class User(db.Model):
     work_rights = db.Column(db.ARRAY(db.String))
     skill = db.Column(db.Text())
     avatarUrl = db.Column(db.Text())
+    groups = db.relationship('Group', secondary='user_group', back_populates='members')
+    created_groups = db.relationship('Group', back_populates='creator', lazy='dynamic')
 
     def __init__(self, role, email, password, name, passport):
         self.role = role
@@ -119,3 +121,50 @@ class ProjectSchema(ma.Schema):
 
 project_sc = ProjectSchema()
 projects_sc = ProjectSchema(many=True)
+
+# intermediate table
+user_group = db.Table('user_group',
+                      db.Column('user_id', db.Integer, db.ForeignKey('user.user_id'), primary_key=True),
+                      db.Column('group_id', db.Integer, db.ForeignKey('group.group_id'), primary_key=True)
+                      )
+
+
+class Group(db.Model):
+    group_id = db.Column(db.Integer, primary_key=True)
+    group_name = db.Column(db.Text())
+    group_description = db.Column(db.Text())
+    limit_no = db.Column(db.Integer)
+    # 0:public 1:private
+    is_private = db.Column(db.Integer)
+    creator_id = db.Column(db.ForeignKey(User.user_id))
+    creator = db.relationship('User', back_populates='created_groups', foreign_keys=[creator_id])
+    members = db.relationship('User', secondary='user_group', back_populates='groups')
+
+    def __init__(
+            self, group_name, group_description, limit_no, is_private
+    ):
+        self.group_name = group_name
+        self.group_description = group_description
+        self.limit_no = limit_no
+        self.is_private = is_private
+
+
+class GroupSchema(ma.Schema):
+    members = ma.Nested(UserSchema, many=True)
+    class Meta:
+        model = Group
+        include_fk = True
+        fields = (
+            "group_id",
+            "group_name",
+            "group_description",
+            "limit_no",
+            "is_private",
+            "creator_id",
+            "members"
+        )
+        # members = ma.Nested('user_sc', many=True)
+
+
+group_sc = GroupSchema()
+groups_sc = GroupSchema(many=True)
