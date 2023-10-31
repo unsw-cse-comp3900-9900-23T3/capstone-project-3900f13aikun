@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import NavigationBtn from "../components/NavigationBtn";
 import { apiCall } from "../components/HelpFunctions";
 import { Pagebackground } from "../components/StyledElement";
+import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
 
 export default function MyCreatedProject() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function MyCreatedProject() {
         <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5 }}>
           <Typography>the total numbers of projects: {projects.length}</Typography>
           {projects.map((item) => (
-            <Card sx={{ maxWidth: 600, minWidth: 400 }}>
+            <Card sx={{ maxWidth: 600, minWidth: 400, border: '2px solid lightgray' }}>
               <CardContent>
                 <Typography
                   sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -55,8 +56,14 @@ export default function MyCreatedProject() {
                   }}>
                   {item.title}
                 </Typography>
-                <Typography variant="body1" color="text.secondary" gutterBottom>
-                  {item.problem_statement}
+                <Typography variant="body1" gutterBottom>
+                  Location: <span style={{ color: '#555' }}>{item.location}</span>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Project type: <span style={{ color: '#555' }}>{getJobType(item.job_classification)}</span>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
                 </Typography>
               </CardContent>
               <CardActions>

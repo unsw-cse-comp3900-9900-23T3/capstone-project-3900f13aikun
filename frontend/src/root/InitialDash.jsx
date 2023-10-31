@@ -14,7 +14,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Stack from "@mui/material/Stack";
+import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
 import Box from "@mui/material/Box";
 import { Dashbackground, Dashtextfield } from "../components/StyledElement";
 
@@ -105,8 +105,8 @@ const InitialDash = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={1}>IT</MenuItem>
-                  <MenuItem value={2}>ACCOUNTING</MenuItem>
+                  <MenuItem value={1}>Information Technology</MenuItem>
+                  <MenuItem value={2}>Accounting</MenuItem>
                   <MenuItem value={3}>Banking</MenuItem>/<MenuItem value={4}>Engineering</MenuItem>/<MenuItem value={5}>Sport</MenuItem>/<MenuItem value={6}>Business</MenuItem>/<MenuItem value={7}>Media</MenuItem>/
                 </Select>
               </FormControl>
@@ -190,10 +190,10 @@ const InitialDash = () => {
           </Box>
         </Dashtextfield>
       </Dashbackground>
-      <Box sx={{ pt: 3, display: "flex", flexDirection: "column",alignItems:'center', gap: 5 }}>
+      <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: 'center', gap: 5 }}>
         <Typography>the total numbers of projects: {projectList.length}</Typography>
         {projectList.map((item) => (
-          <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400 }}>
+          <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: '2px solid lightgray' }}>
             <CardContent>
               <Typography
                 sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -205,8 +205,14 @@ const InitialDash = () => {
                 }}>
                 {item.title}
               </Typography>
-              <Typography variant="body1" color="text.secondary" gutterBottom>
-                {item.problem_statement}
+              <Typography variant="body1" gutterBottom>
+                Location: <span style={{ color: '#555' }}>{item.location}</span>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Project type: <span style={{ color: '#555' }}>{getJobType(item.job_classification)}</span>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
               </Typography>
             </CardContent>
             <CardActions>

@@ -14,7 +14,6 @@ function MyGroup() {
     const [joinStatus, setJoinStatus] = React.useState({});
 
     const handleLeave = () => { }
-    const handleEdit = () => { }
     const handleJoin = () => { }
 
     return (
@@ -48,11 +47,21 @@ function MyGroup() {
                     <TableBody>
                         {groups.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell>Project {item.id}</TableCell>
-                                <TableCell>{item.groupName}</TableCell>
+                                <TableCell
+                                    sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                                    onClick={() => {
+                                        navigate(`/group-composition/${item.id}`);
+                                    }}>
+                                    {item.groupName}
+                                </TableCell>
                                 <TableCell>{item.description}</TableCell>
                                 <TableCell>
-                                    <Button onClick={() => handleEdit(item.id)}>
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        onClick={() => {
+                                            navigate(`/edit-group/${item.id}`);
+                                        }}>
                                         Edit
                                     </Button>
                                 </TableCell>
@@ -86,14 +95,8 @@ function MyGroup() {
                     <TableBody>
                         {groups.map((item) => (
                             <TableRow key={item.id}>
-                                <TableCell>Project {item.id}</TableCell>
                                 <TableCell>{item.groupName}</TableCell>
                                 <TableCell>{item.description}</TableCell>
-                                <TableCell>
-                                    <Button onClick={() => handleEdit(item.id)}>
-                                        Edit
-                                    </Button>
-                                </TableCell>
                                 <TableCell>
                                     {joinStatus[item.id] ? (
                                         <Button onClick={() => handleLeave(item.id)}>

@@ -50,6 +50,7 @@ function App () {
             <Route path="/notification" element={<Notification/>} />
             <Route path="/my-group" element={<MyGroup/>} />
             <Route path="/my-create-group" element={<MyCreateGroup/>} />
+            <Route path="/edit-group/:id" element={<MyCreateGroup/>} />
             <Route path="/project-detail/:id" element={<ProjectDetail/>} />
           </Routes>
         </BrowserRouter>
