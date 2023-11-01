@@ -7,12 +7,11 @@ import { Pagebackground } from '../components/StyledElement';
 
 function GroupComposition() {
 
-
     return (
-
         <>
             <NavigationBtn></NavigationBtn>
             <Pagebackground>My Group</Pagebackground>
+            
         </>
     );
 }

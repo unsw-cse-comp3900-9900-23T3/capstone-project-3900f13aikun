@@ -27,7 +27,12 @@ function MyGroup() {
         });
     }, []);
 
-    const handleLeave = () => { }
+    const handleLeave = () => {
+        // apiCall(`/group/remove`, "POST").then((res) => {
+
+        // }
+        // )
+    }
     const handleJoin = () => { }
 
     return (

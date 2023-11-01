@@ -409,7 +409,10 @@ def get_group_route(group_id):
 @app.route("/group", methods=["GET"])
 @jwt_required()
 def get_groups_route():
-    groups = db.session.query(Group).filter(Group.is_private == 0)
+    current_user_id = get_jwt_identity()
+    groups = db.session.query(Group).filter(
+        (Group.is_private == 0) & (Group.creator_id == current_user_id)
+    )
     return groups_sc.jsonify(groups)
 
 
