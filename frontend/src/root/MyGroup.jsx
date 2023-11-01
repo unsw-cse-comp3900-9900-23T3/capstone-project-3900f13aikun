@@ -13,8 +13,18 @@ function MyGroup() {
     const [groups, setGroups] = useState([]);
     const [joinStatus, setJoinStatus] = React.useState({});
 
+    React.useEffect(() => {
+        apiCall(`/group`, "GET").then((res) => {
+          setGroups(res);
+        });
+      }, []);
+
     const handleLeave = () => { }
     const handleJoin = () => { }
+
+
+    // const myGroups = groups.filter((item) => item.creatorId === item.user_id);
+    // const otherGroups = groups.filter((item) => item.creatorId !== item.user_id);
 
     return (
         <>
@@ -46,27 +56,28 @@ function MyGroup() {
                     </TableHead>
                     <TableBody>
                         {groups.map((item) => (
-                            <TableRow key={item.id}>
+                            <TableRow key={item.creator_id}>
                                 <TableCell
                                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                     onClick={() => {
-                                        navigate(`/group-composition/${item.id}`);
+                                        navigate(`/group-composition/${item.group_id}`);
                                     }}>
-                                    {item.groupName}
+                                    {item.group_name}
                                 </TableCell>
-                                <TableCell>{item.description}</TableCell>
+                                <TableCell>{item.group_description}</TableCell>
+                                <TableCell>{item.members.length}/{item.limit_no}</TableCell>
                                 <TableCell>
                                     <Button
                                         variant="contained"
                                         size="small"
                                         onClick={() => {
-                                            navigate(`/edit-group/${item.id}`);
+                                            navigate(`/edit-group/${item.group_id}`);
                                         }}>
                                         Edit
                                     </Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button onClick={() => handleLeave(item.id)}>
+                                    <Button onClick={() => handleLeave(item.group_id)}>
                                         Leave
                                     </Button>
                                 </TableCell>
@@ -87,18 +98,17 @@ function MyGroup() {
                         <TableRow>
                             <TableCell>Group name</TableCell>
                             <TableCell>Description</TableCell>
-                            <TableCell>Members</TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {groups.map((item) => (
-                            <TableRow key={item.id}>
-                                <TableCell>{item.groupName}</TableCell>
-                                <TableCell>{item.description}</TableCell>
+                            <TableRow key={item.creator_id}>
+                                <TableCell>{item.group_name}</TableCell>
+                                <TableCell>{item.group_description}</TableCell>
                                 <TableCell>
-                                    {joinStatus[item.id] ? (
+                                    {joinStatus[item.group_id] ? (
                                         <Button onClick={() => handleLeave(item.id)}>
                                             Leave
                                         </Button>
