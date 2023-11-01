@@ -10,21 +10,25 @@ import { Table, TableCell, TableHead, TableRow, TableBody, TableContainer, Paper
 
 function MyGroup() {
     const navigate = useNavigate();
-    const [groups, setGroups] = useState([]);
+    const [myGroups, setMyGroups] = useState([]);
+    const [otherGroups, setOtherGroups] = useState([]);
+
     const [joinStatus, setJoinStatus] = React.useState({});
 
     React.useEffect(() => {
         apiCall(`/group`, "GET").then((res) => {
-          setGroups(res);
+            setMyGroups(res);
         });
       }, []);
 
+    React.useEffect(() => {
+        apiCall(`/notInGroup/`, "GET").then((res) => {
+            setOtherGroups(res);
+        });
+    }, []);
+
     const handleLeave = () => { }
     const handleJoin = () => { }
-
-
-    // const myGroups = groups.filter((item) => item.creatorId === item.user_id);
-    // const otherGroups = groups.filter((item) => item.creatorId !== item.user_id);
 
     return (
         <>
@@ -55,7 +59,7 @@ function MyGroup() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {groups.map((item) => (
+                        {myGroups.map((item) => (
                             <TableRow key={item.creator_id}>
                                 <TableCell
                                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -98,15 +102,23 @@ function MyGroup() {
                         <TableRow>
                             <TableCell>Group name</TableCell>
                             <TableCell>Description</TableCell>
+                            <TableCell>Members</TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {groups.map((item) => (
+                        {otherGroups.map((item) => (
                             <TableRow key={item.creator_id}>
-                                <TableCell>{item.group_name}</TableCell>
+                                <TableCell
+                                    sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                                    onClick={() => {
+                                        navigate(`/group-composition/${item.group_id}`);
+                                    }}>
+                                    {item.group_name}
+                                </TableCell>
                                 <TableCell>{item.group_description}</TableCell>
+                                <TableCell>{item.members.length}/{item.limit_no}</TableCell>
                                 <TableCell>
                                     {joinStatus[item.group_id] ? (
                                         <Button onClick={() => handleLeave(item.id)}>

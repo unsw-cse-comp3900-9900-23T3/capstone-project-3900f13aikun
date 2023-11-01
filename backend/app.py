@@ -419,7 +419,7 @@ def get_groups_route():
 def get_user_groups_route():
     current_user_id = get_jwt_identity()
     groups_without_current_user = Group.query.filter(
-        (Group.is_private == 1) &
+        (Group.is_private == 0) &
         not_(Group.members.any(User.user_id == current_user_id))
     ).all()
     return groups_sc.jsonify(groups_without_current_user)
