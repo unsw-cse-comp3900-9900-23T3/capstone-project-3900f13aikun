@@ -400,7 +400,6 @@ def join_group_route(group_id):
 @jwt_required()
 def get_group_route(group_id):
     group = db.session.get(Group, group_id)
-
     if not group:
         return {"status": "Not Found"}, 400
 
@@ -419,6 +418,7 @@ def get_groups_route():
 def get_user_groups_route():
     current_user_id = get_jwt_identity()
     groups_without_current_user = Group.query.filter(
+       (Group.creator_id != current_user_id) &
         (Group.is_private == 0) &
         not_(Group.members.any(User.user_id == current_user_id))
     ).all()
