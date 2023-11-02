@@ -12,9 +12,8 @@ function MyGroup() {
   const navigate = useNavigate();
   const [myGroups, setMyGroups] = useState([]);
   const [otherGroups, setOtherGroups] = useState([]);
-  const { groupId, removeId } = useParams();
+  
 
-  const [joinStatus, setJoinStatus] = React.useState({});
 
   React.useEffect(() => {
     getJoinedGroups();
