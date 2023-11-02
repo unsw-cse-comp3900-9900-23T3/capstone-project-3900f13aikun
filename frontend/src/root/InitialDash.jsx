@@ -27,6 +27,7 @@ const InitialDash = () => {
   const [paymentType, setPaymentType] = React.useState("");
   const [publishTime, setPublishTime] = React.useState("");
   const [projectList, setProjectList] = React.useState([]);
+  
 
   const handleSearch = () => {
     const data = { keyword, location, job_classification: classification };
@@ -219,9 +220,7 @@ const InitialDash = () => {
               <Button variant="contained" size="small">
                 Save
               </Button>
-              <Button variant="contained" size="small" onClick={() => navigate('/Application')}>
-                Quick apply
-              </Button>
+            
             </CardActions>
           </Card>
         ))}

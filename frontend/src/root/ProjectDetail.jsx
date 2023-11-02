@@ -9,9 +9,11 @@ import { apiCall } from "../components/HelpFunctions";
 import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
 
 function ProjectDetail() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [projectInfo, setProjectInfo] = useState({});
-
+  const [role, setRole] = React.useState(0)
+  console.log(id)
   const getProjectInfo = () => {
     apiCall(`/project/${id}`, "GET").then((res) => {
       setProjectInfo(res);
@@ -20,6 +22,16 @@ function ProjectDetail() {
 
   useEffect(() => {
     getProjectInfo();
+    let user = apiCall("/profile", "GET");
+    user.then((data) => {
+      if (localStorage.getItem('token')) {
+        if (data.error) {
+          alert(data.error)
+        } else {
+          setRole(data.role)
+        }
+      }
+    })
   }, []);
 
   return (
@@ -41,12 +53,16 @@ function ProjectDetail() {
         <Typography variant="body1" gutterBottom>
           <span style={{ color: 'gray' }}>Posted 12h ago</span>
         </Typography>
-      
+
         <Box sx={{ display: "flex", gap: 8, my: 2 }}>
-          <Button variant="contained">Apply</Button>
+          {role == 1 ? <Button variant="contained" size="small" onClick={() => navigate(`/application/${id}`)}>
+            Quick apply
+          </Button> : role == 3 ? <Button variant="contained" size="small" onClick={() => navigate(`/application/${id}`)}>
+            supervise
+          </Button> : null}
           <Button variant="outlined">Save</Button>
         </Box>
-        
+
         <br></br>
         <Typography variant="h6" gutterBottom>
           Problem statement
