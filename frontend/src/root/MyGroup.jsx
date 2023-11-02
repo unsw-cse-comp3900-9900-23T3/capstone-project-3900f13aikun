@@ -29,7 +29,7 @@ function MyGroup() {
 
     const handleLeave = () => {
         // apiCall(`/group/remove`, "POST").then((res) => {
-
+            
         // }
         // )
     }
