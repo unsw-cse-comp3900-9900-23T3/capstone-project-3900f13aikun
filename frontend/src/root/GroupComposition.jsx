@@ -15,7 +15,7 @@ import CardContent from "@mui/material/CardContent";
 
 function GroupComposition() {
     const { groupId } = useParams();
-    const [groupDetail, setGroupDetail] = useState([]);
+    const [groupDetail, setGroupDetail] = useState({});
 
     useEffect(() => {
         getGroupDetail();

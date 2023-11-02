@@ -42,7 +42,7 @@ const InitialDash = () => {
       setProjectList(res);
     });
   };
-
+  
   useEffect(() => {
     handleSearch();
   }, []);
