@@ -396,6 +396,25 @@ def join_group_route(group_id):
     return jsonify({"message": "success"})
 
 
+@app.route("/group/leave/<group_id>", methods=["GET"])
+@jwt_required()
+def join_group_route(group_id):
+    current_user_id = get_jwt_identity()
+    user = db.session.get(User, current_user_id)
+    group = db.session.get(Group, group_id)
+
+    if not group:
+        return {"status": "Not Found"}, 404
+
+    if user in group.members:
+        group.members.remove(user)
+        db.session.commit()
+        return jsonify({"message": "success"})
+
+    else:
+        return {"msg": "The user not in the group"}, 404
+
+
 @app.route("/group/<group_id>", methods=["GET"])
 @jwt_required()
 def get_group_route(group_id):
@@ -421,7 +440,7 @@ def get_groups_route():
 def get_user_groups_route():
     current_user_id = get_jwt_identity()
     groups_without_current_user = Group.query.filter(
-       (Group.creator_id != current_user_id) &
+        (Group.creator_id != current_user_id) &
         (Group.is_private == 0) &
         not_(Group.members.any(User.user_id == current_user_id))
     ).all()

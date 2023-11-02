@@ -151,6 +151,8 @@ class Group(db.Model):
 
 class GroupSchema(ma.Schema):
     members = ma.Nested(UserSchema, many=True)
+    creator = ma.Nested(UserSchema)
+
     class Meta:
         model = Group
         include_fk = True
@@ -161,6 +163,7 @@ class GroupSchema(ma.Schema):
             "limit_no",
             "is_private",
             "creator_id",
+            "creator",
             "members"
         )
         # members = ma.Nested('user_sc', many=True)
