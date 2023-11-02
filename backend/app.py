@@ -388,7 +388,7 @@ def join_group_route(group_id):
     if not group:
         return {"status": "Not Found"}, 404
 
-    if len(group.members) == group.limit_no:
+    if len(group.members + 1) == group.limit_no:
         return {"msg": "The Group is full"}, 400
 
     group.members.append(user)
