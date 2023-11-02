@@ -21,8 +21,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Database config
-# app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
-app.config["SQLALCHEMY_DATABASE_URI"] ='postgresql://postgres:jjy0325@localhost:5432/postgres'
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
@@ -38,8 +37,6 @@ app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')  # 发送邮件的邮箱
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')  # 邮箱密码
-# app.config['MAIL_USERNAME'] = '852691750@qq.com'  # 发送邮件的邮箱
-# app.config['MAIL_PASSWORD'] = '61751589JJy'  # 邮箱密码
 
 mail = Mail(app)
 

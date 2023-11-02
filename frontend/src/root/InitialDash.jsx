@@ -27,6 +27,20 @@ const InitialDash = () => {
   const [paymentType, setPaymentType] = React.useState("");
   const [publishTime, setPublishTime] = React.useState("");
   const [projectList, setProjectList] = React.useState([]);
+  const [role, setRole] = React.useState(0);
+
+  React.useEffect(() => {
+    if (localStorage.getItem('token')) {
+      const res = apiCall(`/profile`, 'GET')
+      res.then((data) => {
+        if (data.error) {
+          alert(data.error)
+        } else {
+          setRole(data.role)
+        }
+      })
+    }
+  });
 
   const handleSearch = () => {
     const data = { keyword, location, job_classification: classification };
@@ -219,7 +233,7 @@ const InitialDash = () => {
               <Button variant="contained" size="small">
                 Save
               </Button>
-              <Button variant="contained" size="small" onClick={() => navigate('/Application')}>
+              <Button variant="contained" size="small" onClick={() => navigate('/Application')} disabled={role===2}>
                 Quick apply
               </Button>
             </CardActions>

@@ -12,6 +12,20 @@ function ProjectDetail() {
   const { id } = useParams();
   const [projectInfo, setProjectInfo] = useState({});
   const navigate = useNavigate();
+  const [role, setRole] = React.useState(0);
+  
+  React.useEffect(() => {
+    if (localStorage.getItem('token')) {
+      const res = apiCall(`/profile`, 'GET')
+      res.then((data) => {
+        if (data.error) {
+          alert(data.error)
+        } else {
+          setRole(data.role)
+        }
+      })
+    }
+  });
 
   const getProjectInfo = () => {
     apiCall(`/project/${id}`, "GET").then((res) => {
@@ -49,7 +63,7 @@ function ProjectDetail() {
         </Typography>
       
         <Box sx={{ display: "flex", gap: 8, my: 2 }}>
-          <Button variant="contained">Apply</Button>
+          <Button variant="contained" onClick={() => navigate('/Application')} disabled={role===2}>Apply</Button>
           <Button variant="outlined" onClick={() => handleSave()}>Save</Button>
         </Box>
         

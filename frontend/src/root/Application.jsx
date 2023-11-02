@@ -16,7 +16,7 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 function Appliacation() {
     const navigate = useNavigate();
-    
+
     const names = [
         'UNSW',
         'USYD',
@@ -55,20 +55,20 @@ function Appliacation() {
             <React.Fragment>
                 <CssBaseline />
                 <Container sx={{ border: '2px solid black', margin: '20px' }}>
-                    <Box sx={{ bgcolor: '#C0C0C0', height: '80vh', fontSize: '30px', display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ height: '80vh', fontSize: '30px', display: 'flex', justifyContent: 'center' }}>
                         <div>
                             <b>Apply to this project</b>
                             <div>
 
                             </div>
                             <div>
-                                <TextField sx={{margin:'20px'}} label="First name" id="outlined-size-small"  />
-                                <TextField sx={{margin:'20px'}} label="Last name" id="outlined-size-small"  />
+                                <TextField sx={{ margin: '20px' }} label="First name" id="outlined-size-small" />
+                                <TextField sx={{ margin: '20px' }} label="Last name" id="outlined-size-small" />
                             </div>
                             <div>
-                                <TextField sx={{margin:'20px'}} label="Email" id="outlined-size-small" defaultValue="Small" size="first name" />
+                                <TextField sx={{ margin: '20px' }} label="Email" id="outlined-size-small" defaultValue="Small" size="first name" />
                             </div>
-                            <div style={{fontSize: '20px'}}>Education</div>
+                            <div style={{ fontSize: '20px' }}>Education</div>
                             <div>
                                 <FormControl sx={{ m: 1, width: 300 }}>
                                     <InputLabel id="demo-multiple-name-label">university</InputLabel>
@@ -93,24 +93,15 @@ function Appliacation() {
                                     </Select>
                                 </FormControl>
                             </div>
-                           
-                            <div style={{fontSize: '20px'}}>resumes</div>
+
+                            <div style={{ fontSize: '20px' }}>resumes</div>
                             <textarea name="" id="" cols="60" rows="6"></textarea>
                             <div><Button onClick={apply}>submit</Button>
-                                </div>
+                            </div>
                         </div>
-                       
-                        
-                        
-
                     </Box>
-
-
                 </Container>
             </React.Fragment>
-
-
-
         </>
     );
 

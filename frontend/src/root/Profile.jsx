@@ -14,7 +14,7 @@ function Profile() {
   const [skill, setSkill] = React.useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-  const [avatarUrl, setAvatarUrl] = React.useState("https://d2w9rnfcy7mm78.cloudfront.net/8040974/original_ff4f1f43d7b72cc31d2eb5b0827ff1ac.png?1595022778?bc=0");
+  const [avatarUrl, setAvatarUrl] = React.useState("");
 
   useEffect(() => {
     apiCall(`/profile`, "GET").then((data) => {
