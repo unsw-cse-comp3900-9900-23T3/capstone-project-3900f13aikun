@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
 import NavigationBtn from "../components/NavigationBtn";
 import { apiCall } from "../components/HelpFunctions";
 import { Pagebackground } from '../components/StyledElement';
@@ -12,6 +12,7 @@ function MyGroup() {
     const navigate = useNavigate();
     const [myGroups, setMyGroups] = useState([]);
     const [otherGroups, setOtherGroups] = useState([]);
+    const { groupId, removeId } = useParams();
 
     const [joinStatus, setJoinStatus] = React.useState({});
 
@@ -19,7 +20,7 @@ function MyGroup() {
         apiCall(`/joinedGroup`, "GET").then((res) => {
             setMyGroups(res);
         });
-      }, []);
+    }, []);
 
     React.useEffect(() => {
         apiCall(`/notInGroup/`, "GET").then((res) => {
@@ -28,12 +29,24 @@ function MyGroup() {
     }, []);
 
     const handleLeave = () => {
-        // apiCall(`/group/remove`, "POST").then((res) => {
-            
-        // }
-        // )
-    }
-    const handleJoin = () => { }
+        // apiCall(`/group/remove`, "POST", {
+        //     group_id: groupId,
+        //     user_id: removeId,
+        // });
+    };
+
+    const handleJoin = () => {
+        // apiCall(`/group/join/${groupId}`, "GET").then((res) => {
+        //     setOtherGroups(res);
+        // });
+    };
+
+    React.useEffect(() => {
+        if (groupId) {
+            handleJoin();
+        }
+    }, []);
+
 
     return (
         <>
@@ -65,7 +78,7 @@ function MyGroup() {
                     </TableHead>
                     <TableBody>
                         {myGroups.map((item) => (
-                            <TableRow key={item.creator_id}>
+                            <TableRow key={item.group_id}>
                                 <TableCell
                                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                     onClick={() => {
@@ -86,7 +99,7 @@ function MyGroup() {
                                     </Button>
                                 </TableCell>
                                 <TableCell>
-                                    <Button onClick={() => handleLeave(item.group_id)}>
+                                    <Button onClick={() => handleLeave(item.user_id, item.group_id)}>
                                         Leave
                                     </Button>
                                 </TableCell>
@@ -109,12 +122,11 @@ function MyGroup() {
                             <TableCell>Description</TableCell>
                             <TableCell>Members</TableCell>
                             <TableCell></TableCell>
-                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {otherGroups.map((item) => (
-                            <TableRow key={item.creator_id}>
+                            <TableRow key={item.group_id}>
                                 <TableCell
                                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                     onClick={() => {
@@ -123,17 +135,11 @@ function MyGroup() {
                                     {item.group_name}
                                 </TableCell>
                                 <TableCell>{item.group_description}</TableCell>
-                                <TableCell>{item.members.length+1}/{item.limit_no}</TableCell>
+                                <TableCell>{item.members.length + 1}/{item.limit_no}</TableCell>
                                 <TableCell>
-                                    {joinStatus[item.group_id] ? (
-                                        <Button onClick={() => handleLeave(item.id)}>
-                                            Leave
-                                        </Button>
-                                    ) : (
-                                        <Button onClick={() => handleJoin(item.id)}>
-                                            Join
-                                        </Button>
-                                    )}
+                                    <Button onClick={() => handleJoin()}>
+                                        Join
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
