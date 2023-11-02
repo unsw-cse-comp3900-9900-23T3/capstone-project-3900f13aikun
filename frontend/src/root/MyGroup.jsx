@@ -16,7 +16,7 @@ function MyGroup() {
     const [joinStatus, setJoinStatus] = React.useState({});
 
     React.useEffect(() => {
-        apiCall(`/group`, "GET").then((res) => {
+        apiCall(`/joinedGroup`, "GET").then((res) => {
             setMyGroups(res);
         });
       }, []);
@@ -74,7 +74,7 @@ function MyGroup() {
                                     {item.group_name}
                                 </TableCell>
                                 <TableCell>{item.group_description}</TableCell>
-                                <TableCell>{item.members.length}/{item.limit_no}</TableCell>
+                                <TableCell>{item.members.length + 1}/{item.limit_no}</TableCell>
                                 <TableCell>
                                     <Button
                                         variant="contained"
@@ -123,7 +123,7 @@ function MyGroup() {
                                     {item.group_name}
                                 </TableCell>
                                 <TableCell>{item.group_description}</TableCell>
-                                <TableCell>{item.members.length}/{item.limit_no}</TableCell>
+                                <TableCell>{item.members.length+1}/{item.limit_no}</TableCell>
                                 <TableCell>
                                     {joinStatus[item.group_id] ? (
                                         <Button onClick={() => handleLeave(item.id)}>
