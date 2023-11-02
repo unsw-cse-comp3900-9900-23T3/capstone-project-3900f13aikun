@@ -219,6 +219,9 @@ const InitialDash = () => {
               <Button variant="contained" size="small">
                 Save
               </Button>
+              <Button variant="contained" size="small" onClick={() => navigate('/Application')}>
+                Quick apply
+              </Button>
             </CardActions>
           </Card>
         ))}

@@ -17,6 +17,7 @@ import Notification from './root/Notification';
 import MyGroup from './root/MyGroup';
 import MyCreateGroup from './root/MyCreateGroup';
 import ProjectDetail from './root/ProjectDetail';
+import Apppro from './root/Apppro';
 
 
 
@@ -47,6 +48,7 @@ function App () {
             <Route path="/dashboard/industryp" element={<DashboardIndustry/>} />
             <Route path="/saved-projects" element={<SavedProjects/>} />
             <Route path="/application" element={<Appliacation/>} />
+            <Route path="/apppro" element={<Apppro/>} />
             <Route path="/notification" element={<Notification/>} />
             <Route path="/my-group" element={<MyGroup/>} />
             <Route path="/my-create-group" element={<MyCreateGroup/>} />
