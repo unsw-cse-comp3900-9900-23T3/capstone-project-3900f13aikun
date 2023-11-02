@@ -111,13 +111,61 @@ export function checkSkills(skill) {
   return true;
 }
 
-// function to sort the game list
-export function sortGame(gamelist) {
-  return gamelist.sort((a, b) => {
-    if (a.createdAt > b.createdAt) {
-      return -1;
-    } else {
-      return 1;
-    }
-  });
+export function checkTitle(title) {
+  if (title.trim() === "") {
+    alert("The title of the project you create cannot be empty");
+    return false;
+  }
+  return true;
 }
+
+export function checkClassification(classification) {
+  if (classification === "") {
+    alert("The Project Classification of the project you create cannot be empty");
+    return false;
+  }
+  return true;
+}
+
+export function checkLocation(location) {
+  if (location.trim() === "") {
+    alert("The location of the project you create cannot be empty");
+    return false;
+  }
+  return true;
+}
+
+export function checkOpportunity(opportunity) {
+  if (opportunity === "") {
+    alert("The Opportunity Type of the project you create cannot be empty");
+    return false;
+  }
+  return true;
+}
+
+export function checkProblemStatement(problem) {
+  if (problem.trim() === "") {
+    alert("The Problem Statement of the project you create cannot be empty");
+    return false;
+  }
+  return true;
+}
+
+export function checkRequirement(requirement) {
+  if (requirement.trim() === "") {
+    alert("The Availability Requiremnet of the project you create cannot be empty");
+    return false;
+  }
+  return true;
+}
+
+export function checkPaymentType(paymentType) {
+  if (paymentType === "") {
+    alert("The Project Classification of the project you create cannot be empty");
+    return false;
+  }
+  return true;
+}
+
+
+

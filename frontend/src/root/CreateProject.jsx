@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import NavigationBtn from "../components/NavigationBtn";
 import { apiCall } from "../components/HelpFunctions";
 import { Pagebackground } from "../components/StyledElement";
+import { checkTitle, checkClassification, checkLocation, checkOpportunity, checkPaymentType, checkProblemStatement, checkRequirement } from "../components/HelpFunctions";
 
 export default function CreateProject() {
   const navigate = useNavigate();
@@ -88,6 +89,13 @@ export default function CreateProject() {
     });
   };
 
+  const checkProjects = () => {
+    if (checkTitle(title) && checkClassification(classification) && checkLocation(location) && checkOpportunity(opportunityType)
+      && checkProblemStatement(problemStatement) && checkRequirement(availabilityRequirement) && checkPaymentType(paymentType)) {
+      handlePublishClick();
+    }
+  }
+
   return (
     <>
       <NavigationBtn></NavigationBtn>
@@ -114,7 +122,7 @@ export default function CreateProject() {
         <br></br>
 
         <FormControl style={{ width: "400px" }}>
-          <FormLabel>Job Classification</FormLabel>
+          <FormLabel>Project Classification</FormLabel>
           <RadioGroup
             value={classification}
             onChange={(e) => {
@@ -181,7 +189,7 @@ export default function CreateProject() {
         <br></br>
 
         <FormControl style={{ width: "400px" }}>
-          <FormLabel>Opportunity type</FormLabel>
+          <FormLabel>Payment type</FormLabel>
           <RadioGroup
             value={paymentType}
             onChange={(e) => {
@@ -237,7 +245,7 @@ export default function CreateProject() {
           color="success"
           sx={{ marginTop: "30px" }}
           onClick={() => {
-            handlePublishClick();
+            checkProjects();
           }}>
           Publish
         </Button>

@@ -15,7 +15,7 @@ import CardContent from "@mui/material/CardContent";
 
 function GroupComposition() {
     const { groupId } = useParams();
-    const [groupDetail, setGroupDetail] = useState([]);
+    const [groupDetail, setGroupDetail] = useState({});
 
     useEffect(() => {
         getGroupDetail();
@@ -45,12 +45,12 @@ function GroupComposition() {
                             Members:
                         </Typography>
                         <List>
-                            {/* {groupDetail.members &&
-                                groupDetail.member.map((item) => (
+                            {groupDetail.members &&
+                                groupDetail.members.map((item) => (
                                     <ListItem key={item.user_id}>
                                         <ListItemText primary={item.name} />
                                     </ListItem>
-                                ))} */}
+                                ))}
                         </List>
                     </CardContent>
                 </Card>

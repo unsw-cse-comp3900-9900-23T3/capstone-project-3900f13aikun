@@ -11,12 +11,18 @@ import { getJobType, getPaymentType, getOpportunityType } from "../components/En
 function ProjectDetail() {
   const { id } = useParams();
   const [projectInfo, setProjectInfo] = useState({});
+  const navigate = useNavigate();
 
   const getProjectInfo = () => {
     apiCall(`/project/${id}`, "GET").then((res) => {
       setProjectInfo(res);
     });
   };
+
+  const handleSave = () => {
+    getProjectInfo();
+    navigate('/saved-projects')
+  }
 
   useEffect(() => {
     getProjectInfo();
@@ -33,7 +39,7 @@ function ProjectDetail() {
           Location: <span style={{ color: '#555' }}>{projectInfo.location}</span>
         </Typography>
         <Typography variant="body1" gutterBottom>
-          Job classification: <span style={{ color: '#555' }}>{getJobType(projectInfo.job_classification)}</span>
+          Project type: <span style={{ color: '#555' }}>{getJobType(projectInfo.job_classification)}</span>
         </Typography>
         <Typography variant="body1" gutterBottom>
           {getOpportunityType(projectInfo.opportunity_type)} | {getPaymentType(projectInfo.payment_type)}
@@ -44,7 +50,7 @@ function ProjectDetail() {
       
         <Box sx={{ display: "flex", gap: 8, my: 2 }}>
           <Button variant="contained">Apply</Button>
-          <Button variant="outlined">Save</Button>
+          <Button variant="outlined" onClick={() => handleSave()}>Save</Button>
         </Box>
         
         <br></br>
