@@ -21,6 +21,7 @@ function SignIn() {
     } else {
       localStorage.setItem("token", data.token);
       let user = await apiCall("/profile", "GET");
+      localStorage.setItem("user_id", user.user_id);
       if (user.role === 2) {
         navigate("/dashboard/industryp");
       } else if (user.role === 1) {

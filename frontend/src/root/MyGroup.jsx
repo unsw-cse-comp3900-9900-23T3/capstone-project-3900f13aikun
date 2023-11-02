@@ -12,8 +12,7 @@ function MyGroup() {
   const navigate = useNavigate();
   const [myGroups, setMyGroups] = useState([]);
   const [otherGroups, setOtherGroups] = useState([]);
-  
-
+  const user_id = localStorage.getItem("user_id");
 
   React.useEffect(() => {
     getJoinedGroups();
@@ -50,7 +49,14 @@ function MyGroup() {
     });
   };
 
-  React.useEffect(() => {}, []);
+  const hanldeDeleteGroup = (groupId) => {
+    apiCall(`/group/${groupId}`, "DELETE").then((res) => {
+      if (res.message === "success") {
+        getJoinedGroups();
+        getOthersGroups();
+      }
+    });
+  };
 
   return (
     <>
@@ -104,9 +110,7 @@ function MyGroup() {
                     Edit
                   </Button>
                 </TableCell>
-                <TableCell>
-                  <Button onClick={() => handleLeave(item.group_id)}>Leave</Button>
-                </TableCell>
+                <TableCell>{user_id != item.creator_id ? <Button onClick={() => handleLeave(item.group_id)}>Leave</Button> : <Button onClick={() => hanldeDeleteGroup(item.group_id)}>Delete</Button>}</TableCell>
               </TableRow>
             ))}
           </TableBody>

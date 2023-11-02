@@ -425,6 +425,21 @@ def get_group_route(group_id):
     return group_sc.jsonify(group)
 
 
+@app.route("/group/<group_id>", methods=["DELETE"])
+@jwt_required()
+def delete_group_route(group_id):
+    current_user_id = get_jwt_identity()
+    group = db.session.get(Group, group_id)
+    if not group:
+        return {"status": "Not Found"}, 400
+    if group.creator_id != current_user_id:
+        return {"msg": "You don't have permission"}, 400
+
+    db.session.delete(group)
+    db.session.commit()
+    return jsonify({"message": "success"})
+
+
 @app.route("/group", methods=["GET"])
 @jwt_required()
 def get_groups_route():
