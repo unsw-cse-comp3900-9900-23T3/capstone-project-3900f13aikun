@@ -398,7 +398,7 @@ def join_group_route(group_id):
 
 @app.route("/group/leave/<group_id>", methods=["GET"])
 @jwt_required()
-def join_group_route(group_id):
+def leave_group_route(group_id):
     current_user_id = get_jwt_identity()
     user = db.session.get(User, current_user_id)
     group = db.session.get(Group, group_id)
