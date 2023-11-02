@@ -35,7 +35,7 @@ class User(db.Model):
     skill = db.Column(db.Text())
     avatarUrl = db.Column(db.Text())
     groups = db.relationship('Group', secondary='user_group', back_populates='members')
-    created_groups = db.relationship('Group', back_populates='creator', lazy='dynamic')
+    created_groups = db.relationship('Group', back_populates='creator')
 
     def __init__(self, role, email, password, name, passport):
         self.role = role

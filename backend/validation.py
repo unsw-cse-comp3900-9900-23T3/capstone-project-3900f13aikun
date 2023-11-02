@@ -118,3 +118,10 @@ UPDATE_GROUP_SCHEMA = Schema(
         Optional("limit_no"): And(Use(int), lambda i: i >= 0),
         Optional("is_private"): And(Use(int), lambda i: i >= 0),
     })
+
+REMOVE_GROUP_MEMBER__SCHEMA = Schema(
+    {
+        "group_id": And(Use(int), lambda i: i >= 0),
+        "user_id": And(Use(int), lambda i: i >= 0),
+    })
+

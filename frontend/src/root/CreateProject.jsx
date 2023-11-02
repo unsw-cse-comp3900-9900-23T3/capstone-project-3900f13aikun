@@ -120,8 +120,8 @@ export default function CreateProject() {
             onChange={(e) => {
               setClassification(e.target.value);
             }}>
-            <FormControlLabel value="1" control={<Radio />} label="IT" />
-            <FormControlLabel value="2" control={<Radio />} label="ACCOUNTING" />
+            <FormControlLabel value="1" control={<Radio />} label="Information Technology" />
+            <FormControlLabel value="2" control={<Radio />} label="Accounting" />
             <FormControlLabel value="3" control={<Radio />} label="Banking" />
             <FormControlLabel value="4" control={<Radio />} label="Engineering" />
             <FormControlLabel value="5" control={<Radio />} label="Sport" />

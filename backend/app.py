@@ -12,8 +12,9 @@ from flask_mail import Mail, Message
 from bcrypt import hashpw, gensalt, checkpw
 from sqlalchemy import desc
 from datetime import datetime
-from sqlalchemy import or_
+from sqlalchemy import or_, not_
 from datetime import timedelta
+from sqlalchemy.orm import joinedload
 
 load_dotenv()
 
@@ -392,7 +393,7 @@ def join_group_route(group_id):
     if not group:
         return {"status": "Not Found"}, 404
 
-    if len(group.members) == group.limit_no:
+    if len(group.members + 1) == group.limit_no:
         return {"msg": "The Group is full"}, 400
 
     group.members.append(user)
@@ -404,7 +405,6 @@ def join_group_route(group_id):
 @jwt_required()
 def get_group_route(group_id):
     group = db.session.get(Group, group_id)
-
     if not group:
         return {"status": "Not Found"}, 400
 
@@ -414,8 +414,65 @@ def get_group_route(group_id):
 @app.route("/group", methods=["GET"])
 @jwt_required()
 def get_groups_route():
-    groups = db.session.query(Group).filter(Group.is_private == 0)
+    current_user_id = get_jwt_identity()
+    groups = db.session.query(Group).filter(
+        (Group.is_private == 0) & (Group.creator_id == current_user_id)
+    )
     return groups_sc.jsonify(groups)
+
+
+@app.route("/notInGroup/", methods=["GET"])
+@jwt_required()
+def get_user_groups_route():
+    current_user_id = get_jwt_identity()
+    groups_without_current_user = Group.query.filter(
+       (Group.creator_id != current_user_id) &
+        (Group.is_private == 0) &
+        not_(Group.members.any(User.user_id == current_user_id))
+    ).all()
+    return groups_sc.jsonify(groups_without_current_user)
+
+
+@app.route("/group/remove", methods=["POST"])
+@jwt_required()
+def remove_group_member():
+    try:
+        data = REMOVE_GROUP_MEMBER__SCHEMA.validate(request.json)
+    except SchemaError as error:
+        return {"msg": str(error)}, 400
+
+    group_id = data["group_id"]
+    remove_user_id = data["user_id"]
+    current_user_id = get_jwt_identity()
+    remove_user = db.session.get(User, remove_user_id)
+    group = db.session.get(Group, group_id)
+    if group.creator_id != current_user_id:
+        return {"msg": "You don't have permission"}, 400
+
+    if remove_user and group:
+
+        if remove_user in group.members:
+            group.members.remove(remove_user)
+            db.session.commit()
+            return jsonify({"message": "success"})
+
+        else:
+            return {"msg": "The user not in the group"}, 404
+    else:
+        return {"status": "Not Found"}, 404
+
+
+@app.route("/joinedGroup", methods=["GET"])
+@jwt_required()
+def get_not_in_groups_route():
+    current_user_id = get_jwt_identity()
+
+    user_with_groups = User.query.options(joinedload(User.groups), joinedload(User.created_groups)).filter_by(
+        user_id=current_user_id).first()
+    joined_groups = user_with_groups.groups
+    created_groups = user_with_groups.created_groups
+    all_groups = list(joined_groups) + list(created_groups)
+    return groups_sc.jsonify(all_groups)
 
 
 @app.route("/group", methods=["PUT"])

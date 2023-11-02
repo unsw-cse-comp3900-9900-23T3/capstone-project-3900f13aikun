@@ -71,7 +71,7 @@ export const NavigationBtn = () => {
       setValue('two');
     } else if (path.pathname === '/my-created-project') {
       setValue('three');
-    } else if (path.pathname === '/my-group') {
+    } else if (path.pathname === '/my-group' || path.pathname === '/my-create-group') {
       setValue('four');
     } else if (path.pathname === '/register') {
       setIsshow(false);
@@ -120,7 +120,7 @@ export const NavigationBtn = () => {
               <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
               <Tab value="two" label="Profile" onClick={testLogin} />
               {role === 2 && <Tab value="three" label="Create Project" onClick={() => { navigate('/my-created-project') }}></Tab>}
-              {role === 1 && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group') }}></Tab>}
+              {role === 1 && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group', '/my-create-group') }}></Tab>}
             </Tabs>
           </Box>}
 
