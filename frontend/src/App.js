@@ -17,8 +17,14 @@ import Notification from './root/Notification';
 import MyGroup from './root/MyGroup';
 import MyCreateGroup from './root/MyCreateGroup';
 import ProjectDetail from './root/ProjectDetail';
+<<<<<<< HEAD
 import Apppro from './root/Apppro';
 import GroupComposition from './root/GroupComposition';
+=======
+import GroupComposition from './root/GroupComposition';
+
+
+>>>>>>> da260b4e93626134941d401b4f757a3c655959b6
 
 
 export const TotalContainer = styled('div')({
