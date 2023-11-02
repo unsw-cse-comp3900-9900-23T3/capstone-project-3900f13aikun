@@ -21,11 +21,14 @@ load_dotenv()
 app = Flask(__name__)
 
 # Database config
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
+# app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
+app.config["SQLALCHEMY_DATABASE_URI"] ='postgresql://postgres:jjy0325@localhost:5432/postgres'
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+
+secret_key = os.urandom(24)
 # JWT config
-app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_SECRET_KEY"] = secret_key 
 JWT_ALGORITHM = 'HS256'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=2)
 
@@ -35,6 +38,8 @@ app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
 app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')  # 发送邮件的邮箱
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')  # 邮箱密码
+# app.config['MAIL_USERNAME'] = '852691750@qq.com'  # 发送邮件的邮箱
+# app.config['MAIL_PASSWORD'] = '61751589JJy'  # 邮箱密码
 
 mail = Mail(app)
 
@@ -109,8 +114,8 @@ def register():
     if not user_code:
         return jsonify({"msg": "You haven't sent the code yet"}), 400
 
-    if code != user_code.vcode:
-        return jsonify({"msg": "Error input code"}), 400
+    # if code != user_code.vcode:
+    #     return jsonify({"msg": "Error input code"}), 400
 
     user = User(role, email, hashpw(password.encode(), gensalt()).decode(), name, passport)
     db.session.add(user)

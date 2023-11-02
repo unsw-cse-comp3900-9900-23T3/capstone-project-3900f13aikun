@@ -95,10 +95,10 @@ function SignUp() {
         alert("Please select a role");
         return;
       }
-      if (!codeinput) {
-        alert("empty code");
-        return;
-      }
+      // if (!codeinput) {
+      //   alert("empty code");
+      //   return;
+      // }
 
       const res = apiCall("/register", "POST", { email: email, password: password1, role: role, name: name, passport: passport, code: codeinput });
       res.then((data) => {
@@ -199,13 +199,17 @@ function SignUp() {
           </FormGroup>
           {authvalur === 1 && (
             <div style={{ marginLeft: "60px", marginTop: "10px" }}>
-              <input
-                placeholder="Enter Verification Code"
-                onChange={(e) => {
-                  setCodeinput(e.target.value);
-                }}
-              />
-              <button onClick={recievecode} disabled={isButtonDisabled}>
+    
+              <TextField
+                  label="Enter Verification Code"
+                  id="filled-size-small"
+                  variant="filled"
+                  size="small"
+                  onChange={(e) => {
+                    setCodeinput(e.target.value);
+                  }}
+                />
+              <button style={{marginLeft:'20px', marginTop:'4px', width:"150px",height:'40px'}} onClick={recievecode} disabled={isButtonDisabled}>
                 {isButtonDisabled ? `Resend in ${countdown} seconds` : "Send Verification Code"}
               </button>
             </div>

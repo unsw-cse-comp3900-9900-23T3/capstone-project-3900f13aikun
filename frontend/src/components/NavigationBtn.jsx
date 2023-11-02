@@ -41,7 +41,7 @@ export const NavigationBtn = () => {
   }
 
   function application() {
-    navigate('/application')
+    navigate('/apppro')
   }
 
   function notification() {
@@ -151,7 +151,7 @@ export const NavigationBtn = () => {
                 }}
               >
                 <MenuItem onClick={savedProjects}>Saved projects</MenuItem>
-                <MenuItem onClick={application}>Appliacation</MenuItem>
+                <MenuItem onClick={application}>apply project</MenuItem>
                 <MenuItem onClick={notification}>Notification</MenuItem>
                 <MenuItem onClick={switchAccount}>Switch account</MenuItem>
               </Menu>

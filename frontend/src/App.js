@@ -17,9 +17,14 @@ import Notification from './root/Notification';
 import MyGroup from './root/MyGroup';
 import MyCreateGroup from './root/MyCreateGroup';
 import ProjectDetail from './root/ProjectDetail';
+<<<<<<< HEAD
+import Apppro from './root/Apppro';
+import GroupComposition from './root/GroupComposition';
+=======
 import GroupComposition from './root/GroupComposition';
 
 
+>>>>>>> da260b4e93626134941d401b4f757a3c655959b6
 
 
 export const TotalContainer = styled('div')({
@@ -48,6 +53,7 @@ function App () {
             <Route path="/dashboard/industryp" element={<DashboardIndustry/>} />
             <Route path="/saved-projects" element={<SavedProjects/>} />
             <Route path="/application" element={<Appliacation/>} />
+            <Route path="/apppro" element={<Apppro/>} />
             <Route path="/notification" element={<Notification/>} />
             <Route path="/my-group" element={<MyGroup/>} />
             <Route path="/my-create-group" element={<MyCreateGroup/>} />
