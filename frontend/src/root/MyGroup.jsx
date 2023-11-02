@@ -110,7 +110,7 @@ function MyGroup() {
                     Edit
                   </Button>
                 </TableCell>
-                <TableCell>{user_id != item.creator_id ? <Button onClick={() => handleLeave(item.group_id)}>Leave</Button> : <Button onClick={() => hanldeDeleteGroup(item.group_id)}>Delete</Button>}</TableCell>
+                <TableCell>{user_id !== item.creator_id ? <Button onClick={() => handleLeave(item.group_id)}>Leave</Button> : <Button onClick={() => hanldeDeleteGroup(item.group_id)}>Delete</Button>}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -147,7 +147,7 @@ function MyGroup() {
                   {item.members.length + 1}/{item.limit_no}
                 </TableCell>
                 <TableCell>
-                  <Button onClick={() => handleJoin(item.group_id)}>Join</Button>
+                  <Button onClick={() => handleJoin(item.group_id)} disabled={item.members.length + 1 >= item.limit_no}>Join</Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -10,7 +10,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Card from "@mui/material/Card";
 import Divider from '@mui/material/Divider';
-import CardActions from "@mui/material/CardActions";
+import ListItemIcon from "@mui/material/ListItemIcon";
 import CardContent from "@mui/material/CardContent";
 
 function GroupComposition() {
@@ -45,12 +45,22 @@ function GroupComposition() {
                             Members:
                         </Typography>
                         <List>
-                            {groupDetail.members &&
-                                groupDetail.members.map((item) => (
-                                    <ListItem key={item.user_id}>
-                                        <ListItemText primary={item.name} />
-                                    </ListItem>
-                                ))}
+                            {groupDetail.creator && (
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <span>&#9733;</span>
+                                    </ListItemIcon>
+                                    <ListItemText primary={groupDetail.creator.name} style={{ fontSize: '16px', color: 'cornflowerblue' }}/>
+                                </ListItem>
+                            )}
+                            {groupDetail.members && groupDetail.members.map((item) => (
+                                <ListItem key={item.user_id}>
+                                    <ListItemIcon>
+                                        <span>&#8226;</span>
+                                    </ListItemIcon>
+                                    <ListItemText primary={item.name} style={{ fontSize: '16px' }} />
+                                </ListItem>
+                            ))}
                         </List>
                     </CardContent>
                 </Card>
