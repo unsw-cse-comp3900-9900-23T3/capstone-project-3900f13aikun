@@ -42,6 +42,24 @@ const InitialDash = () => {
     }
   });
 
+  function testApply() {
+    if (!localStorage.getItem('token')) {
+      alert('please login in')
+    } else {
+      navigate('/Application')
+    }
+  }
+
+  function testSave() {
+    if (!localStorage.getItem('token')) {
+      alert('please login in')
+    } else {
+      navigate('/save-project')
+    }
+  }
+
+
+
   const handleSearch = () => {
     const data = { keyword, location, job_classification: classification };
     let temp = [];
@@ -56,7 +74,7 @@ const InitialDash = () => {
       setProjectList(res);
     });
   };
-  
+
   useEffect(() => {
     handleSearch();
   }, []);
@@ -230,10 +248,10 @@ const InitialDash = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button variant="contained" size="small">
+              <Button variant="contained" size="small" onClick={() => testSave()}>
                 Save
               </Button>
-              <Button variant="contained" size="small" onClick={() => navigate('/Application')} disabled={role===2}>
+              <Button variant="contained" size="small" onClick={() => testApply()} disabled={role === 2}>
                 Quick apply
               </Button>
             </CardActions>

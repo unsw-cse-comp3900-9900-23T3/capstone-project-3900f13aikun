@@ -67,7 +67,7 @@ export const NavigationBtn = () => {
     if (path.pathname === '/') {
       setValue('one');
       setIsshow(true);
-    } else if (path.pathname === '/profile') {
+    } else if (path.pathname === '/profile' || path.pathname === '/profile-detail') {
       setValue('two');
     } else if (path.pathname === '/my-created-project') {
       setValue('three');

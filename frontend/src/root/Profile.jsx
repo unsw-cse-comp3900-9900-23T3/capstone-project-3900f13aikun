@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -8,15 +9,16 @@ import { apiCall, checkEmail, checkSkills, checkWorkRight, fileToDataUrl } from 
 import { Pagebackground } from "../components/StyledElement";
 
 function Profile() {
+  const navigate = useNavigate();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [workRight, setWorkRight] = React.useState([]);
+  const [intention, setIntention] = React.useState([])
   const [skill, setSkill] = React.useState("");
-  const [isEditing, setIsEditing] = useState(false);
 
   const [avatarUrl, setAvatarUrl] = React.useState("");
 
-  useEffect(() => {
+  React.useEffect(() => {
     apiCall(`/profile`, "GET").then((data) => {
       if (data.error) {
         alert(data.error);
@@ -26,39 +28,51 @@ function Profile() {
         setWorkRight(data.work_rights)
         setSkill(data.skill)
         setAvatarUrl(data.avatarUrl)
+        setIntention(data.project_intention)
       }
     });
   }, []);
 
   async function updateProfile() {
-    const res = apiCall(`/profile`, "PUT", { name: name, work_rights: workRight, skill: skill, avatarUrl: avatarUrl });
-    res.then((data) => {
-      if (data.error) {
-        alert(data.error);
-      } else {
-        console.log(data);
-      }
+    const res = apiCall(`/profile`, "PUT", {
+      name: name,
+      work_rights: workRight,
+      skill: skill,
+      avatarUrl: avatarUrl,
+      project_intention: intention
     });
+    res.then((data) => {
+      navigate("/profile-detail")
+    });
+    return;
   }
 
-  const handleCheckbox = (event) => {
+  const handleCheckbox1 = (event) => {
     const value = event.target.value;
     if (workRight === null) {
       setWorkRight([value]);
     } else if (workRight.includes(value)) {
       setWorkRight(workRight.filter((item) => item !== value));
     } else {
-        setWorkRight([...workRight, value]);
+      setWorkRight([...workRight, value]);
     }
-};
+  };
+
+  const handleCheckbox2 = (event) => {
+    const value = event.target.value;
+    if (intention === null) {
+      setIntention([value]);
+    } else if (intention.includes(value)) {
+      setIntention(intention.filter((item) => item !== value));
+    } else {
+      setIntention([...intention, value]);
+    }
+  };
 
   function checkProfile() {
-    if (isEditing) {
-      if (checkEmail(email) && checkWorkRight(workRight) && checkSkills(skill)) {
-        updateProfile();
-      }
+    if (checkEmail(email) && checkWorkRight(workRight) && checkSkills(skill)) {
+      updateProfile();
     }
-    setIsEditing(!isEditing);
   }
 
   const handleReplace = () => {
@@ -80,110 +94,97 @@ function Profile() {
         }}
         noValidate
         autoComplete="off">
-        {isEditing && (
-          <>
-            <FormControl style={{ textAlign: "center", position: "relative" }}>
-              <div style={{ width: "130px", height: "130px", border: "2px solid #3489db", borderRadius: "50%", overflow: "hidden" }}>
-                <img src={avatarUrl} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center center" }} />
-              </div>
-              {!avatarUrl && (
-                <div>
-                  <label htmlFor="upload" style={{ backgroundColor: "#3498db", padding: "5px 10px", borderRadius: "5px", marginBottom: "10px" }}>
-                    Upload
-                  </label>
-                  <input
-                    type="file"
-                    id="upload"
-                    accept="image/jpeg, image/png, image/jpg"
-                    onChange={async (e) => {
-                      setAvatarUrl(await fileToDataUrl(e.target.files[0]));
-                    }}
-                    style={{ display: "none" }}
-                  />
-                </div>
-              )}
-              {avatarUrl && (
-                <Button htmlFor="upload" onClick={handleReplace} style={{ left: "50%", transform: "translateX(-50%)", backgroundColor: "transparent", color: "#3489db" }}>
-                  Replace
-                </Button>
-              )}
-            </FormControl>
-            <br></br>
-            <FormControl style={{ width: "400px", backgroundColor: "#F5F5F5", borderRadius: "10px", padding: "100px" }}>
-              <FormLabel style={{ fontWeight: "bold", color: "black" }}>Email:</FormLabel>
-              <TextField
-                id="filled-basic"
-                label="email"
-                variant="filled"
-                value={email}
-                style={{ width: "400px" }}
-                onChange={(e) => {
-                  setEmail(e.target.value);
+
+        <FormControl style={{ textAlign: "center", position: "relative" }}>
+          <div style={{ width: "130px", height: "130px", border: "2px solid #3489db", borderRadius: "50%", overflow: "hidden" }}>
+            <img src={avatarUrl} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center center" }} />
+          </div>
+          {!avatarUrl && (
+            <div>
+              <label htmlFor="upload" style={{ backgroundColor: "#3498db", padding: "5px 10px", borderRadius: "5px", marginBottom: "10px" }}>
+                Upload
+              </label>
+              <input
+                type="file"
+                id="upload"
+                accept="image/jpeg, image/png, image/jpg"
+                onChange={async (e) => {
+                  setAvatarUrl(await fileToDataUrl(e.target.files[0]));
                 }}
-                disabled
+                style={{ display: "none" }}
               />
-              <br></br>
-              <FormLabel style={{ fontWeight: "bold", color: "black" }}>Name:</FormLabel>
-              <TextField
-                id="filled-basic"
-                label="name"
-                variant="filled"
-                value={name}
-                style={{ width: "400px" }}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-              />
-              <br></br>
-              <FormLabel style={{ fontWeight: "bold", color: "black" }}>WorkRights</FormLabel>
-              <FormGroup value={workRight}>
-                <FormControlLabel control={<Checkbox />} label="Monday" value="Monday" checked={workRight !== null && workRight.includes("Monday")} onChange={handleCheckbox} />
-                <FormControlLabel control={<Checkbox />} label="Tuesday" value="Tuesday" checked={workRight !== null && workRight.includes("Tuesday")} onChange={handleCheckbox} />
-                <FormControlLabel control={<Checkbox />} label="Wenesday" value="Wenesday" checked={workRight !== null && workRight.includes("Wenesday")} onChange={handleCheckbox} />
-                <FormControlLabel control={<Checkbox />} label="Thursday" value="Thursday" checked={workRight !== null && workRight.includes("Thursday")} onChange={handleCheckbox} />
-                <FormControlLabel control={<Checkbox />} label="Friday" value="Friday" checked={workRight !== null && workRight.includes("Friday")} onChange={handleCheckbox} />
-                <FormControlLabel control={<Checkbox />} label="Saturday" value="Saturday" checked={workRight !== null && workRight.includes("Saturday")} onChange={handleCheckbox} />
-                <FormControlLabel control={<Checkbox />} label="Sunday" value="Sunday" checked={workRight !== null && workRight.includes("Sunday")} onChange={handleCheckbox} />
-              </FormGroup>
-              <br></br>
-              <FormLabel style={{ fontWeight: "bold", color: "black" }}>Skills:</FormLabel>
-              <TextField
-                id="filled-basic"
-                style={{ width: "400px", borderWidth: "1px", borderStyle: "solid" }}
-                value={skill}
-                multiline
-                rows={4}
-                onChange={(e) => {
-                  setSkill(e.target.value);
-                }}
-              />
-            </FormControl>
-          </>
-        )}
-        {!isEditing && (
-          <TableContainer component={Paper} style={{ border: "2px solid #c0c0c0" }}>
-            <Table>
-              <TableRow>
-                <TableCell>Email:</TableCell>
-                <TableCell>{email}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Name:</TableCell>
-                <TableCell>{name}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Workright:</TableCell>
-                <TableCell>{Array.isArray(workRight) ? workRight.join(', ') : ''}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Skills</TableCell>
-                <TableCell>{skill}</TableCell>
-              </TableRow>
-            </Table>
-          </TableContainer>
-        )}
+            </div>
+          )}
+          {avatarUrl && (
+            <Button htmlFor="upload" onClick={handleReplace} style={{ left: "50%", transform: "translateX(-50%)", backgroundColor: "transparent", color: "#3489db" }}>
+              Replace
+            </Button>
+          )}
+        </FormControl>
+        <br></br>
+        <FormControl style={{ width: "400px", backgroundColor: "#F5F5F5", borderRadius: "10px", padding: "100px" }}>
+          <FormLabel style={{ fontWeight: "bold", color: "black" }}>Email:</FormLabel>
+          <TextField
+            id="filled-basic"
+            label="email"
+            variant="filled"
+            value={email}
+            style={{ width: "400px" }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            disabled
+          />
+          <br></br>
+          <FormLabel style={{ fontWeight: "bold", color: "black" }}>Name:</FormLabel>
+          <TextField
+            id="filled-basic"
+            label="name"
+            variant="filled"
+            value={name}
+            style={{ width: "400px" }}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
+          <br></br>
+          <FormLabel style={{ fontWeight: "bold", color: "black" }}>WorkRights</FormLabel>
+          <FormGroup value={workRight}>
+            <FormControlLabel control={<Checkbox />} label="Monday" value="Monday" checked={workRight !== null && workRight.includes("Monday")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Tuesday" value="Tuesday" checked={workRight !== null && workRight.includes("Tuesday")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Wenesday" value="Wenesday" checked={workRight !== null && workRight.includes("Wenesday")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Thursday" value="Thursday" checked={workRight !== null && workRight.includes("Thursday")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Friday" value="Friday" checked={workRight !== null && workRight.includes("Friday")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Saturday" value="Saturday" checked={workRight !== null && workRight.includes("Saturday")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Sunday" value="Sunday" checked={workRight !== null && workRight.includes("Sunday")} onChange={handleCheckbox1} />
+          </FormGroup>
+          <br></br>
+          <FormLabel style={{ fontWeight: "bold", color: "black" }}>Project Intention</FormLabel>
+          <FormGroup value={intention}>
+            <FormControlLabel control={<Checkbox />} label="Information Technology" value="Information Technology" checked={intention !== null && intention.includes("Information Technology")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Accounting" value="Accounting" checked={intention !== null && intention.includes("Accounting")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Banking" value="Banking" checked={intention !== null && intention.includes("Banking")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Engineering" value="Engineering" checked={intention !== null && intention.includes("Engineering")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Sport" value="Sport" checked={intention !== null && intention.includes("Sport")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Business" value="Business" checked={intention !== null && intention.includes("Business")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Media" value="Media" checked={intention !== null && intention.includes("Media")} onChange={handleCheckbox2} />
+          </FormGroup>
+          <br></br>
+          <FormLabel style={{ fontWeight: "bold", color: "black" }}>Skills:</FormLabel>
+          <TextField
+            id="filled-basic"
+            style={{ width: "400px", borderWidth: "1px", borderStyle: "solid" }}
+            value={skill}
+            multiline
+            rows={4}
+            onChange={(e) => {
+              setSkill(e.target.value);
+            }}
+          />
+        </FormControl>
+
         <Button id="registerbutton" role="profile" variant="contained" color="success" onClick={checkProfile} sx={{ marginTop: "30px" }}>
-          {isEditing ? "Save" : "Edit"}
+          Save
         </Button>
       </Box>
     </>
