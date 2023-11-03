@@ -16,7 +16,7 @@ import CardContent from "@mui/material/CardContent";
 function GroupComposition() {
     const { groupId } = useParams();
     const [groupDetail, setGroupDetail] = useState({});
-
+    const navigate = useNavigate();
     useEffect(() => {
         getGroupDetail();
     }, []);
@@ -50,7 +50,14 @@ function GroupComposition() {
                                     <ListItemIcon>
                                         <span>&#9733;</span>
                                     </ListItemIcon>
-                                    <ListItemText primary={groupDetail.creator.name} style={{ fontSize: '16px', color: 'cornflowerblue' }}/>
+                                    <ListItemText
+                                        primary={groupDetail.creator.name}
+                                        style={{ fontSize: '16px', color: 'cornflowerblue' }}
+                                        sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                                        onClick={() => {
+                                            navigate('/profile-detail');
+                                        }}>
+                                    </ListItemText>
                                 </ListItem>
                             )}
                             {groupDetail.members && groupDetail.members.map((item) => (
@@ -58,7 +65,13 @@ function GroupComposition() {
                                     <ListItemIcon>
                                         <span>&#8226;</span>
                                     </ListItemIcon>
-                                    <ListItemText primary={item.name} style={{ fontSize: '16px' }} />
+                                    <ListItemText
+                                        primary={item.name}
+                                        style={{ fontSize: '16px' }}
+                                        sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                                        onClick={() => {
+                                            navigate('/profile-detail');
+                                        }}></ListItemText>
                                 </ListItem>
                             ))}
                         </List>

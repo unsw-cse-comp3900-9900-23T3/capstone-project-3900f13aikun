@@ -105,12 +105,12 @@ function MyGroup() {
                                         variant="contained"
                                         size="small"
                                         onClick={() => { navigate(`/edit-group/${item.group_id}`); }}
-                                        disabled={user_id !== item.creator_id}
+                                        disabled={user_id != item.creator_id}
                                     >
                                         Edit
                                     </Button>
                                 </TableCell>
-                                <TableCell>{user_id !== item.creator_id ? <Button onClick={() => handleLeave(item.group_id)}>Leave</Button> : <Button onClick={() => hanldeDeleteGroup(item.group_id)}>Delete</Button>}</TableCell>
+                                <TableCell>{user_id != item.creator_id ? <Button onClick={() => handleLeave(item.group_id)}>Leave</Button> : <Button onClick={() => hanldeDeleteGroup(item.group_id)}>Delete</Button>}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

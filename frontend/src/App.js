@@ -19,6 +19,7 @@ import MyCreateGroup from './root/MyCreateGroup';
 import ProjectDetail from './root/ProjectDetail';
 import Apppro from './root/Apppro';
 import GroupComposition from './root/GroupComposition';
+import ProfileDetails from './root/ProfileDetails';
 
 
 export const TotalContainer = styled('div')({
@@ -54,6 +55,7 @@ function App () {
             <Route path="/edit-group/:groupId" element={<MyCreateGroup/>} />
             <Route path="/group-composition/:groupId" element={<GroupComposition/>} />
             <Route path="/project-detail/:id" element={<ProjectDetail/>} />
+            <Route path="/profile-detail" element={<ProfileDetails/>} />
           </Routes>
         </BrowserRouter>
       </TotalContainer>
