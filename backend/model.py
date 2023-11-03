@@ -24,6 +24,12 @@ class PaymentType(Enum):
     NonPaid = 2
 
 
+user_saved_project = db.Table(
+    'user_project_association',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.user_id'), primary_key=True),
+    db.Column('project_id', db.Integer, db.ForeignKey('project.id'), primary_key=True))
+
+
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     role = db.Column(db.INTEGER)
@@ -36,6 +42,7 @@ class User(db.Model):
     avatarUrl = db.Column(db.Text())
     groups = db.relationship('Group', secondary='user_group', back_populates='members')
     created_groups = db.relationship('Group', back_populates='creator')
+    saved_projects = db.relationship('Project', secondary=user_saved_project)
 
     def __init__(self, role, email, password, name, passport):
         self.role = role
@@ -166,7 +173,6 @@ class GroupSchema(ma.Schema):
             "creator",
             "members"
         )
-        # members = ma.Nested('user_sc', many=True)
 
 
 group_sc = GroupSchema()

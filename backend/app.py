@@ -24,10 +24,9 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-
 secret_key = os.urandom(24)
 # JWT config
-app.config["JWT_SECRET_KEY"] = secret_key 
+app.config["JWT_SECRET_KEY"] = secret_key
 JWT_ALGORITHM = 'HS256'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=2)
 
@@ -275,12 +274,14 @@ def store_project():
 
 
 @app.route("/project", methods=["GET"])
+@jwt_required(optional=True)
 def get_projects_route():
     try:
         data = GET_TASKS_SCHEMA.validate(request.args.to_dict())
     except SchemaError as error:
         return {"status": "Bad request", "message": str(error)}, 400
 
+    current_user_id = get_jwt_identity()
     projects = db.session.query(Project)
 
     if "job_classification" in data:
@@ -299,16 +300,37 @@ def get_projects_route():
             Project.problem_statement.ilike(f"%{keyword}%")
         )
         projects = projects.filter(or_(*keyword_filter))
-    return projects_sc.jsonify(projects)
+
+    if not current_user_id:
+        return projects_sc.jsonify(projects)
+
+    else:
+        result = []
+        for project in projects:
+            current_user = db.session.get(User, current_user_id)
+            project_data = ProjectSchema().dump(project)
+            project_data['is_saved'] = project in current_user.saved_projects
+            result.append(project_data)
+        return jsonify(result)
 
 
 @app.route("/project/<id>", methods=["GET"])
+@jwt_required(optional=True)
 def get_project_route(id):
+    current_user_id = get_jwt_identity()
     project = db.session.get(Project, id)
 
     if not project:
         return {"status": "Not Found"}, 404
-    return project_sc.jsonify(project)
+
+    if not current_user_id:
+        return project_sc.jsonify(project)
+
+    else:
+        current_user = db.session.get(User, current_user_id)
+        project_data = ProjectSchema().dump(project)
+        project_data['is_saved'] = project in current_user.saved_projects
+        return jsonify(project_data)
 
 
 @app.route("/project", methods=["PUT"])
@@ -452,7 +474,7 @@ def get_groups_route():
     return groups_sc.jsonify(groups)
 
 
-@app.route("/notInGroup/", methods=["GET"])
+@app.route("/notInGroup", methods=["GET"])
 @jwt_required()
 def get_user_groups_route():
     current_user_id = get_jwt_identity()
@@ -532,6 +554,49 @@ def update_group_route():
     db.session.merge(group)
     db.session.commit()
     return jsonify({"message": "success"})
+
+
+@app.route("/savedProject", methods=["GET"])
+@jwt_required()
+def get_saved_projects_route():
+    current_user_id = get_jwt_identity()
+    user = db.session.get(User, current_user_id)
+
+    return projects_sc.jsonify(user.saved_projects)
+
+
+@app.route("/saved/project/<project_id>", methods=["GET"])
+@jwt_required()
+def add_saved_project_route(project_id):
+    current_user_id = get_jwt_identity()
+    current_user = db.session.get(User, current_user_id)
+    project_to_save = db.session.get(Project, project_id)
+
+    if not project_to_save:
+        return {"msg": "There is no such project"}, 404
+
+    current_user.saved_projects.append(project_to_save)
+    db.session.commit()
+    return jsonify({"message": "success"})
+
+
+@app.route("/unsaved/project/<project_id>", methods=["GET"])
+@jwt_required()
+def unsaved_saved_project_route(project_id):
+    current_user_id = get_jwt_identity()
+    current_user = db.session.get(User, current_user_id)
+    project_to_save = db.session.get(Project, project_id)
+
+    if not project_to_save:
+        return {"msg": "There is no such project"}, 404
+
+    if project_to_save in current_user.saved_projects:
+        current_user.saved_projects.remove(project_to_save)
+        db.session.commit()
+        return jsonify({"message": "success"})
+
+    else:
+        return {"msg": "The project is not saved"}, 404
 
 
 def generate_code():
