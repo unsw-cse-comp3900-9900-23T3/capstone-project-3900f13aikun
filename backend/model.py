@@ -38,6 +38,7 @@ class User(db.Model):
     password = db.Column(db.Text())
     name = db.Column(db.Text())
     work_rights = db.Column(db.ARRAY(db.String))
+    project_intention = db.Column(db.ARRAY(db.String))
     skill = db.Column(db.Text())
     avatarUrl = db.Column(db.Text())
     groups = db.relationship('Group', secondary='user_group', back_populates='members')
@@ -54,7 +55,8 @@ class User(db.Model):
 
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ("user_id", "role", "email", "passport", "name", "work_rights", "skill", "avatarUrl")
+        fields = (
+        "user_id", "role", "email", "passport", "name", "work_rights", "project_intention", "skill", "avatarUrl")
 
 
 class UserCode(db.Model):

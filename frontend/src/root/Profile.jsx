@@ -42,7 +42,7 @@ function Profile() {
       project_intention: intention,
     });
     res.then((data) => {
-      navigate("/profile-detail");
+      // navigate("/profile-detail");
     });
     return;
   }

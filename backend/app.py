@@ -224,6 +224,8 @@ def update_profile():
         current_user.avatarUrl = data["avatarUrl"]
     if "work_rights" in data:
         current_user.work_rights = data["work_rights"]
+    if "project_intention" in data:
+        current_user.project_intention = data["project_intention"]
     if "skill" in data:
         current_user.skill = data["skill"]
 
