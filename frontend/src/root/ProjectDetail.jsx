@@ -34,9 +34,10 @@ function ProjectDetail() {
   };
 
   const handleSave = () => {
-    getProjectInfo();
-    navigate('/saved-projects')
-  }
+    apiCall(`/saved/project/${id}`, "GET").then((res) => {
+      setProjectInfo(res);
+    });
+  };
 
   useEffect(() => {
     getProjectInfo();

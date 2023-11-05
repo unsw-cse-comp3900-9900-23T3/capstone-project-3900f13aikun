@@ -50,7 +50,7 @@ const InitialDash = () => {
     }
   }
 
-  function testSave() {
+  const testSave = () => {
     if (!localStorage.getItem("token")) {
       alert("please login in");
     } else {

@@ -24,7 +24,7 @@ export function getPaymentType(paymentType) {
     return PaymentTypeMap[paymentType] || 'Unknown';
 }
 
-export function getJobType(JobType) {
+export function getJobType(jobType) {
     const JobTypeMap = {
         1: 'Information Technology',
         2: 'Accounting',
@@ -34,5 +34,19 @@ export function getJobType(JobType) {
         6: 'Business',
         7: 'Media'
     };
-    return JobTypeMap[JobType] || 'Unknown';
+    return JobTypeMap[jobType] || 'Unknown';
 }
+
+export function getWorkRights(workRights) {
+    const JobTypeMap = {
+        1: 'Monday',
+        2: 'Tuesday',
+        3: 'Wednesday',
+        4: 'Thursday',
+        5: 'Friday',
+        6: 'Saturday',
+        7: 'Sunday'
+    };
+    return JobTypeMap[workRights] || 'Unknown';
+}
+

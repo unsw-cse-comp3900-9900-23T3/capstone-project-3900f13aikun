@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NavigationBtn from "../components/NavigationBtn";
 import { apiCall } from "../components/HelpFunctions";
 import { Pagebackground } from "../components/StyledElement";
@@ -18,7 +18,7 @@ function SavedProjects() {
     const [savedProjects, setSavedProjects] = React.useState([]);
 
     React.useEffect(() => {
-        apiCall(`/project`, "GET").then((res) => {
+        apiCall(`/savedProject`, "GET").then((res) => {
             setSavedProjects(res);
         });
     }, []);
