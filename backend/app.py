@@ -382,6 +382,20 @@ def update_project():
     return jsonify({"message": "success"})
 
 
+@app.route("/recommend/project", methods=["GET"])
+@jwt_required()
+def get_recommend_project_route():
+    projects = db.session.query(Project)
+    current_user_id = get_jwt_identity()
+    current_user = db.session.get(User, current_user_id)
+
+    if not current_user.project_intention:
+        return projects_sc.jsonify(projects)
+
+    projects = projects.filter(Project.job_classification.in_(current_user.project_intention)).all()
+    return projects_sc.jsonify(projects)
+
+
 @app.route("/group", methods=["POST"])
 @jwt_required()
 def store_group():

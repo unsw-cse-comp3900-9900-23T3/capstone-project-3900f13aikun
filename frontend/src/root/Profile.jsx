@@ -25,10 +25,10 @@ function Profile() {
       } else {
         setEmail(data.email);
         setName(data.name);
-        setWorkRight(data.work_rights);
+        setWorkRight(data.work_rights || []);
         setSkill(data.skill);
         setAvatarUrl(data.avatarUrl);
-        setIntention(data.project_intention);
+        setIntention(data.project_intention || []);
       }
     });
   }, []);
@@ -42,13 +42,15 @@ function Profile() {
       project_intention: intention,
     });
     res.then((data) => {
-      // navigate("/profile-detail");
+      navigate("/profile-detail");
     });
     return;
   }
 
   const handleCheckbox1 = (event) => {
+    console.log(event.target.value);
     const value = event.target.value;
+
     if (!workRight) {
       setWorkRight([value]);
     } else if (workRight.includes(value)) {
@@ -149,24 +151,24 @@ function Profile() {
           <br></br>
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>WorkRights</FormLabel>
           <FormGroup value={workRight}>
-            <FormControlLabel control={<Checkbox />} label="Monday" value="Monday" checked={workRight && workRight.includes("Monday")} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Tuesday" value="Tuesday" checked={workRight && workRight.includes("Tuesday")} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Wenesday" value="Wenesday" checked={workRight && workRight.includes("Wenesday")} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Thursday" value="Thursday" checked={workRight && workRight.includes("Thursday")} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Friday" value="Friday" checked={workRight && workRight.includes("Friday")} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Saturday" value="Saturday" checked={workRight && workRight.includes("Saturday")} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Sunday" value="Sunday" checked={workRight && workRight.includes("Sunday")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Monday" value={1} checked={workRight && workRight.includes("1")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Tuesday" value={2} checked={workRight && workRight.includes("2")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Wenesday" value={3} checked={workRight && workRight.includes("3")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Thursday" value={4} checked={workRight && workRight.includes("4")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Friday" value={5} checked={workRight && workRight.includes("5")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Saturday" value={6} checked={workRight && workRight.includes("6")} onChange={handleCheckbox1} />
+            <FormControlLabel control={<Checkbox />} label="Sunday" value={7} checked={workRight && workRight.includes("7")} onChange={handleCheckbox1} />
           </FormGroup>
           <br></br>
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>Project Intention</FormLabel>
           <FormGroup value={intention}>
-            <FormControlLabel control={<Checkbox />} label="Information Technology" value="Information Technology" checked={intention && intention.includes("Information Technology")} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Accounting" value="Accounting" checked={intention && intention.includes("Accounting")} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Banking" value="Banking" checked={intention && intention.includes("Banking")} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Engineering" value="Engineering" checked={intention && intention.includes("Engineering")} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Sport" value="Sport" checked={intention && intention.includes("Sport")} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Business" value="Business" checked={intention && intention.includes("Business")} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Media" value="Media" checked={intention && intention.includes("Media")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Information Technology" value={1} checked={intention && intention.includes("1")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Accounting" value={2} checked={intention && intention.includes("2")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Banking" value={3} checked={intention && intention.includes("3")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Engineering" value={4} checked={intention && intention.includes("4")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Sport" value={5} checked={intention && intention.includes("5")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Business" value={6} checked={intention && intention.includes("6")} onChange={handleCheckbox2} />
+            <FormControlLabel control={<Checkbox />} label="Media" value={7} checked={intention && intention.includes("7")} onChange={handleCheckbox2} />
           </FormGroup>
           <br></br>
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>Skills:</FormLabel>

@@ -76,7 +76,7 @@ export default function CreateProject() {
   const getProjectInfo = () => {
     apiCall(`/project/${id}`, "GET").then((res) => {
       setClassification(res.job_classification);
-      setLocation(res.location)
+      setLocation(res.location);
       setTitle(res.title);
       setProblemStatement(res.problem_statement);
       setAvailabilityRequirement(res.requirement);
@@ -90,11 +90,10 @@ export default function CreateProject() {
   };
 
   const checkProjects = () => {
-    if (checkTitle(title) && checkClassification(classification) && checkLocation(location) && checkOpportunity(opportunityType)
-      && checkProblemStatement(problemStatement) && checkRequirement(availabilityRequirement) && checkPaymentType(paymentType)) {
+    if (checkTitle(title) && checkClassification(classification) && checkLocation(location) && checkOpportunity(opportunityType) && checkProblemStatement(problemStatement) && checkRequirement(availabilityRequirement) && checkPaymentType(paymentType)) {
       handlePublishClick();
     }
-  }
+  };
 
   return (
     <>
@@ -128,13 +127,13 @@ export default function CreateProject() {
             onChange={(e) => {
               setClassification(e.target.value);
             }}>
-            <FormControlLabel value="1" control={<Radio />} label="Information Technology" />
-            <FormControlLabel value="2" control={<Radio />} label="Accounting" />
-            <FormControlLabel value="3" control={<Radio />} label="Banking" />
-            <FormControlLabel value="4" control={<Radio />} label="Engineering" />
-            <FormControlLabel value="5" control={<Radio />} label="Sport" />
-            <FormControlLabel value="6" control={<Radio />} label="Business" />
-            <FormControlLabel value="7" control={<Radio />} label="Media" />
+            <FormControlLabel value={1} control={<Radio />} label="Information Technology" />
+            <FormControlLabel value={2} control={<Radio />} label="Accounting" />
+            <FormControlLabel value={3} control={<Radio />} label="Banking" />
+            <FormControlLabel value={4} control={<Radio />} label="Engineering" />
+            <FormControlLabel value={5} control={<Radio />} label="Sport" />
+            <FormControlLabel value={6} control={<Radio />} label="Business" />
+            <FormControlLabel value={7} control={<Radio />} label="Media" />
           </RadioGroup>
         </FormControl>
 
@@ -156,9 +155,9 @@ export default function CreateProject() {
             onChange={(e) => {
               setOpportunityType(e.target.value);
             }}>
-            <FormControlLabel value="1" control={<Radio />} label="Internship" />
-            <FormControlLabel value="2" control={<Radio />} label="Individual Project" />
-            <FormControlLabel value="3" control={<Radio />} label="Group Project" />
+            <FormControlLabel value={1} control={<Radio />} label="Internship" />
+            <FormControlLabel value={2} control={<Radio />} label="Individual Project" />
+            <FormControlLabel value={3} control={<Radio />} label="Group Project" />
           </RadioGroup>
         </FormControl>
 

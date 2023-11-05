@@ -30,35 +30,33 @@ const InitialDash = () => {
   const [role, setRole] = React.useState(0);
 
   React.useEffect(() => {
-    if (localStorage.getItem('token')) {
-      const res = apiCall(`/profile`, 'GET')
+    if (localStorage.getItem("token")) {
+      const res = apiCall(`/profile`, "GET");
       res.then((data) => {
         if (data.error) {
-          alert(data.error)
+          alert(data.error);
         } else {
-          setRole(data.role)
+          setRole(data.role);
         }
-      })
+      });
     }
   });
 
   function testApply() {
-    if (!localStorage.getItem('token')) {
-      alert('please login in')
+    if (!localStorage.getItem("token")) {
+      alert("please login in");
     } else {
-      navigate('/Application')
+      navigate("/Application");
     }
   }
 
   function testSave() {
-    if (!localStorage.getItem('token')) {
-      alert('please login in')
+    if (!localStorage.getItem("token")) {
+      alert("please login in");
     } else {
-      navigate('/save-project')
+      navigate("/save-project");
     }
   }
-
-
 
   const handleSearch = () => {
     const data = { keyword, location, job_classification: classification };
@@ -139,7 +137,11 @@ const InitialDash = () => {
                   </MenuItem>
                   <MenuItem value={1}>Information Technology</MenuItem>
                   <MenuItem value={2}>Accounting</MenuItem>
-                  <MenuItem value={3}>Banking</MenuItem>/<MenuItem value={4}>Engineering</MenuItem>/<MenuItem value={5}>Sport</MenuItem>/<MenuItem value={6}>Business</MenuItem>/<MenuItem value={7}>Media</MenuItem>/
+                  <MenuItem value={3}>Banking</MenuItem>
+                  <MenuItem value={4}>Engineering</MenuItem>
+                  <MenuItem value={5}>Sport</MenuItem>
+                  <MenuItem value={6}>Business</MenuItem>
+                  <MenuItem value={7}>Media</MenuItem>/
                 </Select>
               </FormControl>
               <TextField value={location} onChange={(e) => setLocation(e.target.value)} id="outlined-basic" label="Enter suburb,city or region" variant="outlined" style={{ zIndex: "3", width: "210px", marginTop: "10px", left: "80px" }} />
@@ -222,10 +224,10 @@ const InitialDash = () => {
           </Box>
         </Dashtextfield>
       </Dashbackground>
-      <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: 'center', gap: 5 }}>
+      <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
         <Typography>the total numbers of projects: {projectList.length}</Typography>
         {projectList.map((item) => (
-          <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: '2px solid lightgray' }}>
+          <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
             <CardContent>
               <Typography
                 sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -238,10 +240,10 @@ const InitialDash = () => {
                 {item.title}
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Location: <span style={{ color: '#555' }}>{item.location}</span>
+                Location: <span style={{ color: "#555" }}>{item.location}</span>
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Project type: <span style={{ color: '#555' }}>{getJobType(item.job_classification)}</span>
+                Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
               </Typography>
               <Typography variant="body1" gutterBottom>
                 {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}

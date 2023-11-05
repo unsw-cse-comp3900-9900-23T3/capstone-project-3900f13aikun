@@ -55,8 +55,8 @@ RESET_PASSWORD_SCHEMA = Schema(
 UPDATE_PROFILE_SCHEMA = Schema(
     {
         "name": And(str, len),
-        Optional("work_rights"): Or([str], lambda x: x == "", None),
-        Optional("project_intention"): Or([str], lambda x: x == "", None),
+        Optional("work_rights"): Or([Use(int), lambda i: i >= 0], lambda x: x == "", None),
+        Optional("project_intention"): Or([Use(int), lambda i: i >= 0], lambda x: x == "", None),
         Optional("passport"): Or(str, lambda x: x == "", None),
         Optional("avatarUrl"): Or(str, lambda x: x == "", None),
         Optional("skill"): Or(str, lambda x: x == "", None),
