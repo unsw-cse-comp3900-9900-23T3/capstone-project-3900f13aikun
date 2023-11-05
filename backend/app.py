@@ -24,11 +24,10 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-secret_key = os.urandom(24)
 # JWT config
-app.config["JWT_SECRET_KEY"] = secret_key
+app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
 JWT_ALGORITHM = 'HS256'
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=2)
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(weeks=1)
 
 # Email config
 app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
@@ -50,8 +49,12 @@ with app.app_context():
 
 # get user information according to the user id
 @app.route("/user/<user_id>", methods=["GET"])
+@jwt_required()
 def get_user_info(user_id):
     user_info = User.query.get(user_id)
+    if not user_info:
+        return {"status": "Not Found"}, 404
+
     results = user_sc.dump(user_info)
     return jsonify(results)
 
