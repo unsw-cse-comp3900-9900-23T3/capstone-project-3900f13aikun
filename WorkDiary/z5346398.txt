@@ -41,3 +41,9 @@ n the past week, my focus was on constructing the necessary database tables for 
 To ensure seamless coordination of our efforts, we held a team meeting to integrate our work effectively. 
 Since many functionalities are inevitablely interact with multiple database tables, adapting these tables to meet various requirements added complexity while maintaining performance.
 Our immediate goal is to complete the initial iteration of Sprint 2 by next Tuesday and refine our system based on any potential issues identified during our meeting. 
+
+Week 8
+We completed Sprint 2 and presented Demo 2 in class, showcasing most of the project's intended functionalities. 
+However, I encountered an unusual challenge related to data type consistency when handling data stored in the database, which prevented me from delivering all the expected results as initially designed. 
+As a response, I will explore alternative solutions for the current data processing model and create a contingency plan for the worst-case scenario, such as modifying the data value to indicate removal.
+In light of the challenges faced during Sprint 2, we conducted an in-depth meeting, and we are now planning to deliver our initial project demo by the upcoming Monday.
