@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, Table, TableCell, TableRow, TableContainer, Paper } from "@mui/material";
@@ -11,8 +11,20 @@ import { getIntention, getWorkRights } from "../components/EnumMap";
 function ProfileDetails() {
     const [profileDetails, setProfileDetails] = React.useState([]);
     const navigate = useNavigate();
+    const { id } = useParams();
 
     React.useEffect(() => {
+        if (id) {
+            apiCall(`/user/${id}`, "GET").then((data) => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    setProfileDetails(data);
+                }
+            });
+            return;
+        }
+
         apiCall(`/profile`, "GET").then((data) => {
             if (data.error) {
                 alert(data.error);
@@ -62,6 +74,16 @@ function ProfileDetails() {
                     </Table>
                 </TableContainer>
                 <br></br>
+                {!id ? (
+                    <Button
+                        variant="contained"
+                        size="small"
+                        onClick={() => {
+                            navigate(`/profile`);
+                        }}>
+                        Edit
+                    </Button>
+                ) : null}
             </Box>
         </>
     );

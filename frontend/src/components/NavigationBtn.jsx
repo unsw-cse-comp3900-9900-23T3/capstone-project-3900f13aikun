@@ -96,7 +96,7 @@ export const NavigationBtn = () => {
     if (!localStorage.getItem('token')) {
       alert('please login in')
     } else {
-      navigate('/profile')
+      navigate('/profile-detail')
     }
   }
 

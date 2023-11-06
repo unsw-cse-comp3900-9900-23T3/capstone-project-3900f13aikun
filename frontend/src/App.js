@@ -39,7 +39,6 @@ function App () {
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<SignIn />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/profile/:id" element={<Profile />} />
             <Route path="/forgot" element={<ForgetPassword/>} />
             <Route path="/create-project" element={<CreateProject/>} />
             <Route path="/edit-project/:id" element={<CreateProject/>} />
@@ -56,6 +55,7 @@ function App () {
             <Route path="/edit-group/:groupId" element={<MyCreateGroup/>} />
             <Route path="/group-composition/:groupId" element={<GroupComposition/>} />
             <Route path="/project-detail/:id" element={<ProjectDetail/>} />
+            <Route path="/profile-detail/:id" element={<ProfileDetails/>} />
             <Route path="/profile-detail" element={<ProfileDetails/>} />
           </Routes>
         </BrowserRouter>

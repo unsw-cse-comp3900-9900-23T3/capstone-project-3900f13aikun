@@ -58,7 +58,7 @@ function GroupComposition() {
                                         style={{ fontSize: '16px', color: 'cornflowerblue' }}
                                         sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                         onClick={() => {
-                                            navigate(`/profile-view/${groupDetail.creator_id}`);
+                                            navigate(`/profile-detail/${groupDetail.creator_id}`);
                                         }}>
                                     </ListItemText>
                                 </ListItem>
@@ -73,7 +73,7 @@ function GroupComposition() {
                                         style={{ fontSize: '16px' }}
                                         sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                         onClick={() => {
-                                            navigate(`/profile-view/${item.user_id}`);
+                                            navigate(`/profile-detail/${item.user_id}`);
                                         }}></ListItemText>
                                 </ListItem>
                             ))}
