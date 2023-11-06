@@ -36,13 +36,11 @@ function ProjectDetail() {
   const handleSave = () => {
     apiCall(`/saved/project/${id}`, "GET").then((res) => {
       getProjectInfo()
-      // setProjectInfo(res);
     });
   };
   const handleUnSave = () => {
     apiCall(`/unsaved/project/${id}`, "GET").then((res) => {
       getProjectInfo()
-      // setProjectInfo(res);
     });
   };
 
