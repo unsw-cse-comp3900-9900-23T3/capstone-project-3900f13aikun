@@ -6,7 +6,7 @@ import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, Table, T
 import { apiCall } from "../components/HelpFunctions";
 import { Pagebackground } from "../components/StyledElement";
 import NavigationBtn from "../components/NavigationBtn";
-import { getJobType, getWorkRights } from "../components/EnumMap";
+import { getIntention, getWorkRights } from "../components/EnumMap";
 
 function ProfileDetails() {
     const [profileDetails, setProfileDetails] = React.useState([]);
@@ -49,11 +49,11 @@ function ProfileDetails() {
                         </TableRow>
                         <TableRow>
                             <TableCell>Workright:</TableCell>
-                            <TableCell>{Array.isArray(getWorkRights(profileDetails.work_rights)) ? getWorkRights(profileDetails.work_rights).join(', ') : ''}</TableCell>
+                            <TableCell>{Array.isArray(profileDetails.work_rights) ? profileDetails.work_rights.map(getWorkRights).join(', ') : ''}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Project Intention:</TableCell>
-                            <TableCell>{Array.isArray(getJobType(profileDetails.project_intention)) ? getJobType(profileDetails.project_intention).join(', ') : ''}</TableCell>
+                            <TableCell>{Array.isArray(profileDetails.project_intention) ? profileDetails.project_intention.map(getIntention).join(', ') : ''}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Skills</TableCell>

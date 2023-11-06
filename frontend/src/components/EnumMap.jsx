@@ -37,16 +37,34 @@ export function getJobType(jobType) {
     return JobTypeMap[jobType] || 'Unknown';
 }
 
-export function getWorkRights(workRights) {
-    const JobTypeMap = {
-        1: 'Monday',
-        2: 'Tuesday',
-        3: 'Wednesday',
-        4: 'Thursday',
-        5: 'Friday',
-        6: 'Saturday',
-        7: 'Sunday'
-    };
-    return JobTypeMap[workRights] || 'Unknown';
+export function getIntention(intention) {
+    const IntentionMap = new Map([
+        [1, 'Information Technology'],
+        [2, 'Accounting'],
+        [3, 'Banking'],
+        [4, 'Engineering'],
+        [5, 'Sports'],
+        [6, 'Business'],
+        [7, 'Media']
+    ]);
+    if (IntentionMap.has(intention)) {
+        return IntentionMap.get(intention);
+    }
+    return 'Unknown';
 }
 
+export function getWorkRights(workRights) {
+    const WorkrightsMap = new Map([
+        [1, 'Monday'],
+        [2, 'Tuesday'],
+        [3, 'Wednesday'],
+        [4, 'Thursday'],
+        [5, 'Friday'],
+        [6, 'Saturday'],
+        [7, 'Sunday']
+    ]);
+    if (WorkrightsMap.has(workRights)) {
+        return WorkrightsMap.get(workRights);
+    }
+    return 'Unknown';
+}
