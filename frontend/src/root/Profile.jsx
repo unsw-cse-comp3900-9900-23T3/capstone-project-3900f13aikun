@@ -156,6 +156,7 @@ function Profile() {
             <FormControlLabel control={<Checkbox />} label="Friday" value={5} checked={workRight !== null  && workRight.includes(5)} onChange={handleCheckbox1} />
             <FormControlLabel control={<Checkbox />} label="Saturday" value={6} checked={workRight !== null  && workRight.includes(6)} onChange={handleCheckbox1} />
             <FormControlLabel control={<Checkbox />} label="Sunday" value={7} checked={workRight !== null  && workRight.includes(7)} onChange={handleCheckbox1} />
+
           </FormGroup>
           <br></br>
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>Project Intention</FormLabel>
@@ -167,6 +168,7 @@ function Profile() {
             <FormControlLabel control={<Checkbox />} label="Sport" value={5} checked={intention !== null  && intention.includes(5)} onChange={handleCheckbox2} />
             <FormControlLabel control={<Checkbox />} label="Business" value={6} checked={intention !== null  && intention.includes(6)} onChange={handleCheckbox2} />
             <FormControlLabel control={<Checkbox />} label="Media" value={7} checked={intention !== null && intention.includes(7)} onChange={handleCheckbox2} />
+
           </FormGroup>
           <br></br>
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>Skills:</FormLabel>

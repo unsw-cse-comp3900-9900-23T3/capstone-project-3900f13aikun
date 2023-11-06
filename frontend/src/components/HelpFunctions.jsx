@@ -19,6 +19,11 @@ export const apiCall = async (path, method, body) => {
   const data = await response.json();
 
   if (!response.ok) {
+    if (response.status == 422) {
+      localStorage.clear();
+      window.location.href = '/'
+    }
+
     const errorData = { error: data.msg };
     return errorData;
   }
@@ -166,6 +171,3 @@ export function checkPaymentType(paymentType) {
   }
   return true;
 }
-
-
-
