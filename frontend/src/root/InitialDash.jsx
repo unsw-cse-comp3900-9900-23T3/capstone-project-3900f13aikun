@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import NavigationBtn from "../components/NavigationBtn";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { apiCall } from "../components/HelpFunctions";
 import { styled } from "@mui/material/styles";
@@ -20,6 +20,7 @@ import { Dashbackground, Dashtextfield } from "../components/StyledElement";
 
 const InitialDash = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
   const [keyword, setKeyword] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [classification, setClassification] = React.useState("");
@@ -28,6 +29,7 @@ const InitialDash = () => {
   const [publishTime, setPublishTime] = React.useState("");
   const [projectList, setProjectList] = React.useState([]);
   const [role, setRole] = React.useState(0);
+  const [isSaved, setIsSaved] = React.useState(false);
 
   React.useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -54,9 +56,21 @@ const InitialDash = () => {
     if (!localStorage.getItem("token")) {
       alert("please login in");
     } else {
-      navigate("/save-project");
+      if (isSaved) {
+        apiCall(`/unsaved/project/${id}`, "GET").then((res) => {
+          if (res.success) {
+            setIsSaved(false);
+          }
+        });
+      } else {
+        apiCall(`/saved/project/${id}`, "GET").then((res) => {
+          if (res.success) {
+            setIsSaved(true);
+          }
+        });
+      }
     }
-  }
+  };
 
   const handleSearch = () => {
     const data = { keyword, location, job_classification: classification };
@@ -251,7 +265,7 @@ const InitialDash = () => {
             </CardContent>
             <CardActions>
               <Button variant="contained" size="small" onClick={() => testSave()}>
-                Save
+                {isSaved ? 'Unsave' : 'Save'}
               </Button>
               <Button variant="contained" size="small" onClick={() => testApply()} disabled={role === 2}>
                 Quick apply

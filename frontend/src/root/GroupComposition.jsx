@@ -12,6 +12,7 @@ import Card from "@mui/material/Card";
 import Divider from '@mui/material/Divider';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import CardContent from "@mui/material/CardContent";
+import { create } from "@mui/material/styles/createTransitions";
 
 function GroupComposition() {
     const { groupId } = useParams();
@@ -26,6 +27,8 @@ function GroupComposition() {
             setGroupDetail(res);
         });
     };
+
+
 
     return (
         <>
@@ -55,7 +58,7 @@ function GroupComposition() {
                                         style={{ fontSize: '16px', color: 'cornflowerblue' }}
                                         sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                         onClick={() => {
-                                            navigate('/profile-detail');
+                                            navigate(`/profile-view/${groupDetail.creator_id}`);
                                         }}>
                                     </ListItemText>
                                 </ListItem>
@@ -70,7 +73,7 @@ function GroupComposition() {
                                         style={{ fontSize: '16px' }}
                                         sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                         onClick={() => {
-                                            navigate('/profile-detail');
+                                            navigate(`/profile-view/${item.user_id}`);
                                         }}></ListItemText>
                                 </ListItem>
                             ))}

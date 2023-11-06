@@ -26,7 +26,7 @@ function MyGroup() {
     };
 
     const getOthersGroups = () => {
-        apiCall(`/notInGroup/`, "GET").then((res) => {
+        apiCall(`/notInGroup`, "GET").then((res) => {
             setOtherGroups(res);
         });
     };

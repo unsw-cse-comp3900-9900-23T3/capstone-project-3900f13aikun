@@ -12,9 +12,10 @@ function ProjectDetail() {
   const { id } = useParams();
   const [projectInfo, setProjectInfo] = useState({});
   const navigate = useNavigate();
-  const [role, setRole] = React.useState(0);
+  const [role, setRole] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
   
-  React.useEffect(() => {
+  useEffect(() => {
     if (localStorage.getItem('token')) {
       const res = apiCall(`/profile`, 'GET')
       res.then((data) => {
@@ -34,13 +35,24 @@ function ProjectDetail() {
   };
 
   const handleSave = () => {
-    apiCall(`/saved/project/${id}`, "GET").then((res) => {
-      setProjectInfo(res);
-    });
+    if (isSaved) {
+      apiCall(`/unsaved/project/${id}`, "GET").then((res) => {
+        if (res.success) {
+          setIsSaved(isSaved);
+        }
+      });
+    } else {
+      apiCall(`/saved/project/${id}`, "GET").then((res) => {
+        if (res.success) {
+          setIsSaved(!isSaved);
+        }
+      });
+    }
   };
 
   useEffect(() => {
     getProjectInfo();
+    handleSave();
   }, []);
 
   return (
@@ -65,7 +77,7 @@ function ProjectDetail() {
       
         <Box sx={{ display: "flex", gap: 8, my: 2 }}>
           <Button variant="contained" onClick={() => navigate('/Application')} disabled={role===2}>Apply</Button>
-          <Button variant="outlined" onClick={() => handleSave()}>Save</Button>
+          <Button variant="outlined" onClick={handleSave}>{isSaved ? 'Unsave' : 'Save'}</Button>
         </Box>
         
         <br></br>
