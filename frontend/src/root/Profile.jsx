@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -9,6 +9,7 @@ import { apiCall, checkEmail, checkSkills, checkWorkRight, fileToDataUrl } from 
 import { Pagebackground } from "../components/StyledElement";
 
 function Profile() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -19,6 +20,22 @@ function Profile() {
   const [avatarUrl, setAvatarUrl] = React.useState("");
 
   React.useEffect(() => {
+    if (id) {
+      apiCall(`/user/${id}`, "GET").then((data) => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          setEmail(data.email);
+          setName(data.name);
+          setWorkRight(data.work_rights || []);
+          setSkill(data.skill);
+          setAvatarUrl(data.avatarUrl);
+          setIntention(data.project_intention || []);
+        }
+      });
+      return;
+    }
+
     apiCall(`/profile`, "GET").then((data) => {
       if (data.error) {
         alert(data.error);
@@ -59,7 +76,7 @@ function Profile() {
   };
 
   const handleCheckbox2 = (event) => {
-    const value = parseInt(event.target.value); 
+    const value = parseInt(event.target.value);
     if (!intention) {
       setIntention([value]);
     } else if (intention.includes(value)) {
@@ -107,6 +124,7 @@ function Profile() {
                 type="file"
                 id="upload"
                 accept="image/jpeg, image/png, image/jpg"
+                disabled={id}
                 onChange={async (e) => {
                   setAvatarUrl(await fileToDataUrl(e.target.files[0]));
                 }}
@@ -128,6 +146,7 @@ function Profile() {
             label="email"
             variant="filled"
             value={email}
+            disabled={id}
             style={{ width: "400px" }}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -141,6 +160,7 @@ function Profile() {
             label="name"
             variant="filled"
             value={name}
+            disabled={id}
             style={{ width: "400px" }}
             onChange={(e) => {
               setName(e.target.value);
@@ -149,26 +169,24 @@ function Profile() {
           <br></br>
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>WorkRights</FormLabel>
           <FormGroup value={workRight}>
-            <FormControlLabel control={<Checkbox />} label="Monday" value={1} checked={workRight !== null && workRight.includes(1)} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Tuesday" value={2} checked={workRight !== null  && workRight.includes(2)} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Wednesday" value={3} checked={workRight !== null  && workRight.includes(3)} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Thursday" value={4} checked={workRight !== null  && workRight.includes(4)} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Friday" value={5} checked={workRight !== null  && workRight.includes(5)} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Saturday" value={6} checked={workRight !== null  && workRight.includes(6)} onChange={handleCheckbox1} />
-            <FormControlLabel control={<Checkbox />} label="Sunday" value={7} checked={workRight !== null  && workRight.includes(7)} onChange={handleCheckbox1} />
-
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Monday" value={1} checked={workRight !== null && workRight.includes(1)} onChange={handleCheckbox1} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Tuesday" value={2} checked={workRight !== null && workRight.includes(2)} onChange={handleCheckbox1} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Wednesday" value={3} checked={workRight !== null && workRight.includes(3)} onChange={handleCheckbox1} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Thursday" value={4} checked={workRight !== null && workRight.includes(4)} onChange={handleCheckbox1} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Friday" value={5} checked={workRight !== null && workRight.includes(5)} onChange={handleCheckbox1} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Saturday" value={6} checked={workRight !== null && workRight.includes(6)} onChange={handleCheckbox1} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Sunday" value={7} checked={workRight !== null && workRight.includes(7)} onChange={handleCheckbox1} />
           </FormGroup>
           <br></br>
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>Project Intention</FormLabel>
           <FormGroup value={intention}>
-            <FormControlLabel control={<Checkbox />} label="Information Technology" value={1} checked={intention !== null  && intention.includes(1)} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Accounting" value={2} checked={intention !== null  && intention.includes(2)} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Banking" value={3} checked={intention !== null  && intention.includes(3)} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Engineering" value={4} checked={intention !== null  && intention.includes(4)} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Sport" value={5} checked={intention !== null  && intention.includes(5)} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Business" value={6} checked={intention !== null  && intention.includes(6)} onChange={handleCheckbox2} />
-            <FormControlLabel control={<Checkbox />} label="Media" value={7} checked={intention !== null && intention.includes(7)} onChange={handleCheckbox2} />
-
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Information Technology" value={1} checked={intention !== null && intention.includes(1)} onChange={handleCheckbox2} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Accounting" value={2} checked={intention !== null && intention.includes(2)} onChange={handleCheckbox2} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Banking" value={3} checked={intention !== null && intention.includes(3)} onChange={handleCheckbox2} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Engineering" value={4} checked={intention !== null && intention.includes(4)} onChange={handleCheckbox2} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Sport" value={5} checked={intention !== null && intention.includes(5)} onChange={handleCheckbox2} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Business" value={6} checked={intention !== null && intention.includes(6)} onChange={handleCheckbox2} />
+            <FormControlLabel disabled={id} control={<Checkbox />} label="Media" value={7} checked={intention !== null && intention.includes(7)} onChange={handleCheckbox2} />
           </FormGroup>
           <br></br>
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>Skills:</FormLabel>
@@ -176,6 +194,7 @@ function Profile() {
             id="filled-basic"
             style={{ width: "400px", borderWidth: "1px", borderStyle: "solid" }}
             value={skill}
+            disabled={id}
             multiline
             rows={4}
             onChange={(e) => {
@@ -184,9 +203,11 @@ function Profile() {
           />
         </FormControl>
 
-        <Button id="registerbutton" role="profile" variant="contained" color="success" onClick={checkProfile} sx={{ marginTop: "30px" }}>
-          Save
-        </Button>
+        {!id ? (
+          <Button id="registerbutton" role="profile" variant="contained" color="success" onClick={checkProfile} sx={{ marginTop: "30px" }}>
+            Save
+          </Button>
+        ) : null}
       </Box>
     </>
   );
