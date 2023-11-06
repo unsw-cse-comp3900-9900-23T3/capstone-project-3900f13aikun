@@ -73,6 +73,8 @@ export const NavigationBtn = () => {
       setValue('three');
     } else if (path.pathname === '/my-group' || path.pathname === '/my-create-group') {
       setValue('four');
+    } else if (path.pathname === '/my-projects') {
+      setValue('five');
     } else if (path.pathname === '/register') {
       setIsshow(false);
     } else if (path.pathname === '/login') {
@@ -109,10 +111,10 @@ export const NavigationBtn = () => {
         <Topselection>
           <div style={{ display: 'flex' }}>
             <Iconchicken></Iconchicken>
-            <div style={{ marginTop: '10px', width: '350px', marginLeft: '10px' }}><b style={{ fontSize: '20px' }}>student industry project management system</b></div>
+            <div style={{ marginTop: '10px', width: '350px', marginLeft: '10px' }}><b style={{ fontSize: '20px' }}>Student Industry Project Management System</b></div>
           </div>
 
-          {isshow && <Box sx={{ width: '80%', position: 'relative', left: '100px', top: '8px' }}>
+          {isshow && <Box sx={{ width: '80%', position: 'relative', marginLeftleft: '100px', top: '8px' }}>
             <Tabs
               value={value}
               aria-label="wrapped label tabs example"
@@ -120,7 +122,8 @@ export const NavigationBtn = () => {
               <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
               <Tab value="two" label="Profile" onClick={testLogin} />
               {role === 2 && <Tab value="three" label="Create Project" onClick={() => { navigate('/my-created-project') }}></Tab>}
-              {role === 1 && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group', '/my-create-group') }}></Tab>}
+              {role === 1 && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group', '/my-create-group') }} ></Tab>}
+              <Tab value="five" label="My Project" onClick={() => { navigate('/my-projects') }}></Tab>
             </Tabs>
           </Box>}
 
@@ -151,7 +154,7 @@ export const NavigationBtn = () => {
                 }}
               >
                 <MenuItem onClick={savedProjects}>Saved projects</MenuItem>
-                <MenuItem onClick={application}>apply project</MenuItem>
+                <MenuItem onClick={application}>Apply project</MenuItem>
                 <MenuItem onClick={notification}>Notification</MenuItem>
                 <MenuItem onClick={switchAccount}>Switch account</MenuItem>
               </Menu>

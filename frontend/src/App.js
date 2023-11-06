@@ -20,6 +20,7 @@ import ProjectDetail from './root/ProjectDetail';
 import Apppro from './root/Apppro';
 import GroupComposition from './root/GroupComposition';
 import ProfileDetails from './root/ProfileDetails';
+import MyProjects from './root/MyProjects';
 
 
 export const TotalContainer = styled('div')({
@@ -57,6 +58,7 @@ function App () {
             <Route path="/project-detail/:id" element={<ProjectDetail/>} />
             <Route path="/profile-detail/:id" element={<ProfileDetails/>} />
             <Route path="/profile-detail" element={<ProfileDetails/>} />
+            <Route path="/my-projects" element={<MyProjects/>}></Route>
           </Routes>
         </BrowserRouter>
       </TotalContainer>

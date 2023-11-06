@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { apiCall } from "../components/HelpFunctions";
 import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
+import { Pagebackground } from "../components/StyledElement";
 
 function ProjectDetail() {
   const { id } = useParams();
@@ -51,6 +52,7 @@ function ProjectDetail() {
   return (
     <>
       <NavigationBtn></NavigationBtn>
+      <Pagebackground>Project Details</Pagebackground>
       <Box sx={{ paddingX: 10, paddingY: 5, marginRight: "200px" }}>
         <Typography variant="h3" gutterBottom>
           {projectInfo.title}
@@ -86,7 +88,7 @@ function ProjectDetail() {
 
         <br></br>
         <Typography variant="h6" gutterBottom>
-          Problem statement
+          Problem Statement
           <br></br>
           <span style={{ color: "#555", fontSize: "16px" }}>{projectInfo.problem_statement}</span>
         </Typography>
@@ -98,19 +100,19 @@ function ProjectDetail() {
         </Typography>
         <br></br>
         <Typography variant="h6" gutterBottom>
-          Desired outcomes
+          Desired Outcomes
           <br></br>
           <span style={{ color: "#555", fontSize: "16px" }}>{projectInfo.desired_outcomes}</span>
         </Typography>
         <br></br>
         <Typography variant="h6" gutterBottom>
-          Potential deliverable
+          Potential Deliverable
           <br></br>
           <span style={{ color: "#555", fontSize: "16px" }}>{projectInfo.potential_deliverable}</span>
         </Typography>
         <br></br>
         <Typography variant="h6" gutterBottom>
-          Expected delivery cycle
+          Expected Delivery Cycle
           <br></br>
           <span style={{ color: "#555", fontSize: "16px" }}>{projectInfo.expected_delivery_cycle}</span>
         </Typography>
