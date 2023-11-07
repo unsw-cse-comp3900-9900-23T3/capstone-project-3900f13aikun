@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import NavigationBtn from '../components/NavigationBtn';
-import { Pagebackground } from '../components/StyledElement';
+import NavigationBtn from '../../components/NavigationBtn';
+import { Pagebackground } from '../../components/StyledElement';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';

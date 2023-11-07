@@ -101,11 +101,15 @@ function MyProjects() {
         </Typography>
         <Typography variant="body1" component="div">
           <span style={{ marginRight: '20px' }}>&#8226;</span>
-          Students can send a demo  the project to the email address of their academic supervisor and industry partners.
+          Students can send a demo of the project to the email address of their academic supervisor and industry partners.
         </Typography>
         <Typography variant="body1" component="div">
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           Students can send the final project results to the email address of their academic supervisor and industry partners.
+        </Typography>
+        <Typography variant="body1" component="div">
+          <span style={{ marginRight: '20px' }}>&#8226;</span>
+          If there is an unequal contribution between students please email the academic supervisor of the project.
         </Typography>
         <br></br>
         <Typography variant="h6" gutterBottom color="royalblue">
@@ -117,7 +121,7 @@ function MyProjects() {
           variant="body1"
           component="div"
           onClick={() => {
-            navigate();
+            navigate("/supervisor-feedback");
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           <span style={{ textDecoration: "underline", color: "#8000FF" }}>Academic Supervisor Feedback</span>
@@ -128,7 +132,7 @@ function MyProjects() {
           variant="body1"
           component="div"
           onClick={() => {
-            navigate();
+            navigate("/supervisor-accessment");
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           <span style={{ textDecoration: "underline", color: "#8000FF" }}>Academic Supervisor Accessment</span>
@@ -139,7 +143,7 @@ function MyProjects() {
           variant="body1"
           component="div"
           onClick={() => {
-            navigate();
+            navigate("/industry-accessment");
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           <span style={{ textDecoration: "underline", color: "#8000FF" }}>Industry Partner Accessment</span>
