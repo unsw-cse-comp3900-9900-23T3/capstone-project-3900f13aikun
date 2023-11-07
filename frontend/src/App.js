@@ -44,6 +44,9 @@ function App () {
             <Route path="/create-project" element={<CreateProject/>} />
             <Route path="/edit-project/:id" element={<CreateProject/>} />
             <Route path="/my-created-project" element={<MyCreatedProject/>} />
+            <Route path="/dashboard/student" element={<DashboardStudent/>} />
+            <Route path="/dashboard/academics" element={<DashboardSupervisor/>} />
+            <Route path="/dashboard/industryp" element={<DashboardIndustry/>} />
             <Route path="/saved-projects" element={<SavedProjects/>} />
             <Route path="/application" element={<Appliacation/>} />
             <Route path="/apppro" element={<Apppro/>} />
