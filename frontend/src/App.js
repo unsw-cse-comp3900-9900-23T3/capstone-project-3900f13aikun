@@ -17,13 +17,15 @@ import ProjectDetail from './root/project/ProjectDetail';
 import Apppro from './root/application/Apppro';
 import GroupComposition from './root/group/GroupComposition';
 import ProfileDetails from './root/profile/ProfileDetails';
-import MyProjects from './root/MyProjects';
+import MyProjects from './root/ProjectDelivery';
 import SupervisorFeedback from './root/SupervisorFeedback';
 import SupervisorAccessment from './root/SupervisorAccessment';
 import IndustryAccessment from './root/IndustryAccessment';
 import DashboardStudent from './root/DashboardStudent';
 import DashboardSupervisor from './root/DashboardSupervisor';
 import DashboardIndustry from './root/DashboardIndustry';
+import MyProject from './root/MyProject';
+import ProjectDelivery from './root/ProjectDelivery';
 
 
 export const TotalContainer = styled('div')({
@@ -61,7 +63,8 @@ function App () {
             <Route path="/project-detail/:id" element={<ProjectDetail/>} />
             <Route path="/profile-detail/:id" element={<ProfileDetails/>} />
             <Route path="/profile-detail" element={<ProfileDetails/>} />
-            <Route path="/my-projects" element={<MyProjects/>}></Route>
+            <Route path="/my-project" element={<MyProject/>}></Route>
+            <Route path="/project-delivery/:id" element={<ProjectDelivery/>}></Route>
             <Route path="/supervisor-feedback" element={<SupervisorFeedback/>}></Route>
             <Route path="/supervisor-accessment" element={<SupervisorAccessment/>}></Route>
             <Route path="/industry-accessment" element={<IndustryAccessment/>}></Route>

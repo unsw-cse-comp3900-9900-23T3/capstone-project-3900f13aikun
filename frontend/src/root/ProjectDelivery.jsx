@@ -9,12 +9,12 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 
-function MyProjects() {
+function ProjectDelivery() {
   const navigate = useNavigate();
   return (
     <>
       <NavigationBtn></NavigationBtn>
-      <Pagebackground>My Projects</Pagebackground>
+      <Pagebackground>My Project</Pagebackground>
       <Box sx={{ paddingX: 10, paddingY: 5, marginRight: "100px" }}>
         <Typography variant="h6" gutterBottom color="royalblue">
           Project Information:
@@ -153,4 +153,4 @@ function MyProjects() {
   )
 }
 
-export default MyProjects;
+export default ProjectDelivery;
