@@ -100,6 +100,9 @@ GET_TASKS_SCHEMA = Schema(
         Optional("keyword"): And(str, len),
         Optional("location"): And(str, len),
         Optional("job_classification"): And(Use(int), lambda i: i >= 0),
+        Optional("opportunity_type"): And(Use(int), lambda i: i >= 0),
+        Optional("publish_date_type"): And(Use(int), lambda i: i >= 0),
+        Optional("payment_type"): And(Use(int), lambda i: i >= 0),
     }
 )
 

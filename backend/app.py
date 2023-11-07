@@ -299,12 +299,38 @@ def get_projects_route():
 
     if "keyword" in data:
         keyword = data['keyword']
-        print(keyword)
         keyword_filter = or_(
             Project.title.ilike(f"%{keyword}%"),
             Project.problem_statement.ilike(f"%{keyword}%")
         )
         projects = projects.filter(or_(*keyword_filter))
+
+    if "opportunity_type" in data:
+        opportunity_type = data['opportunity_type']
+        projects = projects.filter(Project.opportunity_type == opportunity_type)
+
+    if "payment_type" in data:
+        payment_type = data['payment_type']
+        projects = projects.filter(Project.payment_type == payment_type)
+
+    if "publish_date_type" in data:
+        publish_date_type = data['publish_date_type']
+        today = datetime.now().date()
+        three_days_ago = today - timedelta(days=3)
+        one_week_ago = today - timedelta(weeks=1)
+        three_months_ago = today - timedelta(days=90)
+        # today
+        if publish_date_type == 1:
+            projects = projects.filter(Project.publish_date.cast(db.Date) == today)
+
+        if publish_date_type == 2:
+            projects = projects.filter(Project.publish_date.cast(db.Date) >= three_days_ago)
+
+        if publish_date_type == 3:
+            projects = projects.filter(Project.publish_date.cast(db.Date) >= one_week_ago)
+
+        if publish_date_type == 4:
+            projects = projects.filter(Project.publish_date.cast(db.Date) >= three_months_ago)
 
     if not current_user_id:
         return projects_sc.jsonify(projects)
@@ -380,6 +406,23 @@ def update_project():
     db.session.commit()
 
     return jsonify({"message": "success"})
+
+
+@app.route("/project/<id>", methods=["DELETE"])
+@jwt_required()
+def delete_project(id):
+    current_user_id = get_jwt_identity()
+    project = db.session.get(Project, id)
+
+    if not project:
+        return {"status": "Not Found"}, 404
+
+    if current_user_id != project.user_id:
+        return {"msg": "No Permission"}, 400
+
+    db.session.delete(project)
+    db.session.commit()
+    return jsonify({'message': 'success'})
 
 
 @app.route("/recommend/project", methods=["GET"])
