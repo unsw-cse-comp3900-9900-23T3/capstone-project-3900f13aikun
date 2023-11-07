@@ -78,7 +78,7 @@ export default function MyCreatedProject() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Box sx={{ pt: 3, display: "flex", gap: 5 }}>
+                <Box sx={{ display: "flex", gap: 5 }}>
                   <Button
                     variant="contained"
                     size="small"
@@ -89,6 +89,7 @@ export default function MyCreatedProject() {
                   </Button>
                   <Button
                     variant="contained"
+                    color="error"
                     size="small"
                     onClick={() => {
                       handleDelete(item.id);
