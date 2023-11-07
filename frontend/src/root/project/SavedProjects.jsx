@@ -6,10 +6,10 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import { useNavigate, useParams } from "react-router-dom";
-import NavigationBtn from "../components/NavigationBtn";
-import { apiCall } from "../components/HelpFunctions";
-import { Pagebackground } from "../components/StyledElement";
-import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
+import NavigationBtn from "../../components/NavigationBtn";
+import { apiCall } from "../../components/HelpFunctions";
+import { Pagebackground } from "../../components/StyledElement";
+import { getJobType, getPaymentType, getOpportunityType } from "../../components/EnumMap";
 
 function SavedProjects() {
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import NavigationBtn from '../components/NavigationBtn';
-import { Pagebackground } from '../components/StyledElement';
+import NavigationBtn from '../../components/NavigationBtn';
+import { Pagebackground } from '../../components/StyledElement';
 
 function Notification() {
 

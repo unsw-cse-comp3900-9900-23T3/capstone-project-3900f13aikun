@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import NavigationBtn from "../components/NavigationBtn";
-import { apiCall } from "../components/HelpFunctions";
-import { Pagebackground } from "../components/StyledElement";
+import NavigationBtn from "../../components/NavigationBtn";
+import { apiCall } from "../../components/HelpFunctions";
+import { Pagebackground } from "../../components/StyledElement";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";

@@ -3,10 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import NavigationBtn from "../components/NavigationBtn";
+import NavigationBtn from "../../components/NavigationBtn";
 import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import { apiCall, checkEmail, checkSkills, checkWorkRight, fileToDataUrl } from "../components/HelpFunctions";
-import { Pagebackground } from "../components/StyledElement";
+import { apiCall, checkEmail, checkSkills, checkWorkRight, fileToDataUrl } from "../../components/HelpFunctions";
+import { Pagebackground } from "../../components/StyledElement";
 
 function Profile() {
   const navigate = useNavigate();

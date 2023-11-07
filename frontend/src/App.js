@@ -3,23 +3,24 @@ import { styled } from '@mui/system';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import InitialDash from './root/InitialDash';
 import SignUp from './root/SignUp';
-import Profile from './root/Profile';
+import Profile from './root/profile/Profile';
 import SignIn from './root/SignIn';
 import ForgetPassword from './root/ForgotPassword';
-import CreateProject from './root/CreateProject';
-import MyCreatedProject from './root/MyCreatedProject';
-import DashboardStudent from './root/DashboardSupervisor';
-import DashboardIndustry from './root/DashboardIndustry';
-import DashboardSupervisor from './root/DashboardSupervisor';
-import SavedProjects from './root/SavedProjects';
-import Appliacation from './root/Application';
-import Notification from './root/Notification';
-import MyGroup from './root/MyGroup';
-import MyCreateGroup from './root/MyCreateGroup';
-import ProjectDetail from './root/ProjectDetail';
-import Apppro from './root/Apppro';
-import GroupComposition from './root/GroupComposition';
-import ProfileDetails from './root/ProfileDetails';
+import CreateProject from './root/project/CreateProject';
+import MyCreatedProject from './root/project/MyCreatedProject';
+import SavedProjects from './root/project/SavedProjects';
+import Appliacation from './root/application/Application';
+import Notification from './root/application/Notification';
+import MyGroup from './root/group/MyGroup';
+import MyCreateGroup from './root/group/MyCreateGroup';
+import ProjectDetail from './root/project/ProjectDetail';
+import Apppro from './root/application/Apppro';
+import GroupComposition from './root/group/GroupComposition';
+import ProfileDetails from './root/profile/ProfileDetails';
+import MyProjects from './root/MyProjects';
+import SupervisorFeedback from './root/SupervisorFeedback';
+import SupervisorAccessment from './root/SupervisorAccessment';
+import IndustryAccessment from './root/IndustryAccessment';
 
 
 export const TotalContainer = styled('div')({
@@ -57,6 +58,10 @@ function App () {
             <Route path="/project-detail/:id" element={<ProjectDetail/>} />
             <Route path="/profile-detail/:id" element={<ProfileDetails/>} />
             <Route path="/profile-detail" element={<ProfileDetails/>} />
+            <Route path="/my-projects" element={<MyProjects/>}></Route>
+            <Route path="/supervisor-feedback" element={<SupervisorFeedback/>}></Route>
+            <Route path="/supervisor-accessment" element={<SupervisorAccessment/>}></Route>
+            <Route path="/industry-accessment" element={<IndustryAccessment/>}></Route>
           </Routes>
         </BrowserRouter>
       </TotalContainer>

@@ -1,6 +1,6 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
-import NavigationBtn from "../components/NavigationBtn";
-import { Pagebackground } from "../components/StyledElement";
+import NavigationBtn from "../../components/NavigationBtn";
+import { Pagebackground } from "../../components/StyledElement";
 import Button from '@mui/material/Button';
 import React from "react";
 
