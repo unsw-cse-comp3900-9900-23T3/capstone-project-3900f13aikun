@@ -21,6 +21,9 @@ import MyProjects from './root/MyProjects';
 import SupervisorFeedback from './root/SupervisorFeedback';
 import SupervisorAccessment from './root/SupervisorAccessment';
 import IndustryAccessment from './root/IndustryAccessment';
+import DashboardStudent from './root/DashboardStudent';
+import DashboardSupervisor from './root/DashboardSupervisor';
+import DashboardIndustry from './root/DashboardIndustry';
 
 
 export const TotalContainer = styled('div')({
