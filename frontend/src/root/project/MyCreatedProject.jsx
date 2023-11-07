@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import NavigationBtn from "../../components/NavigationBtn";
 import { apiCall } from "../../components/HelpFunctions";
 import { Pagebackground } from "../../components/StyledElement";
@@ -13,13 +13,24 @@ import { getJobType, getPaymentType, getOpportunityType } from "../../components
 
 export default function MyCreatedProject() {
   const navigate = useNavigate();
-
   const [projects, setProjects] = React.useState([]);
 
-  React.useEffect(() => {
+  const getProInfo =() => {
     apiCall(`/project`, "GET").then((res) => {
       setProjects(res);
     });
+  };
+
+  const handleDelete = (id) => {
+    apiCall(`/project/${id}`, "DELETE").then((res) => {
+      if (res.message === "success") {
+        getProInfo();
+      }
+    });
+  }
+
+  React.useEffect(() => {
+    getProInfo();
   }, []);
 
   return (
@@ -67,14 +78,24 @@ export default function MyCreatedProject() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button
-                  variant="contained"
-                  size="small"
-                  onClick={() => {
-                    navigate(`/edit-project/${item.id}`);
-                  }}>
-                  Edit
-                </Button>
+                <Box sx={{ pt: 3, display: "flex", gap: 5 }}>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => {
+                      navigate(`/edit-project/${item.id}`);
+                    }}>
+                    Edit
+                  </Button>
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={() => {
+                      handleDelete(item.id);
+                    }}>
+                    Delete
+                  </Button>
+                </Box>
               </CardActions>
             </Card>
           ))}
