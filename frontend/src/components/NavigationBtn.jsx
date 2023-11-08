@@ -98,11 +98,19 @@ export const NavigationBtn = () => {
     navigate('/')
   }
 
-  function testLogin() {
+  function testProfile() {
     if (!localStorage.getItem('token')) {
       alert('please login in')
     } else {
       navigate('/profile-detail')
+    }
+  }
+
+  function testMyProject() {
+    if (!localStorage.getItem('token')) {
+      alert('please login in')
+    } else {
+      navigate('/my-project')
     }
   }
 
@@ -124,10 +132,10 @@ export const NavigationBtn = () => {
               aria-label="wrapped label tabs example"
             >
               <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
-              <Tab value="two" label="Profile" onClick={testLogin} />
+              <Tab value="two" label="Profile" onClick={testProfile} />
               {role === 2 && <Tab value="three" label="Create Project" onClick={() => { navigate('/my-created-project') }}></Tab>}
               {role === 1 && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group', '/my-create-group') }} ></Tab>}
-              <Tab value="five" label="My Project" onClick={() => { navigate('/my-project') }}></Tab>
+              <Tab value="five" label="My Project" onClick={testMyProject}></Tab>
             </Tabs>
           </Box>}
 

@@ -143,7 +143,6 @@ const InitialDash = () => {
                 Search
               </Button>
             </Box>
-
             <Box display="flex" alignItems="center" marginRight="350px">
               <FormControl sx={{ m: 1, minWidth: 170, marginBottom: "26px" }}>
                 <InputLabel sx={{ color: "purple" }} id="demo-simple-select-helper-label">
@@ -212,6 +211,8 @@ const InitialDash = () => {
           </Box>
         </Dashtextfield>
       </Dashbackground>
+
+      {/* search results */}
       <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
         <Typography>the total numbers of projects: {projectList.length}</Typography>
         {projectList.map((item) => (
@@ -283,9 +284,7 @@ const InitialDash = () => {
             </CardContent>
           </Card>
         ))) : (
-          <div>
-            <p>Not logged in, please log in to view content.</p>
-          </div>
+            <span style={{color: "gray"}}>Not logged in, please log in to view content.</span>
         )}
         {localStorage.getItem("token") ? (
           <Button
