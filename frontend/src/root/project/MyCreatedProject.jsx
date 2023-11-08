@@ -16,7 +16,7 @@ export default function MyCreatedProject() {
   const [projects, setProjects] = React.useState([]);
 
   const getProInfo =() => {
-    apiCall(`/project`, "GET").then((res) => {
+    apiCall(`/project-created`, "GET").then((res) => {
       setProjects(res);
     });
   };
