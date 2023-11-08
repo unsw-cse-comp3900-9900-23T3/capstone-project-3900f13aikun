@@ -30,6 +30,7 @@ const InitialDash = () => {
   const [projectList, setProjectList] = React.useState([]);
   const [role, setRole] = React.useState(0);
 
+
   React.useEffect(() => {
     if (localStorage.getItem("token")) {
       const res = apiCall(`/profile`, "GET");
@@ -42,6 +43,12 @@ const InitialDash = () => {
       });
     }
   });
+
+  React.useEffect(()=>{
+    handleFilter()
+    
+  },[opportunityType,publishTime,paymentType])
+
 
   function testApply() {
     if (!localStorage.getItem("token")) {
@@ -78,6 +85,22 @@ const InitialDash = () => {
       setProjectList(res);
     });
   };
+
+  const handleFilter = () =>{
+    const data = { opportunity_type:opportunityType, publish_date_type:publishTime, payment_type: paymentType };
+    let temp = [];
+    Object.keys(data).forEach((key) => {
+      if (data[key]) {
+        temp.push(`${key}=${data[key]}`);
+      }
+    });
+    const qs = temp.join("&");
+
+    apiCall(`/project?${qs}`, "GET").then((res) => {
+      setProjectList(res);
+    });
+  }
+
 
   useEffect(() => {
     handleSearch();
