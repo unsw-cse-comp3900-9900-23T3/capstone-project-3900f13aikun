@@ -44,12 +44,6 @@ const InitialDash = () => {
     }
   });
 
-  React.useEffect(()=>{
-    handleFilter()
-    
-  },[opportunityType,publishTime,paymentType])
-
-
   function testApply() {
     if (!localStorage.getItem("token")) {
       alert("please login in");
@@ -72,7 +66,7 @@ const InitialDash = () => {
 
 
   const handleSearch = () => {
-    const data = { keyword, location, job_classification: classification };
+    const data = { keyword, location, job_classification: classification, opportunity_type:opportunityType, publish_date_type:publishTime, payment_type: paymentType };
     let temp = [];
     Object.keys(data).forEach((key) => {
       if (data[key]) {
@@ -85,22 +79,6 @@ const InitialDash = () => {
       setProjectList(res);
     });
   };
-
-  const handleFilter = () =>{
-    const data = { opportunity_type:opportunityType, publish_date_type:publishTime, payment_type: paymentType };
-    let temp = [];
-    Object.keys(data).forEach((key) => {
-      if (data[key]) {
-        temp.push(`${key}=${data[key]}`);
-      }
-    });
-    const qs = temp.join("&");
-
-    apiCall(`/project?${qs}`, "GET").then((res) => {
-      setProjectList(res);
-    });
-  }
-
 
   useEffect(() => {
     handleSearch();
