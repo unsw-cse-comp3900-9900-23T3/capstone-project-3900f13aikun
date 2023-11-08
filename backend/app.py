@@ -345,6 +345,15 @@ def get_projects_route():
         return jsonify(result)
 
 
+@app.route("/project-created", methods=["GET"])
+@jwt_required()
+def get_created_project():
+    current_user_id = get_jwt_identity()
+    projects = db.session.query(Project).filter(Project.user_id == current_user_id)
+
+    return projects_sc.jsonify(projects)
+
+
 @app.route("/project/<id>", methods=["GET"])
 @jwt_required(optional=True)
 def get_project_route(id):
