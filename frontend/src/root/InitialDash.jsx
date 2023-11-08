@@ -17,6 +17,7 @@ import FormControl from "@mui/material/FormControl";
 import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
 import Box from "@mui/material/Box";
 import { Dashbackground, Dashtextfield } from "../components/StyledElement";
+import Stack from '@mui/material/Stack';
 
 const InitialDash = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const InitialDash = () => {
   const [publishTime, setPublishTime] = React.useState("");
   const [projectList, setProjectList] = React.useState([]);
   const [role, setRole] = React.useState(0);
-
+  const [recProjects, setRecProjects] = React.useState([]);
 
   React.useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -42,7 +43,14 @@ const InitialDash = () => {
         }
       });
     }
+    getRecProjects();
   });
+
+  const getRecProjects = () => {
+    apiCall(`/recommend/project`, "GET").then((res) => {
+      setRecProjects(res);
+    });
+  };
 
   function testApply() {
     if (!localStorage.getItem("token")) {
@@ -66,7 +74,7 @@ const InitialDash = () => {
 
 
   const handleSearch = () => {
-    const data = { keyword, location, job_classification: classification, opportunity_type:opportunityType, publish_date_type:publishTime, payment_type: paymentType };
+    const data = { keyword, location, job_classification: classification, opportunity_type: opportunityType, publish_date_type: publishTime, payment_type: paymentType };
     let temp = [];
     Object.keys(data).forEach((key) => {
       if (data[key]) {
@@ -84,38 +92,9 @@ const InitialDash = () => {
     handleSearch();
   }, []);
 
-  function CreateJob(imgpath) {
-    return (
-      <>
-        <Card sx={{ width: "300px", marginTop: "100px", marginRight: "30px" }}>
-          <CardMedia sx={{ height: 120 }} image={imgpath.imgpath} title="green iguana" />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Share</Button>
-            <Button
-              size="small"
-              onClick={() => {
-                navigate("/project-detail");
-              }}>
-              Learn More
-            </Button>
-          </CardActions>
-        </Card>
-      </>
-    );
-  }
-
   return (
     <div>
       <NavigationBtn />
-
       <Dashbackground>
         <Dashtextfield>
           <Box display="flex" flexDirection="column" alignItems="center" marginRight="30px">
@@ -274,6 +253,39 @@ const InitialDash = () => {
           </Card>
         ))}
       </Box>
+
+      <div style={{ display: 'flex', width: '100%', height: '100px', justifyContent: 'center', marginTop: '15px' }}>
+        <div>
+          <span style={{ fontSize: '30px', position: 'relative', right: '100px' }}>recommend project</span>
+        </div>
+
+      </div>
+      <div style={{ display: 'flex' }}>
+        <Stack direction="column" spacing={2} style={{ overflowY: 'auto', width: '510px', background: '#F2F2F2', borderRadius: '3%', marginLeft: '28px', height: '500px' }}>
+          {recProjects.map((item) => (
+            <Card key={item.id} sx={{ maxWidth: 400, minWidth: 200, border: "2px solid lightgray" }}>
+              <CardContent>
+                <Typography
+                  sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  onClick={() => {
+                    navigate(`/project-detail/${item.id}`);
+                  }}>
+                  {item.title}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Location: <span style={{ color: "#555" }}>{item.location}</span>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
+                </Typography>
+              </CardContent>
+            </Card>
+          ))}
+        </Stack>
+      </div>
     </div>
   );
 };
