@@ -261,7 +261,7 @@ const InitialDash = () => {
         <Typography variant="h5" gutterBottom>
           Recommand Projects
         </Typography>
-        {recProjects.slice(0, 3).map((item) => (
+        {localStorage.getItem("token") ? (recProjects.slice(0, 3).map((item) => (
           <Card key={item.id} sx={{ maxWidth: 400, minWidth: 300, border: "2px solid lightgray", borderRadius: "30px" }}>
             <CardContent sx={{ marginLeft: "10px" }}>
               <Typography
@@ -282,12 +282,18 @@ const InitialDash = () => {
               </Typography>
             </CardContent>
           </Card>
-        ))}
-        <Button
-          sx={{ width: "200px", height: "50px", border: "2px solid lightgray", borderRadius: "90px" }}
-          onClick={() => { navigate('/recommend-projects'); }}>
-          View All ({recProjects.length})
-        </Button>
+        ))) : (
+          <div>
+            <p>Not logged in, please log in to view content.</p>
+          </div>
+        )}
+        {localStorage.getItem("token") ? (
+          <Button
+            sx={{ width: "200px", height: "50px", border: "2px solid lightgray", borderRadius: "90px" }}
+            onClick={() => { navigate('/recommend-projects'); }}>
+            View All ({recProjects.length})
+          </Button>
+        ) : null}
       </Box>
     </div>
   );
