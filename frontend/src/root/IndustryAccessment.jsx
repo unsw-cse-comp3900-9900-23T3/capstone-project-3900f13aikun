@@ -25,7 +25,7 @@ function IndustryAccessment() {
         }
       });
     }
-  });
+  }, [role]);
 
   return (
     <>

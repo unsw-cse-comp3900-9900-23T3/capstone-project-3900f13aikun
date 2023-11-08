@@ -43,8 +43,7 @@ const InitialDash = () => {
         }
       });
     }
-    getRecProjects();
-  });
+  }, [role]);
 
   const getRecProjects = () => {
     apiCall(`/recommend/project`, "GET").then((res) => {
@@ -72,7 +71,6 @@ const InitialDash = () => {
     });
   };
 
-
   const handleSearch = () => {
     const data = { keyword, location, job_classification: classification, opportunity_type: opportunityType, publish_date_type: publishTime, payment_type: paymentType };
     let temp = [];
@@ -87,6 +85,10 @@ const InitialDash = () => {
       setProjectList(res);
     });
   };
+
+  useEffect(() => {
+    getRecProjects();
+  }, []);
 
   useEffect(() => {
     handleSearch();
@@ -254,38 +256,39 @@ const InitialDash = () => {
         ))}
       </Box>
 
-      <div style={{ display: 'flex', width: '100%', height: '100px', justifyContent: 'center', marginTop: '15px' }}>
-        <div>
-          <span style={{ fontSize: '30px', position: 'relative', right: '100px' }}>recommend project</span>
-        </div>
-
-      </div>
-      <div style={{ display: 'flex' }}>
-        <Stack direction="column" spacing={2} style={{ overflowY: 'auto', width: '510px', background: '#F2F2F2', borderRadius: '3%', marginLeft: '28px', height: '500px' }}>
-          {recProjects.map((item) => (
-            <Card key={item.id} sx={{ maxWidth: 400, minWidth: 200, border: "2px solid lightgray" }}>
-              <CardContent>
-                <Typography
-                  sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  onClick={() => {
-                    navigate(`/project-detail/${item.id}`);
-                  }}>
-                  {item.title}
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Location: <span style={{ color: "#555" }}>{item.location}</span>
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
-                </Typography>
-              </CardContent>
-            </Card>
-          ))}
-        </Stack>
-      </div>
+      {/* recommand system */}
+      <Box sx={{ pt: 3, gap: 3, display: "flex", flexDirection: "column", marginLeft: "100px" }}>
+        <Typography variant="h5" gutterBottom>
+          Recommand Projects
+        </Typography>
+        {recProjects.slice(0, 3).map((item) => (
+          <Card key={item.id} sx={{ maxWidth: 400, minWidth: 300, border: "2px solid lightgray", borderRadius: "30px" }}>
+            <CardContent sx={{ marginLeft: "10px" }}>
+              <Typography
+                sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                gutterBottom
+                variant="h5"
+                component="div"
+                onClick={() => {
+                  navigate(`/project-detail/${item.id}`);
+                }}>
+                {item.title}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Location: <span style={{ color: "#555" }}>{item.location}</span>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+        <Button
+          sx={{ width: "200px", height: "50px", border: "2px solid lightgray", borderRadius: "90px" }}
+          onClick={() => { navigate('/recommend-projects'); }}>
+          View All ({recProjects.length})
+        </Button>
+      </Box>
     </div>
   );
 };

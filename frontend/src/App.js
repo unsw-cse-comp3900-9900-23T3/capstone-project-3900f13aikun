@@ -26,6 +26,7 @@ import DashboardSupervisor from './root/DashboardSupervisor';
 import DashboardIndustry from './root/DashboardIndustry';
 import MyProject from './root/MyProject';
 import ProjectDelivery from './root/ProjectDelivery';
+import RecommendProjects from './root/RecommendProjects';
 
 
 export const TotalContainer = styled('div')({
@@ -68,6 +69,7 @@ function App () {
             <Route path="/supervisor-feedback" element={<SupervisorFeedback/>}></Route>
             <Route path="/supervisor-accessment" element={<SupervisorAccessment/>}></Route>
             <Route path="/industry-accessment" element={<IndustryAccessment/>}></Route>
+            <Route path="/recommend-projects" element={<RecommendProjects/>}></Route>
           </Routes>
         </BrowserRouter>
       </TotalContainer>

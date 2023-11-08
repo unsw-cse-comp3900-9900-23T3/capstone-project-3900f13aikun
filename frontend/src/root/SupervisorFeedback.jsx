@@ -25,7 +25,7 @@ function SupervisorFeedback() {
         }
       });
     }
-  });
+  }, [role]);
 
   return (
     <>

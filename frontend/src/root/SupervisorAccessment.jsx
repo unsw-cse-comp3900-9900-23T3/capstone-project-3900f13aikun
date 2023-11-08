@@ -26,7 +26,7 @@ function SupervisorAccessment() {
         }
       });
     }
-  });
+  }, [role]);
 
   return (
     <>

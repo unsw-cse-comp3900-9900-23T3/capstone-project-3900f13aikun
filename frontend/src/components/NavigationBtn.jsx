@@ -44,6 +44,10 @@ export const NavigationBtn = () => {
     navigate('/apppro')
   }
 
+  function recommendProjects() {
+    navigate('/recommend-projects')
+  }
+
   function notification() {
     navigate('/notification')
   }
@@ -86,7 +90,7 @@ export const NavigationBtn = () => {
       setIslog(true);
       setIsshow(true);
     }
-  }, []);
+  }, [name, picture, email, role, path.pathname]);
 
   function logout() {
     localStorage.removeItem('token')
@@ -157,6 +161,7 @@ export const NavigationBtn = () => {
                 <MenuItem onClick={application}>Apply project</MenuItem>
                 <MenuItem onClick={notification}>Notification</MenuItem>
                 <MenuItem onClick={switchAccount}>Switch account</MenuItem>
+                <MenuItem onClick={recommendProjects}>Recommend Projects</MenuItem>
               </Menu>
             </div>
           </div>

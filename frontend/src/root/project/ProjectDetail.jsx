@@ -26,7 +26,7 @@ function ProjectDetail() {
         }
       });
     }
-  });
+  }, [role]);
 
   const getProjectInfo = () => {
     apiCall(`/project/${id}`, "GET").then((res) => {
