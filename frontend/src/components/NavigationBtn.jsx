@@ -40,7 +40,7 @@ export const NavigationBtn = () => {
     localStorage.clear()
   }
 
-  function savedProjects() {
+  function savedLists() {
     NavRefresh('/saved-projects')
   }
 
@@ -48,16 +48,13 @@ export const NavigationBtn = () => {
     NavRefresh('/apppro')
   }
 
-  function recommendProjects() {
+  function recommendLists() {
     NavRefresh('/recommend-projects')
   }
 
+
   function notification() {
     NavRefresh('/notification')
-  }
-
-  function savedSupervisors() {
-    NavRefresh('/saved-academic-supervisors')
   }
 
   const path = useLocation();
@@ -91,6 +88,10 @@ export const NavigationBtn = () => {
       setValue('six');
     } else if (path.pathname === '/saved-academic-supervisors') {
       setValue('seven');
+    } else if (path.pathname === '/recommend-academic-supervisors') {
+      setValue('eight');
+    } else if (path.pathname === '/recommend-projects') {
+      setValue('nine');
     } else if (path.pathname === '/register') {
       setIsshow(false);
     } else if (path.pathname === '/login') {
@@ -179,9 +180,8 @@ export const NavigationBtn = () => {
               >
                 <MenuItem onClick={application}>Apply project</MenuItem>
                 <MenuItem onClick={notification}>Notification</MenuItem>
-                <MenuItem onClick={recommendProjects}>Recommend Projects</MenuItem>
-                <MenuItem onClick={savedProjects}>Saved Projects</MenuItem>
-                <MenuItem onClick={savedSupervisors}>Saved Academic Supervisors</MenuItem>
+                <MenuItem onClick={recommendLists}>Recommended Lists</MenuItem>
+                <MenuItem onClick={savedLists}>Saved Lists</MenuItem>
                 <MenuItem onClick={switchAccount}>Switch account</MenuItem>
               </Menu>
             </div>

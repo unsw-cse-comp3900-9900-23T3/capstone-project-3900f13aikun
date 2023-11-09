@@ -8,7 +8,6 @@ import SignIn from './root/SignIn';
 import ForgetPassword from './root/ForgotPassword';
 import CreateProject from './root/project/CreateProject';
 import MyCreatedProject from './root/project/MyCreatedProject';
-import SavedProjects from './root/SavedInformation';
 import Appliacation from './root/application/Application';
 import Notification from './root/application/Notification';
 import MyGroup from './root/group/MyGroup';
@@ -25,8 +24,8 @@ import DashboardSupervisor from './root/DashboardSupervisor';
 import DashboardIndustry from './root/DashboardIndustry';
 import MyProject from './root/MyProject';
 import ProjectDelivery from './root/ProjectDelivery';
-import RecommendProjects from './root/RecommendProjects';
-import SavedInformation from './root/SavedInformation';
+import RecommendLists from './root/RecommendLists';
+import SavedLists from './root/SavedLists';
 
 
 export const TotalContainer = styled('div')({
@@ -53,8 +52,8 @@ function App () {
             <Route path="/dashboard/student" element={<DashboardStudent/>} />
             <Route path="/dashboard/academics" element={<DashboardSupervisor/>} />
             <Route path="/dashboard/industryp" element={<DashboardIndustry/>} />
-            <Route path="/saved-projects" element={<SavedInformation/>} />
-            <Route path="/saved-academic-supervisors" element={<SavedInformation/>} />
+            <Route path="/saved-projects" element={<SavedLists/>} />
+            <Route path="/saved-academic-supervisors" element={<SavedLists/>} />
             <Route path="/application" element={<Appliacation/>} />
             <Route path="/apppro" element={<Apppro/>} />
             <Route path="/notification" element={<Notification/>} />
@@ -70,7 +69,8 @@ function App () {
             <Route path="/supervisor-feedback" element={<SupervisorFeedback/>}></Route>
             <Route path="/supervisor-accessment" element={<SupervisorAccessment/>}></Route>
             <Route path="/industry-accessment" element={<IndustryAccessment/>}></Route>
-            <Route path="/recommend-projects" element={<RecommendProjects/>}></Route>
+            <Route path="/recommend-projects" element={<RecommendLists/>}></Route>
+            <Route path="/recommend-academic-supervisors" element={<RecommendLists/>}></Route>
           </Routes>
         </BrowserRouter>
       </TotalContainer>
