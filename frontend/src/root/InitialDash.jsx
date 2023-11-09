@@ -17,7 +17,7 @@ import FormControl from "@mui/material/FormControl";
 import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
 import Box from "@mui/material/Box";
 import { Dashbackground, Dashtextfield } from "../components/StyledElement";
-import Stack from '@mui/material/Stack';
+import Stack from "@mui/material/Stack";
 
 const InitialDash = () => {
   const navigate = useNavigate();
@@ -96,7 +96,7 @@ const InitialDash = () => {
   }, []);
 
   useEffect(() => {
-    handleSearch();
+    // handleSearch();
   }, []);
 
   return (
@@ -218,61 +218,12 @@ const InitialDash = () => {
       </Dashbackground>
 
       {/* search results */}
-      <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-        <Typography>the total numbers of projects: {projectList.length}</Typography>
-        {projectList.map((item) => (
-          <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
-            <CardContent>
-              <Typography
-                sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                gutterBottom
-                variant="h5"
-                component="div"
-                onClick={() => {
-                  navigate(`/project-detail/${item.id}`);
-                }}>
-                {item.title}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Location: <span style={{ color: "#555" }}>{item.location}</span>
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              {localStorage.getItem("token") ? (
-                <Button variant="outlined"  onClick={() => navigate("/Application")}>
-                  Apply
-                </Button>
-              ) : null}
-              {localStorage.getItem("token") && !item.is_saved ? (
-                <Button variant="outlined" onClick={() => handleSave(item.id)}>
-                  Save
-                </Button>
-              ) : null}
-              {localStorage.getItem("token") && item.is_saved ? (
-                <Button variant="outlined" onClick={() => handleUnSave(item.id)}>
-                  UnSave
-                </Button>
-              ) : null}
-            </CardActions>
-          </Card>
-        ))}
-      </Box>
-
-      {/* recommand system */}
-      <Box sx={{ pt: 3, gap: 3, display: "flex", justifyContent: "center" }}>
-        <Box sx={{ pt: 3, gap: 3, display: "flex", flexDirection: "column" }}>
-          <Typography variant="h5" gutterBottom>
-            Recommand Projects
-          </Typography>
-          {localStorage.getItem("token") ? (recProjects.slice(0, 3).map((item) => (
-            <Card key={item.id} sx={{ maxWidth: 400, minWidth: 300, border: "2px solid lightgray", borderRadius: "30px" }}>
-              <CardContent sx={{ marginLeft: "10px" }}>
+      {projectList.length > 0 ? (
+        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+          <Typography>the total numbers of projects: {projectList.length}</Typography>
+          {projectList.map((item) => (
+            <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
+              <CardContent>
                 <Typography
                   sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                   gutterBottom
@@ -289,56 +240,117 @@ const InitialDash = () => {
                 <Typography variant="body1" gutterBottom>
                   Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
                 </Typography>
-              </CardContent>
-            </Card>
-          ))) : (
-            <span style={{ color: "gray" }}>Not logged in, please log in to view content.</span>
-          )}
-          {localStorage.getItem("token") ? (
-            <Button
-              sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
-              onClick={() => { navigate('/recommend-projects'); }}>
-              View All ({recProjects.length})
-            </Button>
-          ) : null}
-        </Box>
-        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "200px" }}>
-          <Typography variant="h5" gutterBottom>
-            Saved Projects
-          </Typography>
-          {localStorage.getItem("token") ? (savedProjects.slice(0, 3).map((item) => (
-            <Card sx={{ maxWidth: 400, minWidth: 300, border: '2px solid lightgray', borderRadius: "30px" }}>
-              <CardContent sx={{ marginLeft: "10px" }}>
-                <Typography
-                  sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  onClick={() => {
-                    navigate(`/project-detail/${item.id}`);
-                  }}>
-                  {item.title}
-                </Typography>
                 <Typography variant="body1" gutterBottom>
-                  Location: <span style={{ color: '#555' }}>{item.location}</span>
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Project type: <span style={{ color: '#555' }}>{getJobType(item.job_classification)}</span>
+                  {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
                 </Typography>
               </CardContent>
+              <CardActions>
+                {localStorage.getItem("token") ? (
+                  <Button variant="outlined" onClick={() => navigate("/Application")}>
+                    Apply
+                  </Button>
+                ) : null}
+                {localStorage.getItem("token") && !item.is_saved ? (
+                  <Button variant="outlined" onClick={() => handleSave(item.id)}>
+                    Save
+                  </Button>
+                ) : null}
+                {localStorage.getItem("token") && item.is_saved ? (
+                  <Button variant="outlined" onClick={() => handleUnSave(item.id)}>
+                    UnSave
+                  </Button>
+                ) : null}
+              </CardActions>
             </Card>
-          ))) : (
-            <span style={{ color: "gray" }}>Not logged in, please log in to view content.</span>
-          )}
-          {localStorage.getItem("token") ? (
-            <Button
-              sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
-              onClick={() => { navigate('/saved-projects'); }}>
-              View All ({savedProjects.length})
-            </Button>
-          ) : null}
+          ))}
         </Box>
-      </Box>
+      ) : null}
+
+      {/* recommand system */}
+      {projectList.length == 0 ? (
+        <Box sx={{ pt: 3, gap: 3, display: "flex", justifyContent: "center" }}>
+          <Box sx={{ pt: 3, gap: 3, display: "flex", flexDirection: "column" }}>
+            <Typography variant="h5" gutterBottom>
+              Recommand Projects
+            </Typography>
+            {localStorage.getItem("token") ? (
+              recProjects.slice(0, 3).map((item) => (
+                <Card key={item.id} sx={{ maxWidth: 400, minWidth: 300, border: "2px solid lightgray", borderRadius: "30px" }}>
+                  <CardContent sx={{ marginLeft: "10px" }}>
+                    <Typography
+                      sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      onClick={() => {
+                        navigate(`/project-detail/${item.id}`);
+                      }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Location: <span style={{ color: "#555" }}>{item.location}</span>
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <span style={{ color: "gray" }}>Not logged in, please log in to view content.</span>
+            )}
+            {localStorage.getItem("token") ? (
+              <Button
+                sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
+                onClick={() => {
+                  navigate("/recommend-projects");
+                }}>
+                View All ({recProjects.length})
+              </Button>
+            ) : null}
+          </Box>
+          <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "200px" }}>
+            <Typography variant="h5" gutterBottom>
+              Saved Projects
+            </Typography>
+            {localStorage.getItem("token") ? (
+              savedProjects.slice(0, 3).map((item) => (
+                <Card sx={{ maxWidth: 400, minWidth: 300, border: "2px solid lightgray", borderRadius: "30px" }}>
+                  <CardContent sx={{ marginLeft: "10px" }}>
+                    <Typography
+                      sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      onClick={() => {
+                        navigate(`/project-detail/${item.id}`);
+                      }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Location: <span style={{ color: "#555" }}>{item.location}</span>
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <span style={{ color: "gray" }}>Not logged in, please log in to view content.</span>
+            )}
+            {localStorage.getItem("token") ? (
+              <Button
+                sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
+                onClick={() => {
+                  navigate("/saved-projects");
+                }}>
+                View All ({savedProjects.length})
+              </Button>
+            ) : null}
+          </Box>
+        </Box>
+      ) : null}
     </div>
   );
 };
