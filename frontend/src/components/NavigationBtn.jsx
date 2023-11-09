@@ -165,11 +165,11 @@ export const NavigationBtn = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem onClick={savedProjects}>Saved projects</MenuItem>
                 <MenuItem onClick={application}>Apply project</MenuItem>
                 <MenuItem onClick={notification}>Notification</MenuItem>
-                <MenuItem onClick={switchAccount}>Switch account</MenuItem>
                 <MenuItem onClick={recommendProjects}>Recommend Projects</MenuItem>
+                <MenuItem onClick={savedProjects}>Saved projects</MenuItem>
+                <MenuItem onClick={switchAccount}>Switch account</MenuItem>
               </Menu>
             </div>
           </div>

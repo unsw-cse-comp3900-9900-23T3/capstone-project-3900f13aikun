@@ -58,12 +58,10 @@ const InitialDash = () => {
     });
   };
 
-  function testApply() {
-    if (!localStorage.getItem("token")) {
-      alert("please login in");
-    } else {
+  function handleApply() {
+    apiCall().then((res) => {
       navigate("/Application");
-    }
+    });
   }
 
   const handleSave = (id) => {
@@ -246,9 +244,11 @@ const InitialDash = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button variant="contained" onClick={() => testApply()} disabled={role === 2}>
-                Apply
-              </Button>
+              {localStorage.getItem("token") ? (
+                <Button variant="outlined"  onClick={() => navigate("/Application")}>
+                  Apply
+                </Button>
+              ) : null}
               {localStorage.getItem("token") && !item.is_saved ? (
                 <Button variant="outlined" onClick={() => handleSave(item.id)}>
                   Save
@@ -266,7 +266,7 @@ const InitialDash = () => {
 
       {/* recommand system */}
       <Box sx={{ pt: 3, gap: 3, display: "flex", justifyContent: "center" }}>
-        <Box sx={{ pt: 3, gap: 3, display: "flex", flexDirection: "column"}}>
+        <Box sx={{ pt: 3, gap: 3, display: "flex", flexDirection: "column" }}>
           <Typography variant="h5" gutterBottom>
             Recommand Projects
           </Typography>
@@ -296,7 +296,7 @@ const InitialDash = () => {
           )}
           {localStorage.getItem("token") ? (
             <Button
-              sx={{ width: "200px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
+              sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
               onClick={() => { navigate('/recommend-projects'); }}>
               View All ({recProjects.length})
             </Button>
@@ -332,7 +332,7 @@ const InitialDash = () => {
           )}
           {localStorage.getItem("token") ? (
             <Button
-              sx={{ width: "200px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
+              sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
               onClick={() => { navigate('/saved-projects'); }}>
               View All ({savedProjects.length})
             </Button>

@@ -71,9 +71,11 @@ function ProjectDetail() {
         </Typography>
 
         <Box sx={{ display: "flex", gap: 8, my: 2 }}>
-          <Button variant="contained" onClick={() => navigate("/Application")} disabled={role === 2}>
-            Apply
-          </Button>
+          {!role === 2 ? (
+            <Button variant="contained" onClick={() => navigate("/Application")}>
+              Apply
+            </Button>
+          ) : null}
           {localStorage.getItem("token") && !projectInfo.is_saved ? (
             <Button variant="outlined" onClick={() => handleSave()}>
               Save
