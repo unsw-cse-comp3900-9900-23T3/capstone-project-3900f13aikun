@@ -12,7 +12,7 @@ from flask_mail import Mail, Message
 from bcrypt import hashpw, gensalt, checkpw
 from sqlalchemy import desc
 from datetime import datetime
-from sqlalchemy import or_, not_
+from sqlalchemy import or_, not_, and_
 from datetime import timedelta
 from sqlalchemy.orm import joinedload
 
@@ -668,6 +668,20 @@ def unsaved_saved_project_route(project_id):
 
     else:
         return {"msg": "The project is not saved"}, 404
+
+
+@app.route("/recommend/student", methods=["GET"])
+@jwt_required()
+def get_recommend_student_route():
+    current_user_id = get_jwt_identity()
+    current_user = db.session.get(User, current_user_id)
+    students = db.session.query(User).filter(User.role == UserRole.Student.value)
+
+    if not current_user.project_intention:
+        return users_sc.jsonify(students)
+
+    students = students.filter(User.project_intention == current_user.project_intention).all()
+    return projects_sc.jsonify(students)
 
 
 def generate_code():
