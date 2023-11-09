@@ -16,11 +16,15 @@ export const NavigationBtn = () => {
   const [isshow, setIsshow] = React.useState(true);
   const [islog, setIslog] = React.useState(false);
   const [value, setValue] = React.useState('one');
-  const [picture, setPicture] = React.useState("")
-  const [email, setEmail] = React.useState('')
-  const [name, setName] = React.useState('')
-  const [role, setRole] = React.useState(0)
+  const [picture, setPicture] = React.useState("");
+  const [email, setEmail] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [role, setRole] = React.useState(0);
 
+  const NavRefresh = (paths) => {
+    navigate(paths);
+    window.location.reload();
+  }
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -102,7 +106,7 @@ export const NavigationBtn = () => {
     if (!localStorage.getItem('token')) {
       alert('please login in')
     } else {
-      navigate('/profile-detail')
+      NavRefresh('/profile-detail')
     }
   }
 
@@ -110,7 +114,7 @@ export const NavigationBtn = () => {
     if (!localStorage.getItem('token')) {
       alert('please login in')
     } else {
-      navigate('/my-project')
+      NavRefresh('/my-project')
     }
   }
 
@@ -131,10 +135,10 @@ export const NavigationBtn = () => {
               value={value}
               aria-label="wrapped label tabs example"
             >
-              <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
+              <Tab value="one" label="project search" onClick={() => { NavRefresh('/') }} />
               <Tab value="two" label="Profile" onClick={testProfile} />
-              {role === 2 && <Tab value="three" label="Create Project" onClick={() => { navigate('/my-created-project') }}></Tab>}
-              {role === 1 && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group', '/my-create-group') }} ></Tab>}
+              {role === 2 && <Tab value="three" label="Create Project" onClick={() => { NavRefresh('/my-created-project') }}></Tab>}
+              {role === 1 && <Tab value="four" label="My Group" onClick={() => { NavRefresh('/my-group') }} ></Tab>}
               <Tab value="five" label="My Project" onClick={testMyProject}></Tab>
             </Tabs>
           </Box>}

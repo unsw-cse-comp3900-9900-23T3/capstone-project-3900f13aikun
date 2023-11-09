@@ -19,7 +19,7 @@ function SavedInformation() {
     const [role, setRole] = React.useState(0);
     const [savedProjects, setSavedProjects] = React.useState([]);
     const path = useLocation();
-    const [currentPage, setCurrentPage] = React.useState('page1');
+    const [currentPage, setCurrentPage] = React.useState("page1");
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -43,9 +43,9 @@ function SavedInformation() {
             setSavedProjects(res);
         });
         if (path.pathname === 'page1') {
-            setCurrentPage("page1")
+            setCurrentPage("page1");
         } else if (path.pathname === 'page2') {
-            setCurrentPage("page2")
+            setCurrentPage("page2");
         }
     }, [path.pathname]);
 
@@ -110,10 +110,7 @@ function SavedInformation() {
             <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
                 {currentPage === 'page2' && (savedProjects.length !== 0 ? (
                     <>
-                        <Typography gutterBottom variant="h5" color="royalblue">
-                            Saved Academic Supervisors
-                            <span style={{ fontSize: "16px", color: "#666666" }}> ({savedProjects.length} academic supervisors)</span>
-                        </Typography>
+                        <Typography marginTop="50px">The total numbers of academic supervisors: {savedProjects.length}</Typography>
                         {savedProjects.map((item) => (
                             <Card sx={{ width: 400, border: '2px solid lightgray' }}>
                                 <CardContent>
