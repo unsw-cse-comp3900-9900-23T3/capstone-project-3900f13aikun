@@ -171,3 +171,4 @@ export function checkPaymentType(paymentType) {
   }
   return true;
 }
+
