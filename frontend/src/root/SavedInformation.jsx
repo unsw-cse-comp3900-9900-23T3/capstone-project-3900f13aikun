@@ -53,20 +53,18 @@ function SavedInformation() {
         <>
             <NavigationBtn></NavigationBtn>
             <Pagebackground>Saved Information</Pagebackground>
-            <Box sx={{ width: '80%', position: 'relative', marginLeftleft: '100px', top: '8px' }}>
+            <Box sx={{ position: 'relative', top: '20px' }}>
                 <Tabs value={currentPage} aria-label="wrapped label tabs example">
-                    <Tab value={"page1"} label="Saved Projects" onClick={() => handlePageChange('page1')} />
-                    {role !== 3 && <Tab value={"page2"} label="Saved Academic Supervisors" onClick={() => handlePageChange('page2')} />}
+                    <Tab sx={{ fontSize: "15px" }} value={"page1"} label="Saved Projects" onClick={() => handlePageChange('page1')} />
+                    {role !== 3 && <Tab value={"page2"} sx={{ fontSize: "15px" }} label="Saved Academic Supervisors" onClick={() => handlePageChange('page2')} />}
                 </Tabs>
             </Box>
             {/* Saved Projects */}
             <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
-                {currentPage === 'page1' && (
+                {currentPage === 'page1' && (savedProjects.length !== 0 ? (
                     <>
-                        <Typography gutterBottom variant="h5" color="royalblue">
-                            Saved Projects <span style={{ fontSize: "16px", color: "#666666" }}>({savedProjects.length} projects)</span>
-                        </Typography>
-                        {savedProjects.length !== 0 ? (savedProjects.map((item) => (
+                        <Typography marginTop="50px">The total numbers of projects: {savedProjects.length}</Typography>
+                        {savedProjects.map((item) => (
                             <Card sx={{ width: 400, border: '2px solid lightgray' }}>
                                 <CardContent>
                                     <Typography
@@ -100,22 +98,23 @@ function SavedInformation() {
                                     </Button>
                                 </CardActions>
                             </Card>
-                        ))) : <span style={{ marginTop: "100px", color: "gray", fontSize: "20px" }}>
-                            No saved projects yet.
-                        </span>}
+                        ))}
                     </>
+                ) : <span style={{ marginTop: "100px", color: "gray", fontSize: "20px" }}>
+                    No saved projects yet.
+                </span>
                 )}
             </Box>
 
             {/* Saved Academic Supervisors*/}
             <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
-                {currentPage === 'page2' && (
+                {currentPage === 'page2' && (savedProjects.length !== 0 ? (
                     <>
                         <Typography gutterBottom variant="h5" color="royalblue">
                             Saved Academic Supervisors
                             <span style={{ fontSize: "16px", color: "#666666" }}> ({savedProjects.length} academic supervisors)</span>
                         </Typography>
-                        {savedProjects.length !== 0 ? (savedProjects.map((item) => (
+                        {savedProjects.map((item) => (
                             <Card sx={{ width: 400, border: '2px solid lightgray' }}>
                                 <CardContent>
                                     <Typography
@@ -149,13 +148,14 @@ function SavedInformation() {
                                     </Button>
                                 </CardActions>
                             </Card>
-                        ))) :
-                            <span style={{ marginTop: "100px", fontSize: "20px", color: "gray"}}>
-                                No saved academic supervisors yet.
-                            </span>
-                        }
+                        ))}
                     </>
+                ) :
+                    <span style={{ marginTop: "100px", fontSize: "20px", color: "gray" }}>
+                        No saved academic supervisors yet.
+                    </span>
                 )}
+
             </Box>
         </>
     );
