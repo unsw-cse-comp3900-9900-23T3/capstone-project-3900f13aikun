@@ -74,7 +74,7 @@ export const NavigationBtn = () => {
 
     if (path.pathname === '/') {
       setValue('one');
-      setIsshow(true);
+      // setIsshow(true);
     } else if (path.pathname === '/profile' || path.pathname === '/profile-detail') {
       setValue('two');
     } else if (path.pathname === '/my-created-project' || path.pathname === '/create-project') {
@@ -83,6 +83,8 @@ export const NavigationBtn = () => {
       setValue('four');
     } else if (path.pathname === '/my-project' || path.pathname === '/project-delivery/:id') {
       setValue('five');
+    } else if (path.pathname === '/saved-information') {
+      setValue('six');
     } else if (path.pathname === '/register') {
       setIsshow(false);
     } else if (path.pathname === '/login') {

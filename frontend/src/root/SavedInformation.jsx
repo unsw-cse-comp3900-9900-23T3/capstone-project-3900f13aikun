@@ -19,10 +19,10 @@ function SavedInformation() {
     const [role, setRole] = React.useState(0);
     const [savedProjects, setSavedProjects] = React.useState([]);
     const path = useLocation();
-    const [currentPage, setCurrentPage] = React.useState("page1");
+    const [Page, setPage] = React.useState("page1");
 
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
+    const handlePage = (page) => {
+        setPage(page);
     };
 
     React.useEffect(() => {
@@ -42,26 +42,21 @@ function SavedInformation() {
         apiCall(`/savedProject`, "GET").then((res) => {
             setSavedProjects(res);
         });
-        if (path.pathname === 'page1') {
-            setCurrentPage("page1");
-        } else if (path.pathname === 'page2') {
-            setCurrentPage("page2");
-        }
-    }, [path.pathname]);
+    }, []);
 
     return (
         <>
             <NavigationBtn></NavigationBtn>
             <Pagebackground>Saved Information</Pagebackground>
             <Box sx={{ position: 'relative', top: '20px' }}>
-                <Tabs value={currentPage} aria-label="wrapped label tabs example">
-                    <Tab sx={{ fontSize: "15px" }} value={"page1"} label="Saved Projects" onClick={() => handlePageChange('page1')} />
-                    {role !== 3 && <Tab value={"page2"} sx={{ fontSize: "15px" }} label="Saved Academic Supervisors" onClick={() => handlePageChange('page2')} />}
+                <Tabs value={Page} aria-label="wrapped label tabs example">
+                    <Tab sx={{ fontSize: "15px"}} value={"page1"} label="Saved Projects" onClick={() => handlePage('page1')} />
+                    {role !== 3 && <Tab value={"page2"} sx={{ fontSize: "15px" }} label="Saved Academic Supervisors" onClick={() => handlePage('page2')} />}
                 </Tabs>
             </Box>
             {/* Saved Projects */}
             <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
-                {currentPage === 'page1' && (savedProjects.length !== 0 ? (
+                {Page === 'page1' && (savedProjects.length !== 0 ? (
                     <>
                         <Typography marginTop="50px">The total numbers of projects: {savedProjects.length}</Typography>
                         {savedProjects.map((item) => (
@@ -108,7 +103,7 @@ function SavedInformation() {
 
             {/* Saved Academic Supervisors*/}
             <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
-                {currentPage === 'page2' && (savedProjects.length !== 0 ? (
+                {Page === 'page2' && (savedProjects.length !== 0 ? (
                     <>
                         <Typography marginTop="50px">The total numbers of academic supervisors: {savedProjects.length}</Typography>
                         {savedProjects.map((item) => (

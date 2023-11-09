@@ -340,7 +340,7 @@ const InitialDash = () => {
             {(localStorage.getItem("token") && savedProjects.length !== 0) ? (
               <Button
                 sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
-                onClick={() => { navigate('/saved-projects'); }}>
+                onClick={() => { navigate('/saved-information'); }}>
                 View All ({savedProjects.length})
               </Button>
             ) : null}
