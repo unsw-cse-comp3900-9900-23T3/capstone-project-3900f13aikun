@@ -20,11 +20,11 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Database config
-# app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
-app.config["SQLALCHEMY_DATABASE_URI"] ='postgresql://postgres:jjy0325@localhost:5432/postgres'
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+# Database config
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
+# app.config["SQLALCHEMY_DATABASE_URI"] ='postgresql://postgres:jjy0325@localhost:5432/postgres'
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 secret_key = os.urandom(24)
 # JWT config
