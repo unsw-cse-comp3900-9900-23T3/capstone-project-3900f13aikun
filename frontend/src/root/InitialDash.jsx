@@ -14,7 +14,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
+import { getJobType, getPaymentType, getOpportunityType, getIntention } from "../components/EnumMap";
 import Box from "@mui/material/Box";
 import { Dashbackground, Dashtextfield } from "../components/StyledElement";
 
@@ -31,7 +31,7 @@ const InitialDash = () => {
   const [recProjects, setRecProjects] = React.useState([]);
   const [savedProjects, setSavedProjects] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState('');
-  const [savedSupervisor, setSavedSupervsior] = React.useState([]);
+  const [recSupervisor, setRecSupervsior] = React.useState([]);
 
   React.useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -57,6 +57,13 @@ const InitialDash = () => {
       setRecProjects(res);
     });
   };
+
+
+  const getRecSupervisors = () => {
+    apiCall(`/recommend/teacher`, "GET").then((res) => {
+      setRecSupervsior(res);
+    });
+  }
 
   function handleApply() {
     apiCall().then((res) => {
@@ -93,6 +100,7 @@ const InitialDash = () => {
 
   useEffect(() => {
     getRecProjects();
+    getRecSupervisors();
   }, []);
 
   useEffect(() => {
@@ -222,7 +230,7 @@ const InitialDash = () => {
         <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
           <Typography>the total numbers of projects: {projectList.length}</Typography>
           {projectList.map((item) => (
-            <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
+            <Card key={item.user_id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
               <CardContent>
                 <Typography
                   sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -230,7 +238,7 @@ const InitialDash = () => {
                   variant="h5"
                   component="div"
                   onClick={() => {
-                    navigate(`/project-detail/${item.id}`);
+                    navigate(`/project-detail/${item.user_id}`);
                   }}>
                   {item.title}
                 </Typography>
@@ -273,7 +281,7 @@ const InitialDash = () => {
             <Typography variant="h5" gutterBottom>
               Recommended Projects
             </Typography>
-            {localStorage.getItem("token") ? (recProjects.slice(0, 3).map((item) => (
+            {(localStorage.getItem("token") && recProjects.length !== 0) ? (recProjects.slice(0, 3).map((item) => (
               <Card key={item.id} sx={{ maxWidth: 400, minWidth: 300, border: "2px solid lightgray", borderRadius: "30px" }}>
                 <CardContent sx={{ marginLeft: "10px" }}>
                   <Typography
@@ -295,9 +303,9 @@ const InitialDash = () => {
                 </CardContent>
               </Card>
             ))) : (
-              <span style={{ color: "gray" }}>Not logged in, please log in to view content.</span>
+              <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>There is nothing, not logged in or no projects published</span>
             )}
-            {localStorage.getItem("token") ? (
+            {(localStorage.getItem("token") && recProjects.length !== 0) ? (
               <Button
                 sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
                 onClick={() => { navigate('/recommend-projects'); }}>
@@ -346,13 +354,13 @@ const InitialDash = () => {
             ) : null}
           </Box>
 
-          {/* Saved Academic SUpervisors*/}
+          {/* Saved Academic Supervisors*/}
           <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "100px" }}>
             <Typography variant="h5" gutterBottom>
               Recommended Academic Supervisors
             </Typography>
-            {(localStorage.getItem("token") && savedSupervisor.length !== 0) ? (savedSupervisor.slice(0, 3).map((item) => (
-              <Card sx={{ maxWidth: 400, minWidth: 300, border: '2px solid lightgray', borderRadius: "30px" }}>
+            {(localStorage.getItem("token") && recSupervisor.length !== 0) ? (recSupervisor.slice(0, 3).map((item) => (
+              <Card key={item.user_id} sx={{ maxWidth: 400, minWidth: 300, border: '2px solid lightgray', borderRadius: "30px" }}>
                 <CardContent sx={{ marginLeft: "10px" }}>
                   <Typography
                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -368,7 +376,10 @@ const InitialDash = () => {
                     Email: <span style={{ color: '#555' }}>{item.email}</span>
                   </Typography>
                   <Typography variant="body1" gutterBottom>
-                    Project Intention: <span style={{ color: '#555' }}>{getJobType(item.project_intention)}</span>
+                    Project Intention:
+                    <span style={{ color: '#555' }}>
+                      {Array.isArray(item.project_intention) ? item.project_intention.map(getIntention).join(', ') : ''}
+                    </span>
                   </Typography>
                 </CardContent>
               </Card>
@@ -377,11 +388,11 @@ const InitialDash = () => {
                 There is nothing, please logged in.
               </span>
             )}
-            {(localStorage.getItem("token") && savedSupervisor.length !== 0) ? (
+            {(localStorage.getItem("token") && recSupervisor.length !== 0) ? (
               <Button
                 sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
                 onClick={() => { navigate('/recommended-academic-supervisors'); }}>
-                View All ({savedSupervisor.length})
+                View All ({recSupervisor.length})
               </Button>
             ) : null}
           </Box>
