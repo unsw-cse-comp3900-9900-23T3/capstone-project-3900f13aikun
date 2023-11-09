@@ -680,7 +680,7 @@ def get_recommend_teacher_route():
     if not current_user.project_intention:
         return users_sc.jsonify(teacher)
 
-    teacher = teacher.filter(User.project_intention == current_user.project_intention).all()
+    teacher = teacher.filter(User.project_intention.op('&&')(current_user.project_intention)).all()
     return projects_sc.jsonify(teacher)
 
 
