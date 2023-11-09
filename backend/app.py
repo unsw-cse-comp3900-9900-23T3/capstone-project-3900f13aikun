@@ -670,18 +670,18 @@ def unsaved_saved_project_route(project_id):
         return {"msg": "The project is not saved"}, 404
 
 
-@app.route("/recommend/student", methods=["GET"])
+@app.route("/recommend/teacher", methods=["GET"])
 @jwt_required()
-def get_recommend_student_route():
+def get_recommend_teacher_route():
     current_user_id = get_jwt_identity()
     current_user = db.session.get(User, current_user_id)
-    students = db.session.query(User).filter(User.role == UserRole.Student.value)
+    teacher = db.session.query(User).filter(User.role == UserRole.AcademicSupervisor.value)
 
     if not current_user.project_intention:
-        return users_sc.jsonify(students)
+        return users_sc.jsonify(teacher)
 
-    students = students.filter(User.project_intention == current_user.project_intention).all()
-    return projects_sc.jsonify(students)
+    teacher = teacher.filter(User.project_intention == current_user.project_intention).all()
+    return projects_sc.jsonify(teacher)
 
 
 def generate_code():
