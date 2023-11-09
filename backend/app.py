@@ -681,7 +681,7 @@ def get_recommend_teacher_route():
         return users_sc.jsonify(teacher)
 
     teacher = teacher.filter(User.project_intention.op('&&')(current_user.project_intention)).all()
-    return projects_sc.jsonify(teacher)
+    return users_sc.jsonify(teacher)
 
 
 def generate_code():
