@@ -265,8 +265,8 @@ const InitialDash = () => {
       </Box>
 
       {/* recommand system */}
-      <Box sx={{ pt: 3, gap: 3, display: "flex" }}>
-        <Box sx={{ pt: 3, gap: 3, display: "flex", flexDirection: "column", marginLeft: "100px" }}>
+      <Box sx={{ pt: 3, gap: 3, display: "flex", justifyContent: "center" }}>
+        <Box sx={{ pt: 3, gap: 3, display: "flex", flexDirection: "column"}}>
           <Typography variant="h5" gutterBottom>
             Recommand Projects
           </Typography>
@@ -295,12 +295,12 @@ const InitialDash = () => {
             <span style={{ color: "gray" }}>Not logged in, please log in to view content.</span>
           )}
           {localStorage.getItem("token") ? (
-          <Button
-            sx={{ width: "200px", height: "50px", border: "2px solid lightgray", borderRadius: "90px" }}
-            onClick={() => { navigate('/recommend-projects'); }}>
-            View All ({recProjects.length})
-          </Button>
-        ) : null}
+            <Button
+              sx={{ width: "200px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
+              onClick={() => { navigate('/recommend-projects'); }}>
+              View All ({recProjects.length})
+            </Button>
+          ) : null}
         </Box>
         <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "200px" }}>
           <Typography variant="h5" gutterBottom>
@@ -331,12 +331,12 @@ const InitialDash = () => {
             <span style={{ color: "gray" }}>Not logged in, please log in to view content.</span>
           )}
           {localStorage.getItem("token") ? (
-          <Button
-            sx={{ width: "200px", height: "50px", marginTop: "170px",border: "2px solid lightgray", borderRadius: "90px" }}
-            onClick={() => { navigate('/saved-projects'); }}>
-            View All ({savedProjects.length})
-          </Button>
-        ) : null}
+            <Button
+              sx={{ width: "200px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
+              onClick={() => { navigate('/saved-projects'); }}>
+              View All ({savedProjects.length})
+            </Button>
+          ) : null}
         </Box>
       </Box>
     </div>

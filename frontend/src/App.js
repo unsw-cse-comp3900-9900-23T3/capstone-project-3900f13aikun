@@ -17,7 +17,6 @@ import ProjectDetail from './root/project/ProjectDetail';
 import Apppro from './root/application/Apppro';
 import GroupComposition from './root/group/GroupComposition';
 import ProfileDetails from './root/profile/ProfileDetails';
-import MyProjects from './root/ProjectDelivery';
 import SupervisorFeedback from './root/SupervisorFeedback';
 import SupervisorAccessment from './root/SupervisorAccessment';
 import IndustryAccessment from './root/IndustryAccessment';
