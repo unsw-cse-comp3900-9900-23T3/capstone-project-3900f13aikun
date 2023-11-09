@@ -31,7 +31,7 @@ const InitialDash = () => {
   const [recProjects, setRecProjects] = React.useState([]);
   const [savedProjects, setSavedProjects] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState('');
-  const path = useLocation();
+  const [savedSupervisor, setSavedSupervsior] = React.useState([]);
 
   React.useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -85,12 +85,10 @@ const InitialDash = () => {
       }
     });
     const qs = temp.join("&");
-
     apiCall(`/project?${qs}`, "GET").then((res) => {
       setProjectList(res);
     });
     setCurrentPage(page)
-
   };
 
   useEffect(() => {
@@ -273,7 +271,7 @@ const InitialDash = () => {
         <Box sx={{ pt: 3, gap: 3, display: "flex", justifyContent: "center" }}>
           <Box sx={{ pt: 3, gap: 3, display: "flex", flexDirection: "column" }}>
             <Typography variant="h5" gutterBottom>
-              Recommand Projects
+              Recommended Projects
             </Typography>
             {localStorage.getItem("token") ? (recProjects.slice(0, 3).map((item) => (
               <Card key={item.id} sx={{ maxWidth: 400, minWidth: 300, border: "2px solid lightgray", borderRadius: "30px" }}>
@@ -307,7 +305,9 @@ const InitialDash = () => {
               </Button>
             ) : null}
           </Box>
-          <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "200px" }}>
+
+          {/* Saved Projects */}
+          <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "100px" }}>
             <Typography variant="h5" gutterBottom>
               Saved Projects
             </Typography>
@@ -340,8 +340,48 @@ const InitialDash = () => {
             {(localStorage.getItem("token") && savedProjects.length !== 0) ? (
               <Button
                 sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
-                onClick={() => { navigate('/saved-information'); }}>
+                onClick={() => { navigate('/saved-projects'); }}>
                 View All ({savedProjects.length})
+              </Button>
+            ) : null}
+          </Box>
+
+          {/* Saved Academic SUpervisors*/}
+          <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "100px" }}>
+            <Typography variant="h5" gutterBottom>
+              Recommended Academic Supervisors
+            </Typography>
+            {(localStorage.getItem("token") && savedSupervisor.length !== 0) ? (savedSupervisor.slice(0, 3).map((item) => (
+              <Card sx={{ maxWidth: 400, minWidth: 300, border: '2px solid lightgray', borderRadius: "30px" }}>
+                <CardContent sx={{ marginLeft: "10px" }}>
+                  <Typography
+                    sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    onClick={() => {
+                      navigate(`/profile-detail/${item.user_id}`);
+                    }}>
+                    {item.name}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Email: <span style={{ color: '#555' }}>{item.email}</span>
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Project Intention: <span style={{ color: '#555' }}>{getJobType(item.project_intention)}</span>
+                  </Typography>
+                </CardContent>
+              </Card>
+            ))) : (
+              <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>
+                There is nothing, please logged in.
+              </span>
+            )}
+            {(localStorage.getItem("token") && savedSupervisor.length !== 0) ? (
+              <Button
+                sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
+                onClick={() => { navigate('/recommended-academic-supervisors'); }}>
+                View All ({savedSupervisor.length})
               </Button>
             ) : null}
           </Box>
