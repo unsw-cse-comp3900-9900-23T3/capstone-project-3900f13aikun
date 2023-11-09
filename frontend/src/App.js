@@ -8,7 +8,7 @@ import SignIn from './root/SignIn';
 import ForgetPassword from './root/ForgotPassword';
 import CreateProject from './root/project/CreateProject';
 import MyCreatedProject from './root/project/MyCreatedProject';
-import SavedProjects from './root/project/SavedProjects';
+import SavedProjects from './root/SavedInformation';
 import Appliacation from './root/application/Application';
 import Notification from './root/application/Notification';
 import MyGroup from './root/group/MyGroup';
@@ -26,6 +26,7 @@ import DashboardIndustry from './root/DashboardIndustry';
 import MyProject from './root/MyProject';
 import ProjectDelivery from './root/ProjectDelivery';
 import RecommendProjects from './root/RecommendProjects';
+import SavedInformation from './root/SavedInformation';
 
 
 export const TotalContainer = styled('div')({
@@ -52,7 +53,7 @@ function App () {
             <Route path="/dashboard/student" element={<DashboardStudent/>} />
             <Route path="/dashboard/academics" element={<DashboardSupervisor/>} />
             <Route path="/dashboard/industryp" element={<DashboardIndustry/>} />
-            <Route path="/saved-projects" element={<SavedProjects/>} />
+            <Route path="/saved-information" element={<SavedInformation/>} />
             <Route path="/application" element={<Appliacation/>} />
             <Route path="/apppro" element={<Apppro/>} />
             <Route path="/notification" element={<Notification/>} />

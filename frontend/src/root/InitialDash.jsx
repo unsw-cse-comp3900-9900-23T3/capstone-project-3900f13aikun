@@ -21,7 +21,6 @@ import Stack from '@mui/material/Stack';
 
 const InitialDash = () => {
   const navigate = useNavigate();
-  // const { id } = useParams();
   const [keyword, setKeyword] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [classification, setClassification] = React.useState("");
@@ -245,7 +244,7 @@ const InitialDash = () => {
             </CardContent>
             <CardActions>
               {localStorage.getItem("token") ? (
-                <Button variant="outlined"  onClick={() => navigate("/Application")}>
+                <Button variant="outlined" onClick={() => navigate("/Application")}>
                   Apply
                 </Button>
               ) : null}
@@ -306,7 +305,7 @@ const InitialDash = () => {
           <Typography variant="h5" gutterBottom>
             Saved Projects
           </Typography>
-          {localStorage.getItem("token") ? (savedProjects.slice(0, 3).map((item) => (
+          {(localStorage.getItem("token") && savedProjects.length !== 0) ? (savedProjects.slice(0, 3).map((item) => (
             <Card sx={{ maxWidth: 400, minWidth: 300, border: '2px solid lightgray', borderRadius: "30px" }}>
               <CardContent sx={{ marginLeft: "10px" }}>
                 <Typography
@@ -328,9 +327,11 @@ const InitialDash = () => {
               </CardContent>
             </Card>
           ))) : (
-            <span style={{ color: "gray" }}>Not logged in, please log in to view content.</span>
+            <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>
+              There is nothing, please logged in or use the save button on each job listing to to save it.
+            </span>
           )}
-          {localStorage.getItem("token") ? (
+          {(localStorage.getItem("token") && savedProjects.length !== 0) ? (
             <Button
               sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
               onClick={() => { navigate('/saved-projects'); }}>
