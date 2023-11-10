@@ -107,12 +107,9 @@ const InitialDash = () => {
   };
 
   useEffect(() => {
+    handleSearch();
     getRecProjects();
     getRecSupervisors();
-  }, []);
-
-  useEffect(() => {
-    handleSearch();
   }, []);
 
   return (
