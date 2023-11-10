@@ -15,7 +15,7 @@ export default function MyCreatedProject() {
   const navigate = useNavigate();
   const [projects, setProjects] = React.useState([]);
 
-  const getProInfo =() => {
+  const getProInfo = () => {
     apiCall(`/project-created`, "GET").then((res) => {
       setProjects(res);
     });
@@ -45,15 +45,16 @@ export default function MyCreatedProject() {
           alignItems: "center",
         }}>
         <Button
+          sx={{ marginTop: "20px", left: "500px" }}
           variant="contained"
           color="success"
           onClick={() => {
             navigate("/create-project");
           }}>
-          New Project
+          + New Project
         </Button>
-        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5 }}>
-          <Typography>the total numbers of projects: {projects.length}</Typography>
+        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
+          <Typography>The total numbers of projects: {projects.length}</Typography>
           {projects.map((item) => (
             <Card sx={{ maxWidth: 600, minWidth: 400, border: '2px solid lightgray' }}>
               <CardContent>
