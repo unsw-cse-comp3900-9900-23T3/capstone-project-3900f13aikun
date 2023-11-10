@@ -435,8 +435,10 @@ def delete_project(id):
 
 
 @app.route("/recommend/project", methods=["GET"])
-@jwt_required()
+@jwt_required(optional=True)
 def get_recommend_project_route():
+    current_user_id = get_jwt_identity()
+    current_user = db.session.get(User, current_user_id)
     projects = db.session.query(Project)
     current_user_id = get_jwt_identity()
     current_user = db.session.get(User, current_user_id)
@@ -445,7 +447,13 @@ def get_recommend_project_route():
         return projects_sc.jsonify(projects)
 
     projects = projects.filter(Project.job_classification.in_(current_user.project_intention)).all()
-    return projects_sc.jsonify(projects)
+    result = []
+    for project in projects:
+        current_user = db.session.get(User, current_user_id)
+        project_data = ProjectSchema().dump(project)
+        project_data['is_saved'] = project in current_user.saved_projects
+        result.append(project_data)
+    return jsonify(result)
 
 
 @app.route("/group", methods=["POST"])
