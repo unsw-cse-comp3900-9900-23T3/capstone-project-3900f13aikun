@@ -71,8 +71,8 @@ function ProjectDetail() {
         </Typography>
 
         <Box sx={{ display: "flex", gap: 8, my: 2 }}>
-          {!role === 2 ? (
-            <Button variant="contained" onClick={() => navigate("/Application")}>
+          {!(role === 2) ? (
+            <Button variant="contained" onClick={() => navigate(`/application/${projectInfo.id}`)}>
               Apply
             </Button>
           ) : null}

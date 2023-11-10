@@ -53,7 +53,7 @@ function App () {
             <Route path="/dashboard/academics" element={<DashboardSupervisor/>} />
             <Route path="/dashboard/industryp" element={<DashboardIndustry/>} />
             <Route path="/saved-projects" element={<SavedProjects/>} />
-            <Route path="/application" element={<Appliacation/>} />
+            <Route path="/application/:id" element={<Appliacation/>} />
             <Route path="/apppro" element={<Apppro/>} />
             <Route path="/notification" element={<Notification/>} />
             <Route path="/my-group" element={<MyGroup/>} />

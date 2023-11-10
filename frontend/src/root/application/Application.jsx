@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import NavigationBtn from '../../components/NavigationBtn';
+import React, { useEffect, useState } from 'react';
 import { Pagebackground } from '../../components/StyledElement';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -12,42 +11,69 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { apiCall } from '../../components/HelpFunctions';
+import NavigationBtn from '../../components/NavigationBtn';
 
-function Appliacation() {
+function Application() {
+    const { id } = useParams();
     const navigate = useNavigate();
-
-    const names = [
+    const Uninames = [
         'UNSW',
         'USYD',
         'UniMelb',
+        'UTS',
         'other'
 
     ];
+    
+    // the information of logging user
+    const [firstname, setFirstname] = React.useState('');
+    const [lastname, setLastname] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [projectInfo, setProjectInfo] = useState({});
 
-    function getStyles(name, personName, theme) {
+
+    //the information needed to be stored in datatbase 
+    const [resume, setResume] = React.useState('');
+    const [uni, setUni] = React.useState([]);
+   
+
+    // project information
+    const getProjectInfo = () => {
+        apiCall(`/project/${id}`, "GET").then((res) => {
+          setProjectInfo(res);
+        });
+    };
+
+    // style function
+    function getStyles(name, uniName, theme) {
         return {
             fontWeight:
-                personName.indexOf(name) === -1
+                uniName.indexOf(name) === -1
                     ? theme.typography.fontWeightRegular
                     : theme.typography.fontWeightMedium,
         };
     }
-    const theme = useTheme();
-    const [personName, setPersonName] = React.useState([]);
 
-    const handleChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setPersonName(
-            // On autofill we get a stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
+    useEffect(() => {
+        const user = apiCall('/profile', 'GET');
+        user.then(data => {
+            setEmail(data.email)
+            setFirstname(data.name)
+            setLastname(data.name)
+        })
+        getProjectInfo();
+    }, [])
+
+    
+    const theme = useTheme();
+    
+    //submit function
     function apply() {
         navigate('/dashboard/industryp')
     }
+
     return (
         <>
             <NavigationBtn></NavigationBtn>
@@ -55,37 +81,36 @@ function Appliacation() {
             <React.Fragment>
                 <CssBaseline />
                 <Container sx={{ border: '2px solid black', margin: '20px' }}>
-                    <Box sx={{ height: '80vh', fontSize: '30px', display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ bgcolor: '#C0C0C0', height: '80vh', fontSize: '30px', display: 'flex', justifyContent: 'center' }}>
                         <div>
-                            <b>Apply to this project</b>
+                            <div style={{ position: 'relative', left: '310px' }}><b >Apply to this project <u>{projectInfo.title}</u></b></div>
                             <div>
 
                             </div>
                             <div>
-                                <TextField sx={{ margin: '20px' }} label="First name" id="outlined-size-small" />
-                                <TextField sx={{ margin: '20px' }} label="Last name" id="outlined-size-small" />
+                                <TextField sx={{ margin: '20px', width: '450px' }} label="First name" id="outlined-size-small" value={firstname} />
+                                <TextField sx={{ margin: '20px', width: '450px' }} label="Last name" id="outlined-size-small" value={lastname} />
                             </div>
                             <div>
-                                <TextField sx={{ margin: '20px' }} label="Email" id="outlined-size-small" defaultValue="Small" size="first name" />
+                                <TextField sx={{ margin: '20px', width: '450px' }} label="Email" id="outlined-size-small" value={email} size="first name" />
                             </div>
-                            <div style={{ fontSize: '20px' }}>Education</div>
+                            <div style={{ fontSize: '23px' }}>Education</div>
                             <div>
-                                <FormControl sx={{ m: 1, width: 300 }}>
+                                <FormControl sx={{ m: 1, width: 450, marginLeft: '20px' }}>
                                     <InputLabel id="demo-multiple-name-label">university</InputLabel>
                                     <Select
                                         labelId="demo-multiple-name-label"
                                         id="demo-multiple-name"
-                                        multiple
-                                        value={personName}
-                                        onChange={handleChange}
+                                        value={uni}
+                                        onChange={(e)=>{setUni(e.target.value)}}
                                         input={<OutlinedInput label="uni" />}
 
                                     >
-                                        {names.map((name) => (
+                                        {Uninames.map((name) => (
                                             <MenuItem
                                                 key={name}
                                                 value={name}
-                                                style={getStyles(name, personName, theme)}
+                                                style={getStyles(name, uni, theme)}
                                             >
                                                 {name}
                                             </MenuItem>
@@ -94,17 +119,26 @@ function Appliacation() {
                                 </FormControl>
                             </div>
 
-                            <div style={{ fontSize: '20px' }}>resumes</div>
-                            <textarea name="" id="" cols="60" rows="6"></textarea>
-                            <div><Button onClick={apply}>submit</Button>
+                            <div style={{ fontSize: '23px' }}>Resumes</div>
+                            <textarea name="" id="" cols="137" rows="8.3" style={{ marginLeft: '20px' }} onChange={(e) => {setResume(e.target.value)}}></textarea>
+                            <div><Button onClick={apply} variant="contained" sx={{ marginLeft: '450px' }}>submit</Button>
                             </div>
                         </div>
+
+
+
+
                     </Box>
+
+
                 </Container>
             </React.Fragment>
+
+
+
         </>
     );
 
 }
 
-export default Appliacation;
+export default Application;

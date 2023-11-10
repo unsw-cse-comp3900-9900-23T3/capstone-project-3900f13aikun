@@ -244,8 +244,8 @@ const InitialDash = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              {localStorage.getItem("token") ? (
-                <Button variant="outlined"  onClick={() => navigate("/Application")}>
+              {localStorage.getItem("token") && !(role === 2)? (
+                <Button variant="outlined"  onClick={() => navigate(`/application/${item.id}`)}>
                   Apply
                 </Button>
               ) : null}
