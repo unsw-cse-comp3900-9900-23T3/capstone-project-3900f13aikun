@@ -683,13 +683,22 @@ def unsaved_saved_project_route(project_id):
 def get_recommend_teacher_route():
     current_user_id = get_jwt_identity()
     current_user = db.session.get(User, current_user_id)
-    teacher = db.session.query(User).filter(User.role == UserRole.AcademicSupervisor.value)
+    teachers = db.session.query(User).filter(User.role == UserRole.AcademicSupervisor.value)
 
-    if not current_user.project_intention:
-        return users_sc.jsonify(teacher)
+    if current_user.project_intention is not None:
+        teachers = teachers.filter(User.project_intention.op('&&')(current_user.project_intention))
 
-    teacher = teacher.filter(User.project_intention.op('&&')(current_user.project_intention)).all()
-    return users_sc.jsonify(teacher)
+    saved_users = db.session.query(UserSaved).filter(UserSaved.user_id == current_user_id).all()
+    saved_users_ids = []
+    for u in saved_users:
+        saved_users_ids.append(u.saved_user_id)
+
+    result = []
+    for teacher in teachers:
+        user_data = UserSchema().dump(teacher)
+        user_data['is_saved'] = teacher.user_id in saved_users_ids
+        result.append(user_data)
+    return jsonify(result)
 
 
 @app.route("/savedUser", methods=["GET"])
@@ -701,26 +710,23 @@ def get_saved_users_route():
     return users_saved_sc.jsonify(saved_users)
 
 
-@app.route("/savedUser", methods=["POST"])
+@app.route("/savedUser/<user_id>", methods=["GET"])
 @jwt_required()
-def add_saved_users_route():
-    try:
-        data = CREATE_SAVED_USER_SCHEMA.validate(request.json)
-    except SchemaError as error:
-        return {"msg": str(error)}, 400
-
+def add_saved_users_route(user_id):
     current_user_id = get_jwt_identity()
-    saved_user = UserSaved(current_user_id, data["saved_user_id"])
+    saved_user = UserSaved(current_user_id, user_id)
     db.session.add(saved_user)
     db.session.commit()
 
     return jsonify({"message": "success"})
 
 
-@app.route("/unSavedUser/<id>", methods=["DELETE"])
+@app.route("/unSavedUser/<user_id>", methods=["DELETE"])
 @jwt_required()
-def delete_saved_users_route(id):
-    un_saved_user = db.session.get(UserSaved, id)
+def delete_saved_users_route(user_id):
+    current_user_id = get_jwt_identity()
+    un_saved_user = db.session.query(UserSaved).filter(
+        and_(UserSaved.user_id == current_user_id, UserSaved.saved_user_id == user_id)).first()
 
     if not un_saved_user:
         return {"status": "Not Found"}, 404
