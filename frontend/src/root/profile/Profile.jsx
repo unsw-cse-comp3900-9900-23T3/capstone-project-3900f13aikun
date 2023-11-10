@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import NavigationBtn from "../../components/NavigationBtn";
 import { FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
-import { apiCall, checkEmail, checkSkills, checkWorkRight, fileToDataUrl } from "../../components/HelpFunctions";
+import { apiCall, checkEmail, checkSkills, checkWorkRight, fileToDataUrl, checkIntention } from "../../components/HelpFunctions";
 import { Pagebackground } from "../../components/StyledElement";
 
 function Profile() {
@@ -26,14 +26,14 @@ function Profile() {
         setEmail(data.email);
         setName(data.name);
         setWorkRight(data.work_rights || []);
-        setSkill(data.skill);
+        setSkill(data.skill || '');
         setAvatarUrl(data.avatarUrl);
         setIntention(data.project_intention || []);
       }
     });
   }, []);
 
-  async function updateProfile() {
+ const updateProfile =() => {
     const res = apiCall(`/profile`, "PUT", {
       name: name,
       work_rights: workRight,
@@ -70,7 +70,7 @@ function Profile() {
   };
 
   function checkProfile() {
-    if (checkEmail(email) && checkWorkRight(workRight) && checkSkills(skill)) {
+    if (checkEmail(email) && checkWorkRight(workRight) && checkIntention(intention) && checkSkills(skill)) {
       updateProfile();
     }
   }

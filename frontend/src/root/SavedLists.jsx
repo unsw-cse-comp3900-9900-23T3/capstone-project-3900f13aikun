@@ -12,6 +12,7 @@ import { Pagebackground } from "../components/StyledElement";
 import { getJobType, getPaymentType, getOpportunityType } from "../components/EnumMap";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { getIntention, getWorkRights } from "../components/EnumMap";
 
 function SavedLists() {
 
@@ -20,6 +21,7 @@ function SavedLists() {
     const [savedProjects, setSavedProjects] = React.useState([]);
     const path = useLocation();
     const [savedPage, setSavedPage] = React.useState("");
+    const [savedSupervisors, setSavedSupervisors] = React.useState("");
 
     const handlePage = (page) => {
         setSavedPage(page);
@@ -44,15 +46,24 @@ function SavedLists() {
         });
         if (path.pathname === '/saved-projects') {
             setSavedPage('/saved-projects')
-        } else if (path.pathname === '/saved-academic-supervisors') {
-            setSavedPage('/saved-academic-supervisors')
         }
     }, []);
+
+    React.useEffect(() => {
+        apiCall(`/savedUser`, "GET").then((res) => {
+            setSavedSupervisors(res);
+        });
+        if (path.pathname === '/saved-academic-supervisors') {
+            setSavedSupervisors('/saved-academic-supervisors')
+        }
+    }, []);
+
+
 
     return (
         <>
             <NavigationBtn></NavigationBtn>
-            <Pagebackground>Saved Information</Pagebackground>
+            <Pagebackground>Saved Lists</Pagebackground>
             <Box sx={{ position: 'relative', top: '20px' }}>
                 <Tabs value={savedPage} aria-label="wrapped label tabs example">
                     <Tab sx={{ fontSize: "15px" }} value={"/saved-projects"} label="Saved Projects" onClick={() => handlePage('/saved-projects')} />
@@ -88,14 +99,6 @@ function SavedLists() {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button
-                                    variant="contained"
-                                    size="small"
-                                    onClick={() => {
-                                        // navigate(`/edit-project/${item.id}`);
-                                    }}>
-                                    Delete
-                                </Button>
                             </CardActions>
                         </Card>
                     ))}
@@ -106,11 +109,11 @@ function SavedLists() {
             )}
 
             {/* Saved Academic Supervisors*/}
-            {savedPage === '/saved-academic-supervisors' && (savedProjects.length !== 0 ? (
+            {savedPage === '/saved-academic-supervisors' && (savedSupervisors.length !== 0 ? (
                 <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
-                    <Typography marginTop="50px">The total numbers of academic supervisors: {savedProjects.length}</Typography>
-                    {savedProjects.map((item) => (
-                        <Card sx={{ width: 400, border: '2px solid lightgray' }}>
+                    <Typography marginTop="50px">The total numbers of academic supervisors: {savedSupervisors.length}</Typography>
+                    {savedSupervisors.map((item) => (
+                        <Card key={item.id} sx={{ width: 400, border: '2px solid lightgray' }}>
                             <CardContent>
                                 <Typography
                                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -118,30 +121,24 @@ function SavedLists() {
                                     variant="h5"
                                     component="div"
                                     onClick={() => {
-                                        navigate(`/project-detail/${item.id}`);
+                                        navigate(`/profile-detail/${item.saved_user.user_id}`);
                                     }}>
-                                    {item.title}
+                                    {item.saved_user.name}
                                 </Typography>
                                 <Typography variant="body1" gutterBottom>
-                                    Location: <span style={{ color: '#555' }}>{item.location}</span>
+                                    Email: <span style={{ color: '#555' }}>{item.saved_user.email}</span>
                                 </Typography>
                                 <Typography variant="body1" gutterBottom>
-                                    Project type: <span style={{ color: '#555' }}>{getJobType(item.job_classification)}</span>
+                                    WorkRight: <span style={{ color: '#555' }}>
+                                        {Array.isArray(item.saved_user.work_rights) ? item.saved_user.work_rights.map(getWorkRights).join(', ') : ''}
+                                    </span>
                                 </Typography>
                                 <Typography variant="body1" gutterBottom>
-                                    {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
+                                    Project Intention: <span style={{ color: '#555' }}>
+                                        {Array.isArray(item.saved_user.project_intention) ? item.saved_user.project_intention.map(getIntention).join(', ') : ''}
+                                    </span>
                                 </Typography>
                             </CardContent>
-                            <CardActions>
-                                <Button
-                                    variant="contained"
-                                    size="small"
-                                    onClick={() => {
-                                        // navigate(`/edit-project/${item.id}`);
-                                    }}>
-                                    Delete
-                                </Button>
-                            </CardActions>
                         </Card>
                     ))}
                 </Box>
