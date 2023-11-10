@@ -26,23 +26,29 @@ function Application() {
         'other'
 
     ];
-    
+
     // the information of logging user
     const [firstname, setFirstname] = React.useState('');
-    const [lastname, setLastname] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [projectInfo, setProjectInfo] = useState({});
-
+    const [myGroups, setMyGroups] = useState([]);
+    
 
     //the information needed to be stored in database 
     const [resume, setResume] = React.useState('');
     const [uni, setUni] = React.useState([]);
-   
+    const [chooseGroup, setChooseGroup] = useState([]);
+    const getJoinedGroups = () => {
+        apiCall(`/joinedGroup`, "GET").then((res) => {
+            setMyGroups(res);
+        });
+    };
+
 
     // project information
     const getProjectInfo = () => {
         apiCall(`/project/${id}`, "GET").then((res) => {
-          setProjectInfo(res);
+            setProjectInfo(res);
         });
     };
 
@@ -61,16 +67,17 @@ function Application() {
         user.then(data => {
             setEmail(data.email)
             setFirstname(data.name)
-            setLastname(data.name)
         })
         getProjectInfo();
+        getJoinedGroups();
     }, [])
 
-    
+    console.log(myGroups)
+    console.log(chooseGroup)
     const theme = useTheme();
-    
-    
-    
+
+
+
     // **********
     //submit function
     // spec: After the submit button being clicked, store the resume and university, mark this project which is applied by the corresponding user
@@ -83,7 +90,7 @@ function Application() {
     // 
     //        the group project can only be applied by the group
     // **********
-    
+
     function apply() {
         navigate('/dashboard/industryp')
         localStorage.setItem('applied', 1);
@@ -97,20 +104,22 @@ function Application() {
             <React.Fragment>
                 <CssBaseline />
                 <Container sx={{ border: '2px solid black', margin: '20px' }}>
-                    <Box sx={{ bgcolor: '#C0C0C0', height: '80vh', fontSize: '30px', display: 'flex', justifyContent: 'center' }}>
+                    <Box sx={{ bgcolor: '#F0F0F0', height: '80vh', fontSize: '30px', display: 'flex', justifyContent: 'center' }}>
                         <div>
                             <div style={{ position: 'relative', left: '310px' }}><b >Apply to this project <u>{projectInfo.title}</u></b></div>
                             <div>
 
                             </div>
                             <div>
-                                <TextField sx={{ margin: '20px', width: '450px' }} label="First name" id="outlined-size-small" value={firstname} />
-                                <TextField sx={{ margin: '20px', width: '450px' }} label="Last name" id="outlined-size-small" value={lastname} />
+                                <TextField sx={{ margin: '20px', width: '900px' }} label="First name" id="outlined-size-small" value={firstname} />
                             </div>
                             <div>
                                 <TextField sx={{ margin: '20px', width: '450px' }} label="Email" id="outlined-size-small" value={email} size="first name" />
                             </div>
-                            <div style={{ fontSize: '23px' }}>Education</div>
+                            {projectInfo.opportunity_type === 3 ? 
+                             <div style={{ fontSize: '23px' }}> Choose your Uni and Group</div>:
+                             <div style={{ fontSize: '23px' }}>Choose your Uni</div>}
+                            
                             <div>
                                 <FormControl sx={{ m: 1, width: 450, marginLeft: '20px' }}>
                                     <InputLabel id="demo-multiple-name-label">university</InputLabel>
@@ -118,7 +127,7 @@ function Application() {
                                         labelId="demo-multiple-name-label"
                                         id="demo-multiple-name"
                                         value={uni}
-                                        onChange={(e)=>{setUni(e.target.value)}}
+                                        onChange={(e) => { setUni(e.target.value) }}
                                         input={<OutlinedInput label="uni" />}
 
                                     >
@@ -133,10 +142,35 @@ function Application() {
                                         ))}
                                     </Select>
                                 </FormControl>
+                                
+                                {projectInfo.opportunity_type === 3 && <FormControl sx={{ m: 1, width: 450, marginLeft: '20px' }}>
+                                    <InputLabel id="demo-multiple-name-label">Group</InputLabel>
+                                    <Select
+                                        labelId="demo-multiple-name-label"
+                                        id="demo-multiple-name"
+                                        value={chooseGroup}
+                                        onChange={(e) => { setChooseGroup(e.target.value) }}
+                                        input={<OutlinedInput label="uni" />}
+
+                                    >
+                                        {myGroups.map((group) => (
+                                            <MenuItem
+                                                key={group}
+                                                value={group}
+                                                style={getStyles(group, group.group_name, theme)}
+                                            >
+                                                {group.group_name}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>}
+
+
                             </div>
 
+
                             <div style={{ fontSize: '23px' }}>Resumes</div>
-                            <textarea name="" id="" cols="137" rows="8.3" style={{ marginLeft: '20px' }} onChange={(e) => {setResume(e.target.value)}}></textarea>
+                            <textarea name="" id="" cols="137" rows="8.3" style={{ marginLeft: '20px' }} onChange={(e) => { setResume(e.target.value) }}></textarea>
                             <div><Button onClick={apply} variant="contained" sx={{ marginLeft: '450px' }}>submit</Button>
                             </div>
                         </div>

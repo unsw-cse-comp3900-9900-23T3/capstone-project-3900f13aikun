@@ -84,7 +84,7 @@ const InitialDash = () => {
     });
   };
 
-  const getProjectDetail= (id) => {
+  const getProjectDetail = (id) => {
     if (localStorage.getItem("token")) {
       navigate(`/project-detail/${id}`)
     } else {
@@ -260,14 +260,18 @@ const InitialDash = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              {localStorage.getItem("token") && !(role === 2) && localStorage.getItem('applied') ?
+              {(localStorage.getItem("token") && role === 2) ?
                 (
                   <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
                     Apply
                   </Button>
-                ) : <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} >
-                  Apply
-                </Button>}
+                ) : localStorage.getItem('applied')
+                  ?
+                  <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
+                    Apply
+                  </Button> : <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} >
+                    Apply
+                  </Button>}
 
               {localStorage.getItem("token") && !item.is_saved ? (
                 <Button variant="outlined" onClick={() => handleSave(item.id)}>
