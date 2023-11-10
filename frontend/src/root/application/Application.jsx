@@ -34,7 +34,7 @@ function Application() {
     const [projectInfo, setProjectInfo] = useState({});
 
 
-    //the information needed to be stored in datatbase 
+    //the information needed to be stored in database 
     const [resume, setResume] = React.useState('');
     const [uni, setUni] = React.useState([]);
    
@@ -69,10 +69,26 @@ function Application() {
     
     const theme = useTheme();
     
+    
+    
+    // **********
     //submit function
+    // spec: After the submit button being clicked, store the resume and university, mark this project which is applied by the corresponding user
+    //       
+    //       return the dashboard page and at the applied project page (Apppro.jsx) there should be a project information shown applied by the user
+    //      
+    //       (one user should only apply one project one time, after the user applied, the apply button should be disabled until the user delete the applied project)
+    // 
+    //       the notification page of the corresponding industry partner will show a message which ask the industry partner if accepting or declining
+    // 
+    //        the group project can only be applied by the group
+    // **********
+    
     function apply() {
         navigate('/dashboard/industryp')
+        localStorage.setItem('applied', 1);
     }
+
 
     return (
         <>
@@ -124,18 +140,9 @@ function Application() {
                             <div><Button onClick={apply} variant="contained" sx={{ marginLeft: '450px' }}>submit</Button>
                             </div>
                         </div>
-
-
-
-
                     </Box>
-
-
                 </Container>
             </React.Fragment>
-
-
-
         </>
     );
 

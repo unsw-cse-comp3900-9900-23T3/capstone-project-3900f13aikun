@@ -93,8 +93,8 @@ export const NavigationBtn = () => {
   }, [name, picture, email, role, path.pathname]);
 
   function logout() {
-    localStorage.removeItem('token')
-    localStorage.removeItem('userId')
+
+    localStorage.clear();
     navigate('/')
   }
 
@@ -165,7 +165,7 @@ export const NavigationBtn = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem onClick={application}>Apply project</MenuItem>
+                <MenuItem onClick={application}>Applied project</MenuItem>
                 <MenuItem onClick={notification}>Notification</MenuItem>
                 <MenuItem onClick={recommendProjects}>Recommend Projects</MenuItem>
                 <MenuItem onClick={savedProjects}>Saved projects</MenuItem>

@@ -244,11 +244,15 @@ const InitialDash = () => {
               </Typography>
             </CardContent>
             <CardActions>
-              {localStorage.getItem("token") && !(role === 2)? (
-                <Button variant="outlined"  onClick={() => navigate(`/application/${item.id}`)}>
+              {localStorage.getItem("token") && !(role === 2) && localStorage.getItem('applied') ?
+                (
+                  <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
+                    Apply
+                  </Button>
+                ) : <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} >
                   Apply
-                </Button>
-              ) : null}
+                </Button>}
+
               {localStorage.getItem("token") && !item.is_saved ? (
                 <Button variant="outlined" onClick={() => handleSave(item.id)}>
                   Save
