@@ -83,6 +83,14 @@ const InitialDash = () => {
     });
   };
 
+  const getProjectDetail= (id) => {
+    if (localStorage.getItem("token")) {
+      navigate(`/project-detail/${id}`)
+    } else {
+      alert('Please logged in');
+    }
+  }
+
   const handleSearch = (page) => {
     const data = { keyword, location, job_classification: classification, opportunity_type: opportunityType, publish_date_type: publishTime, payment_type: paymentType };
     let temp = [];
@@ -238,7 +246,7 @@ const InitialDash = () => {
                   variant="h5"
                   component="div"
                   onClick={() => {
-                    navigate(`/project-detail/${item.user_id}`);
+                    getProjectDetail(item.user_id);
                   }}>
                   {item.title}
                 </Typography>
@@ -303,7 +311,7 @@ const InitialDash = () => {
                 </CardContent>
               </Card>
             ))) : (
-              <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>There is nothing, not logged in or no projects published</span>
+              <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>Please logged in or there is no project for you.</span>
             )}
             {(localStorage.getItem("token") && recProjects.length !== 0) ? (
               <Button
@@ -342,7 +350,7 @@ const InitialDash = () => {
               </Card>
             ))) : (
               <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>
-                There is nothing, please logged in or use the save button on each job listing to to save it.
+                Please logged in or use the save button on each job listing to to save it.
               </span>
             )}
             {(localStorage.getItem("token") && savedProjects.length !== 0) ? (
@@ -385,7 +393,7 @@ const InitialDash = () => {
                 </Card>
               ))) : (
                 <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>
-                  There is nothing, please logged in.
+                  Please logged in or there is no academic supervisior for you.
                 </span>
               )}
               {(localStorage.getItem("token") && recSupervisor.length !== 0) ? (
