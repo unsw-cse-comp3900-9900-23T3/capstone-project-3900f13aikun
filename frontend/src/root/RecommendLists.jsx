@@ -70,9 +70,9 @@ function RecommendLists() {
   }
 
   const handleRecSave = (id) => {
-    // apiCall(`/saved/project/${id}`, "GET").then((res) => {
-    //   getRecProjects();
-    // });
+    apiCall(`/saved/project/${id}`, "GET").then((res) => {
+      getRecProjects();
+    });
   };
 
   const handleRecUnSave = (id) => {
