@@ -12,7 +12,7 @@ from flask_mail import Mail, Message
 from bcrypt import hashpw, gensalt, checkpw
 from sqlalchemy import desc
 from datetime import datetime
-from sqlalchemy import or_, not_
+from sqlalchemy import or_, not_, and_
 from datetime import timedelta
 from sqlalchemy.orm import joinedload
 
@@ -437,8 +437,10 @@ def delete_project(id):
 
 
 @app.route("/recommend/project", methods=["GET"])
-@jwt_required()
+@jwt_required(optional=True)
 def get_recommend_project_route():
+    current_user_id = get_jwt_identity()
+    current_user = db.session.get(User, current_user_id)
     projects = db.session.query(Project)
     current_user_id = get_jwt_identity()
     current_user = db.session.get(User, current_user_id)
@@ -447,7 +449,13 @@ def get_recommend_project_route():
         return projects_sc.jsonify(projects)
 
     projects = projects.filter(Project.job_classification.in_(current_user.project_intention)).all()
-    return projects_sc.jsonify(projects)
+    result = []
+    for project in projects:
+        current_user = db.session.get(User, current_user_id)
+        project_data = ProjectSchema().dump(project)
+        project_data['is_saved'] = project in current_user.saved_projects
+        result.append(project_data)
+    return jsonify(result)
 
 
 @app.route("/group", methods=["POST"])
@@ -563,7 +571,7 @@ def get_user_groups_route():
 @jwt_required()
 def remove_group_member():
     try:
-        data = REMOVE_GROUP_MEMBER__SCHEMA.validate(request.json)
+        data = REMOVE_GROUP_MEMBER_SCHEMA.validate(request.json)
     except SchemaError as error:
         return {"msg": str(error)}, 400
 
@@ -670,6 +678,65 @@ def unsaved_saved_project_route(project_id):
 
     else:
         return {"msg": "The project is not saved"}, 404
+
+
+@app.route("/recommend/teacher", methods=["GET"])
+@jwt_required()
+def get_recommend_teacher_route():
+    current_user_id = get_jwt_identity()
+    current_user = db.session.get(User, current_user_id)
+    teachers = db.session.query(User).filter(User.role == UserRole.AcademicSupervisor.value)
+
+    if current_user.project_intention is not None:
+        teachers = teachers.filter(User.project_intention.op('&&')(current_user.project_intention))
+
+    saved_users = db.session.query(UserSaved).filter(UserSaved.user_id == current_user_id).all()
+    saved_users_ids = []
+    for u in saved_users:
+        saved_users_ids.append(u.saved_user_id)
+
+    result = []
+    for teacher in teachers:
+        user_data = UserSchema().dump(teacher)
+        user_data['is_saved'] = teacher.user_id in saved_users_ids
+        result.append(user_data)
+    return jsonify(result)
+
+
+@app.route("/savedUser", methods=["GET"])
+@jwt_required()
+def get_saved_users_route():
+    current_user_id = get_jwt_identity()
+    saved_users = db.session.query(UserSaved).filter(UserSaved.user_id == current_user_id)
+
+    return users_saved_sc.jsonify(saved_users)
+
+
+@app.route("/savedUser/<user_id>", methods=["GET"])
+@jwt_required()
+def add_saved_users_route(user_id):
+    current_user_id = get_jwt_identity()
+    saved_user = UserSaved(current_user_id, user_id)
+    db.session.add(saved_user)
+    db.session.commit()
+
+    return jsonify({"message": "success"})
+
+
+@app.route("/unSavedUser/<user_id>", methods=["DELETE"])
+@jwt_required()
+def delete_saved_users_route(user_id):
+    current_user_id = get_jwt_identity()
+    un_saved_user = db.session.query(UserSaved).filter(
+        and_(UserSaved.user_id == current_user_id, UserSaved.saved_user_id == user_id)).first()
+
+    if not un_saved_user:
+        return {"status": "Not Found"}, 404
+
+    db.session.delete(un_saved_user)
+    db.session.commit()
+
+    return jsonify({"message": "success"})
 
 
 def generate_code():

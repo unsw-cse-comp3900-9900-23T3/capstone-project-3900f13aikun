@@ -16,11 +16,15 @@ export const NavigationBtn = () => {
   const [isshow, setIsshow] = React.useState(true);
   const [islog, setIslog] = React.useState(false);
   const [value, setValue] = React.useState('one');
-  const [picture, setPicture] = React.useState("")
-  const [email, setEmail] = React.useState('')
-  const [name, setName] = React.useState('')
-  const [role, setRole] = React.useState(0)
+  const [picture, setPicture] = React.useState("");
+  const [email, setEmail] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [role, setRole] = React.useState(0);
 
+  const NavRefresh = (paths) => {
+    navigate(paths);
+    window.location.reload();
+  }
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -32,24 +36,25 @@ export const NavigationBtn = () => {
   };
 
   function switchAccount() {
-    navigate('/login')
+    NavRefresh('/login')
     localStorage.clear()
   }
 
-  function savedProjects() {
-    navigate('/saved-projects')
+  function savedLists() {
+    NavRefresh('/saved-projects')
   }
 
   function application() {
-    navigate('/apppro')
+    NavRefresh('/apppro')
   }
 
-  function recommendProjects() {
-    navigate('/recommend-projects')
+  function recommendLists() {
+    NavRefresh('/recommend-projects')
   }
+
 
   function notification() {
-    navigate('/notification')
+    NavRefresh('/notification')
   }
 
   const path = useLocation();
@@ -70,7 +75,7 @@ export const NavigationBtn = () => {
 
     if (path.pathname === '/') {
       setValue('one');
-      setIsshow(true);
+      // setIsshow(true);
     } else if (path.pathname === '/profile' || path.pathname === '/profile-detail') {
       setValue('two');
     } else if (path.pathname === '/my-created-project' || path.pathname === '/create-project') {
@@ -79,6 +84,14 @@ export const NavigationBtn = () => {
       setValue('four');
     } else if (path.pathname === '/my-project' || path.pathname === '/project-delivery/:id') {
       setValue('five');
+    } else if (path.pathname === '/saved-projects') {
+      setValue('six');
+    } else if (path.pathname === '/saved-academic-supervisors') {
+      setValue('seven');
+    } else if (path.pathname === '/recommend-academic-supervisors') {
+      setValue('eight');
+    } else if (path.pathname === '/recommend-projects') {
+      setValue('nine');
     } else if (path.pathname === '/register') {
       setIsshow(false);
     } else if (path.pathname === '/login') {
@@ -102,7 +115,7 @@ export const NavigationBtn = () => {
     if (!localStorage.getItem('token')) {
       alert('please login in')
     } else {
-      navigate('/profile-detail')
+      NavRefresh('/profile-detail')
     }
   }
 
@@ -110,7 +123,7 @@ export const NavigationBtn = () => {
     if (!localStorage.getItem('token')) {
       alert('please login in')
     } else {
-      navigate('/my-project')
+      NavRefresh('/my-project')
     }
   }
 
@@ -131,10 +144,10 @@ export const NavigationBtn = () => {
               value={value}
               aria-label="wrapped label tabs example"
             >
-              <Tab value="one" label="project search" onClick={() => { navigate('/') }} />
+              <Tab value="one" label="project search" onClick={() => { NavRefresh('/') }} />
               <Tab value="two" label="Profile" onClick={testProfile} />
-              {role === 2 && <Tab value="three" label="Create Project" onClick={() => { navigate('/my-created-project') }}></Tab>}
-              {role === 1 && <Tab value="four" label="My Group" onClick={() => { navigate('/my-group', '/my-create-group') }} ></Tab>}
+              {role === 2 && <Tab value="three" label="Create Project" onClick={() => { NavRefresh('/my-created-project') }}></Tab>}
+              {role === 1 && <Tab value="four" label="My Group" onClick={() => { NavRefresh('/my-group') }} ></Tab>}
               <Tab value="five" label="My Project" onClick={testMyProject}></Tab>
             </Tabs>
           </Box>}
@@ -167,8 +180,8 @@ export const NavigationBtn = () => {
               >
                 <MenuItem onClick={application}>Applied project</MenuItem>
                 <MenuItem onClick={notification}>Notification</MenuItem>
-                <MenuItem onClick={recommendProjects}>Recommend Projects</MenuItem>
-                <MenuItem onClick={savedProjects}>Saved projects</MenuItem>
+                <MenuItem onClick={recommendLists}>Recommended Lists</MenuItem>
+                <MenuItem onClick={savedLists}>Saved Lists</MenuItem>
                 <MenuItem onClick={switchAccount}>Switch account</MenuItem>
               </Menu>
             </div>

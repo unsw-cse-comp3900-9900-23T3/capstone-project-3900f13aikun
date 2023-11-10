@@ -102,7 +102,15 @@ export function checkName(name) {
 
 export function checkWorkRight(workRight) {
   if (workRight.length === 0) {
-    alert("Select at least one option");
+    alert("Select at least one option of workright");
+    return false;
+  }
+  return true;
+}
+
+export function checkIntention(intention) {
+  if (intention.length === 0) {
+    alert("Select at least one option of intention");
     return false;
   }
   return true;
@@ -171,3 +179,4 @@ export function checkPaymentType(paymentType) {
   }
   return true;
 }
+

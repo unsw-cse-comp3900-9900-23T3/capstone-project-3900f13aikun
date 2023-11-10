@@ -105,7 +105,10 @@ function SignUp() {
         if (data.error) {
           alert(data.error);
         } else {
+<<<<<<< HEAD
   
+=======
+>>>>>>> 23efc1001e64fd24302307a5376467d7043c3fd3
           setOpen(true);
         }
       });
