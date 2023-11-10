@@ -45,6 +45,7 @@ class User(db.Model):
     created_groups = db.relationship('Group', back_populates='creator')
     saved_projects = db.relationship('Project', secondary=user_saved_project)
 
+
     def __init__(self, role, email, password, name, passport):
         self.role = role
         self.email = email

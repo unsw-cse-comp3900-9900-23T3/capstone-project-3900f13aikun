@@ -70,15 +70,15 @@ function RecommendLists() {
   }
 
   const handleRecSave = (id) => {
-    // apiCall(`/saved/project/${id}`, "GET").then((res) => {
-    //   getRecProjects();
-    // });
+    apiCall(`/savedUser/${id}`, "GET").then((res) => {
+      getRecSupervisors();
+    });
   };
 
   const handleRecUnSave = (id) => {
-    // apiCall(`/unsaved/project/${id}`, "GET").then((res) => {
-    //   getRecProjects();
-    // });
+    apiCall(`/unSavedUser/${id}`, "DELETE").then((res) => {
+      getRecSupervisors();
+    });
   };
 
   React.useEffect(() => {
@@ -177,12 +177,12 @@ function RecommendLists() {
             </CardContent>
             <CardActions>
               {!item.is_saved && (
-                <Button variant="outlined" onClick={() => handleRecSave(item.id)}>
+                <Button variant="outlined" onClick={() => handleRecSave(item.user_id)}>
                   Save
                 </Button>
               )}
               {item.is_saved && (
-                <Button variant="outlined" onClick={() => handleRecUnSave(item.id)}>
+                <Button variant="outlined" onClick={() => handleRecUnSave(item.user_id)}>
                   UnSave
                 </Button>
               )}
