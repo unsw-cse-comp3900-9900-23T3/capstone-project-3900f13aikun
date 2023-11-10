@@ -282,7 +282,7 @@ const InitialDash = () => {
               Recommended Projects
             </Typography>
             {(localStorage.getItem("token") && recProjects.length !== 0) ? (recProjects.slice(0, 3).map((item) => (
-              <Card key={item.id} sx={{ maxWidth: 400, minWidth: 300, border: "2px solid lightgray", borderRadius: "30px" }}>
+              <Card key={item.id} sx={{ maxWidth: 350, minWidth: 320, border: "2px solid lightgray", borderRadius: "30px" }}>
                 <CardContent sx={{ marginLeft: "10px" }}>
                   <Typography
                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -320,7 +320,7 @@ const InitialDash = () => {
               Saved Projects
             </Typography>
             {(localStorage.getItem("token") && savedProjects.length !== 0) ? (savedProjects.slice(0, 3).map((item) => (
-              <Card sx={{ maxWidth: 400, minWidth: 300, border: '2px solid lightgray', borderRadius: "30px" }}>
+              <Card sx={{ maxWidth: 350, minWidth: 320, border: '2px solid lightgray', borderRadius: "30px" }}>
                 <CardContent sx={{ marginLeft: "10px" }}>
                   <Typography
                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -355,47 +355,48 @@ const InitialDash = () => {
           </Box>
 
           {/* Saved Academic Supervisors*/}
-          <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "100px" }}>
-            <Typography variant="h5" gutterBottom>
-              Recommended Academic Supervisors
-            </Typography>
-            {(localStorage.getItem("token") && recSupervisor.length !== 0) ? (recSupervisor.slice(0, 3).map((item) => (
-              <Card key={item.user_id} sx={{ maxWidth: 400, minWidth: 300, border: '2px solid lightgray', borderRadius: "30px" }}>
-                <CardContent sx={{ marginLeft: "10px" }}>
-                  <Typography
-                    sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    onClick={() => {
-                      navigate(`/profile-detail/${item.user_id}`);
-                    }}>
-                    {item.name}
-                  </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    Email: <span style={{ color: '#555' }}>{item.email}</span>
-                  </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    Project Intention:
-                    <span style={{ color: '#555' }}>
-                      {Array.isArray(item.project_intention) ? item.project_intention.map(getIntention).join(', ') : ''}
-                    </span>
-                  </Typography>
-                </CardContent>
-              </Card>
-            ))) : (
-              <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>
-                There is nothing, please logged in.
-              </span>
-            )}
-            {(localStorage.getItem("token") && recSupervisor.length !== 0) ? (
-              <Button
-                sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
-                onClick={() => { navigate('/recommended-academic-supervisors'); }}>
-                View All ({recSupervisor.length})
-              </Button>
-            ) : null}
-          </Box>
+          {role !== 3 ? (
+            <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "100px" }}>
+              <Typography variant="h5" gutterBottom>
+                Recommended Academic Supervisors
+              </Typography>
+              {(localStorage.getItem("token") && recSupervisor.length !== 0) ? (recSupervisor.slice(0, 3).map((item) => (
+                <Card key={item.user_id} sx={{ maxWidth: 350, minWidth: 320, border: '2px solid lightgray', borderRadius: "30px" }}>
+                  <CardContent sx={{ marginLeft: "10px" }}>
+                    <Typography
+                      sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      onClick={() => {
+                        navigate(`/profile-detail/${item.user_id}`);
+                      }}>
+                      {item.name}
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Email: <span style={{ color: '#555' }}>{item.email}</span>
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Project Intention: <span style={{ color: '#555' }}>
+                        {Array.isArray(item.project_intention) ? item.project_intention.map(getIntention).join(', ') : ''}
+                      </span>
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))) : (
+                <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>
+                  There is nothing, please logged in.
+                </span>
+              )}
+              {(localStorage.getItem("token") && recSupervisor.length !== 0) ? (
+                <Button
+                  sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
+                  onClick={() => { navigate('/recommend-academic-supervisors'); }}>
+                  View All ({recSupervisor.length})
+                </Button>
+              ) : null}
+            </Box>
+          ) : null}
         </Box>
       )}
     </div>
