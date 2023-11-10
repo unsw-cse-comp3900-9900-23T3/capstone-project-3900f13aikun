@@ -56,7 +56,11 @@ class User(db.Model):
 class UserSchema(ma.Schema):
     class Meta:
         fields = (
-        "user_id", "role", "email", "passport", "name", "work_rights", "project_intention", "skill", "avatarUrl")
+            "user_id", "role", "email", "passport", "name", "work_rights", "project_intention", "skill", "avatarUrl")
+
+
+user_sc = UserSchema()
+users_sc = UserSchema(many=True)
 
 
 class UserCode(db.Model):
@@ -69,10 +73,6 @@ class UserCode(db.Model):
         self.vcode = vcode
         self.email = email
         self.create_at = datetime.now()
-
-
-user_sc = UserSchema()
-users_sc = UserSchema(many=True)
 
 
 class Project(db.Model):
@@ -179,3 +179,29 @@ class GroupSchema(ma.Schema):
 
 group_sc = GroupSchema()
 groups_sc = GroupSchema(many=True)
+
+
+class UserSaved(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.ForeignKey(User.user_id))
+    user = db.relationship('User', foreign_keys=[user_id])
+    saved_user_id = db.Column(db.ForeignKey(User.user_id))
+    saved_user = db.relationship('User', foreign_keys=[saved_user_id])
+
+    def __init__(
+            self, user_id, saved_user_id
+    ):
+        self.user_id = user_id
+        self.saved_user_id = saved_user_id
+
+
+
+class UserSavedSchema(ma.Schema):
+    saved_user = ma.Nested(UserSchema)
+
+    class Meta:
+        fields = ("id", "user_id", "saved_user_id", "saved_user")
+
+
+user_saved_sc = UserSavedSchema()
+users_saved_sc = UserSavedSchema(many=True)

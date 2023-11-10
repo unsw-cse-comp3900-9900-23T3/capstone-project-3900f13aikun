@@ -561,7 +561,7 @@ def get_user_groups_route():
 @jwt_required()
 def remove_group_member():
     try:
-        data = REMOVE_GROUP_MEMBER__SCHEMA.validate(request.json)
+        data = REMOVE_GROUP_MEMBER_SCHEMA.validate(request.json)
     except SchemaError as error:
         return {"msg": str(error)}, 400
 
@@ -682,6 +682,45 @@ def get_recommend_teacher_route():
 
     teacher = teacher.filter(User.project_intention.op('&&')(current_user.project_intention)).all()
     return users_sc.jsonify(teacher)
+
+
+@app.route("/savedUser", methods=["GET"])
+@jwt_required()
+def get_saved_users_route():
+    current_user_id = get_jwt_identity()
+    saved_users = db.session.query(UserSaved).filter(UserSaved.user_id == current_user_id)
+
+    return users_saved_sc.jsonify(saved_users)
+
+
+@app.route("/savedUser", methods=["POST"])
+@jwt_required()
+def add_saved_users_route():
+    try:
+        data = CREATE_SAVED_USER_SCHEMA.validate(request.json)
+    except SchemaError as error:
+        return {"msg": str(error)}, 400
+
+    current_user_id = get_jwt_identity()
+    saved_user = UserSaved(current_user_id, data["saved_user_id"])
+    db.session.add(saved_user)
+    db.session.commit()
+
+    return jsonify({"message": "success"})
+
+
+@app.route("/unSavedUser/<id>", methods=["DELETE"])
+@jwt_required()
+def delete_saved_users_route(id):
+    un_saved_user = db.session.get(UserSaved, id)
+
+    if not un_saved_user:
+        return {"status": "Not Found"}, 404
+
+    db.session.delete(un_saved_user)
+    db.session.commit()
+
+    return jsonify({"message": "success"})
 
 
 def generate_code():

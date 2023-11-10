@@ -123,9 +123,14 @@ UPDATE_GROUP_SCHEMA = Schema(
         Optional("is_private"): And(Use(int), lambda i: i >= 0),
     })
 
-REMOVE_GROUP_MEMBER__SCHEMA = Schema(
+REMOVE_GROUP_MEMBER_SCHEMA = Schema(
     {
         "group_id": And(Use(int), lambda i: i >= 0),
         "user_id": And(Use(int), lambda i: i >= 0),
     })
 
+
+CREATE_SAVED_USER_SCHEMA = Schema(
+    {
+        "saved_user_id": And(Use(int), lambda i: i >= 0),
+    })
