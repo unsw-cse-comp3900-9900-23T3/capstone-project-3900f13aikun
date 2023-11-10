@@ -19,10 +19,7 @@ export default function ForgetPassword() {
   const [code, setCode] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-
-  const [rececode, setReceCode] = React.useState("");
-  const [userId, setUserId] = React.useState(0);
-
+  
   const handleSendClick = () => {
     const res = apiCall(`/resetPassword/sendCode`, "POST", { email: email });
     res.then((data) => {
@@ -59,6 +56,7 @@ export default function ForgetPassword() {
         if (data.error) {
           alert(data.error);
         } else {
+          localStorage.removeItem("token", data.token);
           navigate("/login");
         }
       });
