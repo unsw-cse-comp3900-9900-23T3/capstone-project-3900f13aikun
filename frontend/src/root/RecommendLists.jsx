@@ -41,10 +41,10 @@ function RecommendLists() {
   const getRecProjects = () => {
     apiCall(`/recommend/project`, "GET").then((res) => {
       setRecProjects(res);
+      if (path.pathname === "/recommend-projects") {
+        setRecPage("/recommend-projects")
+      }
     });
-    if (path.pathname === "/recommend-projects") {
-      setRecPage("/recommend-projects")
-    }
   }
 
   const handleSave = (id) => {
@@ -84,8 +84,6 @@ function RecommendLists() {
   React.useEffect(() => {
     getRecProjects();
     getRecSupervisors();
-    handleSave();
-    handleUnSave();
   }, []);
 
   return (

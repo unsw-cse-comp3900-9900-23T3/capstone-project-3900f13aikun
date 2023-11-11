@@ -47,9 +47,11 @@ const InitialDash = () => {
   }, [role]);
 
   React.useEffect(() => {
-    apiCall(`/savedProject`, "GET").then((res) => {
-      setSavedProjects(res);
-    });
+    if (localStorage.getItem("token")) {
+      apiCall(`/savedProject`, "GET").then((res) => {
+        setSavedProjects(res);
+      });
+    }
   }, []);
 
   const getRecProjects = () => {
@@ -83,7 +85,7 @@ const InitialDash = () => {
     });
   };
 
-  const getProjectDetail= (id) => {
+  const getProjectDetail = (id) => {
     if (localStorage.getItem("token")) {
       navigate(`/project-detail/${id}`)
     } else {
@@ -107,8 +109,10 @@ const InitialDash = () => {
   };
 
   useEffect(() => {
-    getRecProjects();
-    getRecSupervisors();
+    if (localStorage.getItem("token")) {
+      getRecProjects();
+      getRecSupervisors();
+    }
   }, []);
 
   useEffect(() => {
