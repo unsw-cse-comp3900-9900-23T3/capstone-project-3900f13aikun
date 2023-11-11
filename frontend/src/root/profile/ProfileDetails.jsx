@@ -50,26 +50,26 @@ function ProfileDetails() {
                 noValidate
                 autoComplete="off">
                 <TableContainer component={Paper} style={{ border: "2px solid #c0c0c0" }}>
-                    <Table>
+                    <Table style={{height: "350px"}}>
                         <TableRow>
-                            <TableCell>Email:</TableCell>
-                            <TableCell>{profileDetails.email}</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>Email:</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>{profileDetails.email}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Name:</TableCell>
-                            <TableCell>{profileDetails.name}</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>Name:</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>{profileDetails.name}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Workright:</TableCell>
-                            <TableCell>{Array.isArray(profileDetails.work_rights) ? profileDetails.work_rights.map(getWorkRights).join(', ') : ''}</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>Workright:</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>{Array.isArray(profileDetails.work_rights) ? profileDetails.work_rights.map(getWorkRights).join(', ') : ''}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Project Intention:</TableCell>
-                            <TableCell>{Array.isArray(profileDetails.project_intention) ? profileDetails.project_intention.map(getIntention).join(', ') : ''}</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>Project Intention:</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>{Array.isArray(profileDetails.project_intention) ? profileDetails.project_intention.map(getIntention).join(', ') : ''}</TableCell>
                         </TableRow>
                         <TableRow>
-                            <TableCell>Skills</TableCell>
-                            <TableCell>{profileDetails.skill}</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>Skills</TableCell>
+                            <TableCell style={{fontSize:"16px"}}>{profileDetails.skill}</TableCell>
                         </TableRow>
                     </Table>
                 </TableContainer>

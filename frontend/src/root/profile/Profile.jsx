@@ -172,10 +172,11 @@ function Profile() {
           <FormLabel style={{ fontWeight: "bold", color: "black" }}>Skills:</FormLabel>
           <TextField
             id="filled-basic"
+            variant="filled"
             style={{ width: "400px", borderWidth: "1px", borderStyle: "solid" }}
             value={skill}
             multiline
-            rows={4}
+            rows={6}
             onChange={(e) => {
               setSkill(e.target.value);
             }}
