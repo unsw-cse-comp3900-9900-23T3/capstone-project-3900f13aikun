@@ -43,8 +43,8 @@ class User(db.Model):
     avatarUrl = db.Column(db.Text())
     groups = db.relationship('Group', secondary='user_group', back_populates='members')
     created_groups = db.relationship('Group', back_populates='creator')
-    saved_projects = db.relationship('Project', secondary=user_saved_project)
-
+    saved_projects = db.relationship('Project', secondary=user_saved_project, cascade='all, delete-orphan',
+                                     single_parent=True )
 
     def __init__(self, role, email, password, name, passport):
         self.role = role
@@ -194,7 +194,6 @@ class UserSaved(db.Model):
     ):
         self.user_id = user_id
         self.saved_user_id = saved_user_id
-
 
 
 class UserSavedSchema(ma.Schema):
