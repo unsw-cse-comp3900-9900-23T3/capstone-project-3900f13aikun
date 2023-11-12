@@ -84,8 +84,6 @@ function RecommendLists() {
   React.useEffect(() => {
     getRecProjects();
     getRecSupervisors();
-    handleSave();
-    handleUnSave();
   }, []);
 
   return (

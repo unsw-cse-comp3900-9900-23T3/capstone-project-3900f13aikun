@@ -43,8 +43,9 @@ class User(db.Model):
     avatarUrl = db.Column(db.Text())
     groups = db.relationship('Group', secondary='user_group', back_populates='members')
     created_groups = db.relationship('Group', back_populates='creator')
-    saved_projects = db.relationship('Project', secondary=user_saved_project, cascade='all, delete-orphan',
-                                     single_parent=True )
+    saved_projects = db.relationship('Project', secondary=user_saved_project,
+                                     cascade='save-update, merge, refresh-expire',
+                                     )
 
     def __init__(self, role, email, password, name, passport):
         self.role = role
