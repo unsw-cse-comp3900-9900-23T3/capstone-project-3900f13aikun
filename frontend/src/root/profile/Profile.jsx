@@ -16,7 +16,7 @@ function Profile() {
   const [intention, setIntention] = React.useState([]);
   const [skill, setSkill] = React.useState("");
 
-  const [avatarUrl, setAvatarUrl] = React.useState("");
+  const [avatarUrl, setAvatarUrl] = React.useState(null);
 
   React.useEffect(() => {
     apiCall(`/profile`, "GET").then((data) => {
@@ -27,7 +27,11 @@ function Profile() {
         setName(data.name);
         setWorkRight(data.work_rights || []);
         setSkill(data.skill || '');
-        setAvatarUrl(data.avatarUrl);
+        if (data.avatarUrl == null) {
+          setAvatarUrl("https://d2w9rnfcy7mm78.cloudfront.net/8040974/original_ff4f1f43d7b72cc31d2eb5b0827ff1ac.png?1595022778?bc=0")
+        } else {
+          setAvatarUrl(data.avatarUrl);
+        }
         setIntention(data.project_intention || []);
       }
     });

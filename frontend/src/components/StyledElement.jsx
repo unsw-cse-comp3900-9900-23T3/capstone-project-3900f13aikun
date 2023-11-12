@@ -21,7 +21,7 @@ export const Iconchicken = styled('div')({
 export const Pagebackground = styled('Typography')({
     fontSize: '30px',
     backgroundColor: '#00008B',
-    width: '1515px',
+    width: '100%',
     color: 'white',
     padding: '40px',
 })

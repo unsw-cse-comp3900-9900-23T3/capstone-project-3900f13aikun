@@ -11,6 +11,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
+import { checkGroupName, checkGroupDescription, checkLimitNumbers, checkStatus } from '../../components/HelpFunctions';
 
 function MyCreateGroup() {
     const navigate = useNavigate();
@@ -57,6 +58,12 @@ function MyCreateGroup() {
             setIsPrivate(res.is_private);
         });
     };
+
+    const checkGroup = () => {
+        if (checkGroupName(groupName) && checkGroupDescription(description) && checkLimitNumbers(limitNumber) && checkStatus(isPrivate)) {
+            handleCreateClick();
+        }
+    }
 
     return (
         <>
@@ -121,7 +128,7 @@ function MyCreateGroup() {
                     color="success"
                     sx={{ marginTop: "30px" }}
                     onClick={() => {
-                        handleCreateClick();
+                        checkGroup();
                     }}>
                     Publish
                 </Button>
