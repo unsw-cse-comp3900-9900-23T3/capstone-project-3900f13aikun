@@ -53,7 +53,7 @@ function ProjectDetail() {
     <>
       <NavigationBtn></NavigationBtn>
       <Pagebackground>Project Details</Pagebackground>
-      <Box sx={{ paddingX: 10, paddingY: 5, marginRight: "200px" }}>
+      <Box sx={{ paddingX: 10, paddingY: 5, alignItems: "center", maxWidth: "800px" }}>
         <Typography variant="h4" gutterBottom >
           {projectInfo.title}
         </Typography>
@@ -67,7 +67,7 @@ function ProjectDetail() {
           {getOpportunityType(projectInfo.opportunity_type)} | {getPaymentType(projectInfo.payment_type)}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          <span style={{ color: "gray" }}>Posted 12h ago</span>
+          <span style={{ color: "gray" }}>Posted 1 day ago</span>
         </Typography>
 
         <Box sx={{ display: "flex", gap: 8, my: 2 }}>

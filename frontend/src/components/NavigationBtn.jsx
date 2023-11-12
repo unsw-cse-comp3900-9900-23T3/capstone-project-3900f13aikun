@@ -68,7 +68,11 @@ export const NavigationBtn = () => {
           setName(data.name)
           setEmail(data.email)
           setRole(data.role)
-          setPicture(data.avatarUrl)
+          if (data.avatarUrl == null) {
+            setPicture("https://d2w9rnfcy7mm78.cloudfront.net/8040974/original_ff4f1f43d7b72cc31d2eb5b0827ff1ac.png?1595022778?bc=0")
+          } else {
+            setPicture(data.avatarUrl);
+          }
         }
       })
     }
@@ -131,11 +135,11 @@ export const NavigationBtn = () => {
 
   return (
     <>
-      <Box sx={{ width: '100%', borderBottom: '2px black solid', paddingBottom: '18px' }}>
+      <Box sx={{ width: '100%', paddingBottom: '18px' }}>
 
         <Topselection>
           <div style={{ display: 'flex' }}>
-            <Iconchicken></Iconchicken>
+            <Iconchicken onClick={() => {NavRefresh('/')}}></Iconchicken>
             <div style={{ marginTop: '10px', width: '350px', marginLeft: '10px' }}><b style={{ fontSize: '20px' }}>Student Industry Project Management System</b></div>
           </div>
 
@@ -152,8 +156,8 @@ export const NavigationBtn = () => {
             </Tabs>
           </Box>}
 
-          {islog && (<div style={{ width: "120px", height: "70px", marginRight: "50px", borderRadius: "50%", overflow: "hidden" }}>
-            {picture && (<img src={picture} alt='avatarUrl' style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center center" }} ></img>)}
+          {islog && (<div style={{ width: "130px", height: "70px", marginRight: "50px", borderRadius: "50%", overflow: "hidden" }}>
+            {picture && (<img src={picture} alt='avatarUrl' onClick={() => NavRefresh('/profile')} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center center" }} ></img>)}
           </div>)
           }
           {islog && (<div style={{ position: 'relative', top: '15px', right: '40px' }}>
@@ -197,15 +201,9 @@ export const NavigationBtn = () => {
             : islog ? (<Button variant="contained" color="error" size='large' sx={{ marginTop: '13px', marginRight: '20px' }} onClick={logout}>logout</Button>)
               :
               <Button variant="contained" color="error" size='large' sx={{ marginTop: '13px', marginRight: '20px' }} onClick={() => navigate('/')}>return home</Button>}
-
-
         </Topselection>
-
-
       </Box>
-
     </>
-
   );
 }
 

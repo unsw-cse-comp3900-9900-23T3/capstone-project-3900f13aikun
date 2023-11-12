@@ -180,3 +180,34 @@ export function checkPaymentType(paymentType) {
   return true;
 }
 
+export function checkGroupName(groupName) {
+  if (groupName.trim() === "") {
+    alert("The name of the group you create cannot be empty");
+    return false;
+  }
+  return true;
+}
+
+export function checkGroupDescription(groupDescription) {
+  if (groupDescription.trim() === "") {
+    alert("The description of the group you create cannot be empty");
+    return false;
+  }
+  return true;
+}
+
+export function checkLimitNumbers(LimitNumber) {
+  if (LimitNumber.length < 2) {
+    alert("The limit numbers of the group you create must large than 2");
+    return false;
+  }
+  return true;
+}
+
+export function checkStatus(Status) {
+  if (Status === "") {
+    alert("The status of the group you create cannot be empty");
+    return false;
+  }
+  return true;
+}
