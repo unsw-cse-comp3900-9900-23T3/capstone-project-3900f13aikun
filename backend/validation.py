@@ -149,3 +149,15 @@ UPDATE_APPLY_PROJECT = Schema(
         "apply_status": And(Use(int), lambda i: i >= 0),
         "apply_id": And(Use(int), lambda i: i >= 0),
     })
+
+CREATE_FEEDBACK_SCHEMA = Schema(
+    {
+        "project_id": And(Use(int), lambda i: i >= 0),
+        Optional("demo_feedback"): And(str, len),
+        Optional("final_feedback"): And(str, len),
+        Optional("evaluating_deliverables"): And(str, len),
+        Optional("problems"): And(str, len),
+        Optional("contributions"): And(str, len),
+        Optional("student_experience"): And(str, len),
+        Optional("supervisor_experience"): And(str, len),
+    })

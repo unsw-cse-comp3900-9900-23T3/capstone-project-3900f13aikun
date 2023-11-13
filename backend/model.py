@@ -256,3 +256,28 @@ class ApplyProjectSchema(ma.Schema):
 
 apply_project_sc = ApplyProjectSchema()
 apply_projects_sc = ApplyProjectSchema(many=True)
+
+
+class Feedback(db.Model):
+    feedback_id = db.Column(db.Integer, primary_key=True)
+    project_id = db.Column(db.ForeignKey(Project.id))
+    project = db.relationship('Project', foreign_keys=[project_id])
+    demo_feedback = db.Column(db.Text())
+    final_feedback = db.Column(db.Text())
+    evaluating_deliverables = db.Column(db.Text())
+    problems = db.Column(db.Text())
+    contributions = db.Column(db.Text())
+    student_experience = db.Column(db.Text())
+    supervisor_experience = db.Column(db.Text())
+
+
+class FeedbackSchema(ma.Schema):
+    class Meta:
+        fields = (
+            "feedback_id", "project_id", "demo_feedback", "final_feedback", "evaluating_deliverables", "problems",
+            "student", "contributions", "student_experience",
+            "supervisor_experience")
+
+
+feedback_sc = FeedbackSchema()
+feedbacks_sc = FeedbackSchema(many=True)

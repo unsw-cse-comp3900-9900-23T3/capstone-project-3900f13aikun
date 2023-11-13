@@ -435,6 +435,7 @@ def delete_project(id):
 
     db.session.execute(user_saved_project.delete().where(user_saved_project.c.project_id == id))
     db.session.query(ApplyProject).filter(ApplyProject.project_id == id).delete()
+    db.session.query(Feedback).filter(Feedback.project_id == id).delete()
     db.session.commit()
 
     db.session.delete(project)
@@ -880,6 +881,52 @@ def handle_apply_project():
         db.session.merge(apply_project)
 
     return jsonify({"message": "success"})
+
+
+@app.route("/applyProject/<project_id>", methods=["GET"])
+@jwt_required()
+def get_apply_project_detail(project_id):
+    apply_project = db.session.query(ApplyProject).filter(ApplyProject.project_id == project_id).first()
+    return apply_project_sc.jsonify(apply_project)
+
+
+@app.route("/feedback", methods=["POST"])
+@jwt_required()
+def create_feedback():
+    try:
+        data = CREATE_FEEDBACK_SCHEMA.validate(request.json)
+    except SchemaError as error:
+        return {"msg": str(error)}, 400
+
+    feedback = db.session.query(Feedback).filter(Feedback.project_id == data["project_id"]).first()
+    if feedback is None:
+        feedback = Feedback()
+
+    if "demo_feedback" in data:
+        feedback.demo_feedback = data["demo_feedback"]
+    if "final_feedback" in data:
+        feedback.final_feedback = data["final_feedback"]
+    if "evaluating_deliverables" in data:
+        feedback.evaluating_deliverables = data["evaluating_deliverables"]
+    if "problems" in data:
+        feedback.problems = data["problems"]
+    if "contributions" in data:
+        feedback.contributions = data["contributions"]
+    if "student_experience" in data:
+        feedback.student_experience = data["student_experience"]
+    if "supervisor_experience" in data:
+        feedback.supervisor_experience = data["supervisor_experience"]
+    feedback.project_id = data["project_id"]
+    db.session.merge(feedback)
+    db.session.commit()
+    return jsonify({"message": "success"})
+
+
+@app.route("/feedback/<project_id>", methods=["GET"])
+@jwt_required()
+def get_project_feedback(project_id):
+    feedback = db.session.query(Feedback).filter(Feedback.project_id == project_id).first()
+    return feedback_sc.jsonify(feedback)
 
 
 def generate_code():
