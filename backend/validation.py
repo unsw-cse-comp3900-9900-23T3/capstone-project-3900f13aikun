@@ -138,8 +138,11 @@ CREATE_APPLY_PROJECT = Schema(
     {
         Optional("group_id"): And(Use(int), lambda i: i >= 0),
         "project_id": And(Use(int), lambda i: i >= 0),
+        Optional("teacher_uni"): And(Use(int), lambda i: i >= 0),
+        Optional("teacher_resumes"): And(str, len),
+        Optional("student_uni"): And(Use(int), lambda i: i >= 0),
+        Optional("student_resumes"): And(str, len),
     })
-
 
 UPDATE_APPLY_PROJECT = Schema(
     {

@@ -135,6 +135,7 @@ class ProjectSchema(ma.Schema):
             "title",
             "publish_date",
             "location",
+            "project_status",
             "job_classification",
             "problem_statement",
             "requirement",
@@ -227,6 +228,10 @@ users_saved_sc = UserSavedSchema(many=True)
 
 class ApplyProject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    teacher_uni = db.Column(db.Integer)
+    teacher_resumes = db.Column(db.Text())
+    student_uni = db.Column(db.Integer)
+    student_resumes = db.Column(db.Text())
     teacher_id = db.Column(db.ForeignKey(User.user_id))
     teacher = db.relationship('User', foreign_keys=[teacher_id])
     student_id = db.Column(db.ForeignKey(User.user_id))
@@ -245,8 +250,10 @@ class ApplyProjectSchema(ma.Schema):
     project = ma.Nested(ProjectSchema)
 
     class Meta:
-        fields = ("id", "apply_status", "group", "project", "teacher", "student")
+        fields = (
+        "id", "apply_status", "group", "project", "teacher", "student", "student_uni", "student_resumes", "teacher_uni",
+        "teacher_resumes")
 
 
-apply_project_sc = UserSavedSchema()
-apply_projects_sc = UserSavedSchema(many=True)
+apply_project_sc = ApplyProjectSchema()
+apply_projects_sc = ApplyProjectSchema(many=True)

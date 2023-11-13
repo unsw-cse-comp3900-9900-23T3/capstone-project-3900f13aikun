@@ -25,9 +25,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # JWT config
-secret_key = os.urandom(24)
+# secret_key = os.urandom(24)
 # JWT config
-app.config["JWT_SECRET_KEY"] = secret_key 
+app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
 JWT_ALGORITHM = 'HS256'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=2)
 
@@ -275,7 +275,7 @@ def store_project():
 
     curr_project.publish_date = datetime.now()
     curr_project.user_id = current_user_id
-    current_user_id.project_status = ProjectStatusType.Initialization.value
+    curr_project.project_status = ProjectStatusType.Initialization.value
 
     db.session.add(curr_project)
     db.session.commit()
@@ -756,11 +756,10 @@ def create_apply_project():
     if current_user.role == UserRole.AcademicSupervisor.value:
         if project.project_status == ProjectStatusType.FoundTeacher:
             return {"msg": "The project is already have a teacher"}, 400
-        apply_record = db.session.query(ApplyProject).filter(and_(ApplyProject.teacher_id == current_user_id,
-                                                                  ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
-        if apply_record is not None:
-            return {"msg": "The teacher is already pass a project"}, 400
+
         apply_project = ApplyProject()
+        apply_project.teacher_uni = data["teacher_uni"]
+        apply_project.teacher_resumes = data["teacher_resumes"]
         apply_project.project_id = data["project_id"]
         apply_project.teacher_id = current_user_id
         apply_project.apply_status = ApplyStatusType.TeacherApplying.value
@@ -774,16 +773,23 @@ def create_apply_project():
         if not group:
             return {"msg": "Not Found group"}, 400
 
-        apply_project = db.session.query(ApplyProject, ApplyProject.project_id == project_id)
+        apply_project = db.session.query(ApplyProject).filter(
+            and_(ApplyProject.project_id == project_id,
+                 ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
 
         apply_project.group_id = data["group_id"]
+        apply_project.student_uni = data["student_uni"]
+        apply_project.student_resumes = data["student_resumes"]
         apply_project.apply_status = ApplyStatusType.StudentApplying.value
         db.session.merge(apply_project)
         db.session.commit()
         return jsonify({"message": "success"})
 
-    apply_project = db.session.query(ApplyProject, ApplyProject.project_id == project_id)
+    apply_project = db.session.query(ApplyProject).filter(
+        and_(ApplyProject.project_id == project_id, ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
     apply_project.student_id = current_user_id
+    apply_project.student_uni = data["student_uni"]
+    apply_project.student_resumes = data["student_resumes"]
     apply_project.apply_status = ApplyStatusType.StudentApplying.value
     db.session.commit()
     return jsonify({"message": "success"})
@@ -792,21 +798,47 @@ def create_apply_project():
 @app.route("/applyProject", methods=["GET"])
 @jwt_required()
 def get_all_apply_project():
+    # for IndustryPartner and AcademicSupervisor
     current_user_id = get_jwt_identity()
     current_user = db.session.get(User, current_user_id)
     if current_user.role == UserRole.AcademicSupervisor.value:
         apply_projects = db.session.query(ApplyProject).filter(ApplyProject.teacher_id == current_user_id)
-        return apply_projects_sc(apply_projects)
-
-    if current_user.role == UserRole.Student.value:
-        apply_projects = db.session.query(ApplyProject).filter(ApplyProject.student_id == current_user_id)
-        return apply_projects_sc(apply_projects)
+        return apply_projects_sc.jsonify(apply_projects)
 
     if current_user.role == UserRole.IndustryPartner.value:
-        apply_projects = db.session.query(ApplyProject, Project).join(Project,
-                                                                      ApplyProject.project_id == Project.id).filter(
+        apply_projects = db.session.query(ApplyProject).join(Project,
+                                                             ApplyProject.project_id == Project.id).filter(
             Project.user_id == current_user_id).all()
-        return apply_projects_sc(apply_projects)
+        return apply_projects_sc.jsonify(apply_projects)
+
+
+@app.route("/applyStudentProject", methods=["GET"])
+@jwt_required()
+def get_student_apply_individual_project():
+    current_user_id = get_jwt_identity()
+    apply_projects = db.session.query(ApplyProject).filter(ApplyProject.student_id == current_user_id)
+    return apply_projects_sc.jsonify(apply_projects)
+
+
+@app.route("/applyStudentGroupProject", methods=["GET"])
+@jwt_required()
+def get_student_apply_group_project():
+    current_user_id = get_jwt_identity()
+    # current_user = db.session.get(User, current_user_id)
+
+    user_with_groups = User.query.options(joinedload(User.groups), joinedload(User.created_groups)).filter_by(
+        user_id=current_user_id).first()
+    joined_groups = user_with_groups.groups
+    created_groups = user_with_groups.created_groups
+    all_groups = list(joined_groups) + list(created_groups)
+
+    groups_ids = []
+    for g in all_groups:
+        groups_ids.append(g.group_id)
+
+    apply_projects = db.session.query(ApplyProject).filter(ApplyProject.group_id in groups_ids)
+
+    return apply_projects_sc.jsonify(apply_projects)
 
 
 @app.route("/applyProject", methods=["PUT"])
@@ -828,12 +860,14 @@ def handle_apply_project():
 
         apply_project.apply_status = data["apply_status"]
         db.session.merge(apply_project)
+        db.session.commit()
 
     if apply_project.apply_status == ApplyStatusType.StudentApplying.value:
         if data["apply_status"] == ApplyStatusType.StudentPass.value:
             project = db.session.get(Project, apply_project.project_id)
             project.project_status = ProjectStatusType.Started.value
-            db.session.query(ApplyProject).filter(ApplyProject.project_id == apply_project.project_id).update(
+            db.session.query(ApplyProject).filter(and_(ApplyProject.project_id == apply_project.project_id,
+                                                       ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).update(
                 {ApplyProject.apply_status: ApplyStatusType.StudentFail.value}, synchronize_session='fetch')
             db.session.commit()
 
