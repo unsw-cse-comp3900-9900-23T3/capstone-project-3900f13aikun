@@ -24,6 +24,22 @@ class PaymentType(Enum):
     NonPaid = 2
 
 
+class ProjectStatusType(Enum):
+    Initialization = 1
+    FoundTeacher = 2
+    Started = 3
+    Finished = 4
+
+
+class ApplyStatusType(Enum):
+    TeacherApplying = 0
+    TeacherPass = 1
+    TeacherFail = 2
+    StudentApplying = 3
+    StudentPass = 4
+    StudentFail = 5
+
+
 user_saved_project = db.Table(
     'user_project_association',
     db.Column('user_id', db.Integer, db.ForeignKey('user.user_id'), primary_key=True),
@@ -87,6 +103,7 @@ class Project(db.Model):
     requirement = db.Column(db.Text())
     payment_type = db.Column(db.Integer)
     opportunity_type = db.Column(db.Integer)
+    project_status = db.Column(db.Integer)
 
     desired_outcomes = db.Column(db.Text())
     required_skill = db.Column(db.Text())
@@ -206,3 +223,30 @@ class UserSavedSchema(ma.Schema):
 
 user_saved_sc = UserSavedSchema()
 users_saved_sc = UserSavedSchema(many=True)
+
+
+class ApplyProject(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    teacher_id = db.Column(db.ForeignKey(User.user_id))
+    teacher = db.relationship('User', foreign_keys=[teacher_id])
+    student_id = db.Column(db.ForeignKey(User.user_id))
+    student = db.relationship('User', foreign_keys=[student_id])
+    group_id = db.Column(db.ForeignKey(Group.group_id))
+    group = db.relationship('Group', foreign_keys=[group_id])
+    project_id = db.Column(db.ForeignKey(Project.id))
+    project = db.relationship('Project', foreign_keys=[project_id])
+    apply_status = db.Column(db.Integer)
+
+
+class ApplyProjectSchema(ma.Schema):
+    teacher = ma.Nested(UserSchema)
+    student = ma.Nested(UserSchema)
+    group = ma.Nested(GroupSchema)
+    project = ma.Nested(ProjectSchema)
+
+    class Meta:
+        fields = ("id", "apply_status", "group", "project", "teacher", "student")
+
+
+apply_project_sc = UserSavedSchema()
+apply_projects_sc = UserSavedSchema(many=True)

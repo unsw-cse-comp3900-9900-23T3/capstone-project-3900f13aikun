@@ -129,8 +129,20 @@ REMOVE_GROUP_MEMBER_SCHEMA = Schema(
         "user_id": And(Use(int), lambda i: i >= 0),
     })
 
-
 CREATE_SAVED_USER_SCHEMA = Schema(
     {
         "saved_user_id": And(Use(int), lambda i: i >= 0),
+    })
+
+CREATE_APPLY_PROJECT = Schema(
+    {
+        Optional("group_id"): And(Use(int), lambda i: i >= 0),
+        "project_id": And(Use(int), lambda i: i >= 0),
+    })
+
+
+UPDATE_APPLY_PROJECT = Schema(
+    {
+        "apply_status": And(Use(int), lambda i: i >= 0),
+        "apply_id": And(Use(int), lambda i: i >= 0),
     })
