@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import NavigationBtn from "../components/NavigationBtn";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import TextField from "@mui/material/TextField";
 import { apiCall } from "../components/HelpFunctions";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Select from "@mui/material/Select";
@@ -18,8 +16,11 @@ import { getJobType, getPaymentType, getOpportunityType, getIntention } from "..
 import Box from "@mui/material/Box";
 import { Dashbackground, Dashtextfield } from "../components/StyledElement";
 
+
+
 const InitialDash = () => {
   const navigate = useNavigate();
+  // const { id } = useParams();
   const [keyword, setKeyword] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [classification, setClassification] = React.useState("");
@@ -118,7 +119,6 @@ const InitialDash = () => {
   useEffect(() => {
     handleSearch();
   }, []);
-
   return (
     <div>
       <NavigationBtn />
@@ -163,7 +163,7 @@ const InitialDash = () => {
                 color="secondary"
                 sx={{ marginTop: "10px", left: "120px" }}
                 onClick={() => {
-                  handleSearch("page-search");
+                  handleSearch();
                 }}>
                 Search
               </Button>
@@ -238,53 +238,59 @@ const InitialDash = () => {
       </Dashbackground>
 
       {/* search results */}
-      {currentPage === 'page-search' && (
-        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-          <Typography>the total numbers of projects: {projectList.length}</Typography>
-          {projectList.map((item) => (
-            <Card key={item.user_id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
-              <CardContent>
-                <Typography
-                  sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  onClick={() => {
-                    getProjectDetail(item.user_id);
-                  }}>
-                  {item.title}
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Location: <span style={{ color: "#555" }}>{item.location}</span>
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                {localStorage.getItem("token") ? (
-                  <Button variant="outlined" onClick={() => navigate("/Application")}>
+      <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+        <Typography>the total numbers of projects: {projectList.length}</Typography>
+        {projectList.map((item) => (
+          <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
+            <CardContent>
+              <Typography
+                sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                gutterBottom
+                variant="h5"
+                component="div"
+                onClick={() => {
+                  navigate(`/project-detail/${item.id}`);
+                }}>
+                {item.title}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Location: <span style={{ color: "#555" }}>{item.location}</span>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
+              </Typography>
+            </CardContent>
+            <CardActions>
+              {(localStorage.getItem("token") && role === 2) ?
+                (
+                  <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
                     Apply
                   </Button>
-                ) : null}
-                {localStorage.getItem("token") && !item.is_saved ? (
-                  <Button variant="outlined" onClick={() => handleSave(item.id)}>
-                    Save
-                  </Button>
-                ) : null}
-                {localStorage.getItem("token") && item.is_saved ? (
-                  <Button variant="outlined" onClick={() => handleUnSave(item.id)}>
-                    UnSave
-                  </Button>
-                ) : null}
-              </CardActions>
-            </Card>
-          ))}
-        </Box>
-      )}
+                ) : localStorage.getItem('applied')
+                  ?
+                  <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
+                    Apply
+                  </Button> : <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} >
+                    Apply
+                  </Button>}
+
+              {localStorage.getItem("token") && !item.is_saved ? (
+                <Button variant="outlined" onClick={() => handleSave(item.id)}>
+                  Save
+                </Button>
+              ) : null}
+              {localStorage.getItem("token") && item.is_saved ? (
+                <Button variant="outlined" onClick={() => handleUnSave(item.id)}>
+                  UnSave
+                </Button>
+              ) : null}
+            </CardActions>
+          </Card>
+        ))}
+      </Box>
 
       {/* recommand system */}
       {currentPage !== 'page-search' && (
@@ -411,6 +417,8 @@ const InitialDash = () => {
           ) : null}
         </Box>
       )}
+
+
     </div>
   );
 };
