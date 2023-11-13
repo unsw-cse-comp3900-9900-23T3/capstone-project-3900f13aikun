@@ -433,7 +433,9 @@ def delete_project(id):
     if current_user_id != project.user_id:
         return {"msg": "No Permission"}, 400
 
+    db.session.execute(user_saved_project.delete().where(user_saved_project.c.project_id == id))
     db.session.query(ApplyProject).filter(ApplyProject.project_id == id).delete()
+    db.session.commit()
 
     db.session.delete(project)
     db.session.commit()
