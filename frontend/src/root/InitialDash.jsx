@@ -119,6 +119,7 @@ const InitialDash = () => {
   useEffect(() => {
     handleSearch();
   }, []);
+
   return (
     <div>
       <NavigationBtn />
@@ -163,7 +164,7 @@ const InitialDash = () => {
                 color="secondary"
                 sx={{ marginTop: "10px", left: "120px" }}
                 onClick={() => {
-                  handleSearch();
+                  handleSearch('page-search');
                 }}>
                 Search
               </Button>
@@ -238,59 +239,61 @@ const InitialDash = () => {
       </Dashbackground>
 
       {/* search results */}
-      <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-        <Typography>the total numbers of projects: {projectList.length}</Typography>
-        {projectList.map((item) => (
-          <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
-            <CardContent>
-              <Typography
-                sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                gutterBottom
-                variant="h5"
-                component="div"
-                onClick={() => {
-                  navigate(`/project-detail/${item.id}`);
-                }}>
-                {item.title}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Location: <span style={{ color: "#555" }}>{item.location}</span>
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              {(localStorage.getItem("token") && role === 2) ?
-                (
-                  <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
-                    Apply
-                  </Button>
-                ) : localStorage.getItem('applied')
-                  ?
-                  <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
-                    Apply
-                  </Button> : <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} >
-                    Apply
-                  </Button>}
+      {currentPage === 'page-search' && (
+        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
+          <Typography>the total numbers of projects: {projectList.length}</Typography>
+          {projectList.map((item) => (
+            <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
+              <CardContent>
+                <Typography
+                  sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  onClick={() => {
+                    getProjectDetail(item.id);
+                  }}>
+                  {item.title}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Location: <span style={{ color: "#555" }}>{item.location}</span>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                {(localStorage.getItem("token") && role === 2) ?
+                  (
+                    <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
+                      Apply
+                    </Button>
+                  ) : localStorage.getItem('applied')
+                    ?
+                    <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
+                      Apply
+                    </Button> : <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} >
+                      Apply
+                    </Button>}
 
-              {localStorage.getItem("token") && !item.is_saved ? (
-                <Button variant="outlined" onClick={() => handleSave(item.id)}>
-                  Save
-                </Button>
-              ) : null}
-              {localStorage.getItem("token") && item.is_saved ? (
-                <Button variant="outlined" onClick={() => handleUnSave(item.id)}>
-                  UnSave
-                </Button>
-              ) : null}
-            </CardActions>
-          </Card>
-        ))}
-      </Box>
+                {localStorage.getItem("token") && !item.is_saved ? (
+                  <Button variant="outlined" onClick={() => handleSave(item.id)}>
+                    Save
+                  </Button>
+                ) : null}
+                {localStorage.getItem("token") && item.is_saved ? (
+                  <Button variant="outlined" onClick={() => handleUnSave(item.id)}>
+                    UnSave
+                  </Button>
+                ) : null}
+              </CardActions>
+            </Card>
+          ))}
+        </Box>
+      )}
 
       {/* recommand system */}
       {currentPage !== 'page-search' && (
