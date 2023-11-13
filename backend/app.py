@@ -433,6 +433,8 @@ def delete_project(id):
     if current_user_id != project.user_id:
         return {"msg": "No Permission"}, 400
 
+    db.session.query(ApplyProject).filter(ApplyProject.project_id == id).delete()
+
     db.session.delete(project)
     db.session.commit()
     return jsonify({'message': 'success'})
@@ -786,7 +788,8 @@ def create_apply_project():
         return jsonify({"message": "success"})
 
     apply_project = db.session.query(ApplyProject).filter(
-        and_(ApplyProject.project_id == project_id, ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
+        and_(ApplyProject.project_id == project_id,
+             ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
     apply_project.student_id = current_user_id
     apply_project.student_uni = data["student_uni"]
     apply_project.student_resumes = data["student_resumes"]
