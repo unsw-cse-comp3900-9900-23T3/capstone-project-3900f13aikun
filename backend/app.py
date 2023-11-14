@@ -868,7 +868,7 @@ def get_industry_project_request():
     apply_projects = db.session.query(ApplyProject).join(ApplyProject.project).filter(
         and_(
             Project.user_id == current_user_id,
-            ApplyProject.apply_status == 0
+            or_(ApplyProject.apply_status == 0 ,ApplyProject.apply_status == 3)
             )
         )
 
@@ -947,6 +947,7 @@ def handle_apply_project():
 
         apply_project.apply_status = data["apply_status"]
         db.session.merge(apply_project)
+        db.session.commit() 
 
     return jsonify({"message": "success"})
 

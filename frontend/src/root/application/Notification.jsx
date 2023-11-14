@@ -40,21 +40,33 @@ function Notification() {
         renderPage();
     }, [])
 
-    console.log(personInfo)
-    console.log(applyInfo)
+    // console.log(personInfo)
+    // console.log(applyInfo)
 
     // if the industry partner declined the request, the student will recive a message on his notification page that show you has been declined
 
     // the request message will be removed on this notificaiton page 
     function decline(applyId) {
-        const res = apiCall("/applyProject", 'Put', { apply_id: applyId, apply_status: 2 })
-        res.then(data => {
-            if (data.error) {
-                alert(data.error)
-            } else {
-                renderPage();
-            }
-        })
+        if (personInfo.role === 3) {
+            const res = apiCall("/applyProject", 'Put', { apply_id: applyId, apply_status: 2 })
+            res.then(data => {
+                if (data.error) {
+                    alert(data.error)
+                } else {
+                    renderPage();
+                }
+            })
+        } else {
+            const res = apiCall("/applyProject", 'Put', { apply_id: applyId, apply_status: 5 })
+            res.then(data => {
+                if (data.error) {
+                    alert(data.error)
+                } else {
+                    renderPage();
+                }
+            })
+        }
+
     }
 
     // if the industry partner declined the request, the student will recive a message on his notification page that show you has been accepted
@@ -63,14 +75,27 @@ function Notification() {
 
     // on the every student(include group member) and industry partner 'my project page', there will be the paired project
     function accept(applyId) {
-        const res = apiCall("/applyProject", 'Put', { apply_id: applyId, apply_status: 1 })
-        res.then(data => {
-            if (data.error) {
-                alert(data.error)
-            } else {
-                renderPage();
-            }
-        })
+        if (personInfo.role === 3) {
+            const res = apiCall("/applyProject", 'Put', { apply_id: applyId, apply_status: 1 })
+            res.then(data => {
+                if (data.error) {
+                    alert(data.error)
+                } else {
+                    renderPage();
+                }
+            })
+        } else {
+            console.log('asdsaasds')
+            const res = apiCall("/applyProject", 'PUT', { apply_id: applyId, apply_status: 4 })
+            res.then(data => {
+                if (data.error) {
+                    alert(data.error)
+                } else {
+                    console.log(data)
+                    renderPage();
+                }
+            })
+        }
     }
 
     return (
@@ -81,7 +106,7 @@ function Notification() {
             {applyInfo.map((item) => (
 
                 <AppBar position="static" sx={{ marginTop: '10px', width: '215vh' }} >
-                    {(item.apply_status === 0 || item.apply_status === 3) ?
+                    {(item.apply_status === 0 || item.apply_status == 3) ?
                         <Toolbar>
                             <IconButton
                                 size="large"
@@ -101,7 +126,11 @@ function Notification() {
                                 {item.apply_status === 0 ? <span>
                                     Your project <u>{item.project.title}</u>  has been applies by the supervisor <u>{item.teacher.name}</u>
 
-                                </span> : null}
+                                </span>
+                                    : <span>
+                                        Your project <u>{item.project.title}</u>  has been applies by the student <u>{item.student.name}</u>
+
+                                    </span>}
 
                             </Typography>
                             <Button variant="contained" color="success" sx={{ marginRight: '10px' }} onClick={() => accept(item.id)}>

@@ -10,7 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import {  useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { apiCall, transUni } from '../../components/HelpFunctions';
 import NavigationBtn from '../../components/NavigationBtn';
 
@@ -48,7 +48,7 @@ function Application() {
         });
     };
 
-   
+
     useEffect(() => {
         const user = apiCall('/profile', 'GET');
         user.then(data => {
@@ -89,14 +89,30 @@ function Application() {
                 }
             });
         } else if (role === 1) {
-            const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), student_uni: transUni(uni), student_resumes: resume });
-            res.then((data) => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    navigate('/dashboard/industryp');
+            if (projectInfo.opportunity_type !== 3) {
+                const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), student_uni: transUni(uni), student_resumes: resume });
+                res.then((data) => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        navigate('/dashboard/industryp');
+                    }
+                });
+            } else {
+    
+                if (myGroups.length === 0){
+                    alert('you have not formed or joined a group')
                 }
-            });
+                const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), student_uni: transUni(uni), student_resumes: resume, group_id:chooseGroup.group_id});
+                res.then((data) => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        navigate('/dashboard/industryp');
+                    }
+                });
+            }
+
         }
     }
 
@@ -140,7 +156,7 @@ function Application() {
                                             <MenuItem
                                                 key={name}
                                                 value={name}
-                                                
+
                                             >
                                                 {name}
                                             </MenuItem>

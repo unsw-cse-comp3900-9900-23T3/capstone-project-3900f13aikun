@@ -16,6 +16,7 @@ function ProjectDetail() {
   const [role, setRole] = React.useState(0);
   const [projectSup, setProjectSup] = useState([]);
   const [isSup, setIsSup] = useState(true);
+  const [isApply, setIsApply] = useState(true);
 
 
   React.useEffect(() => {
@@ -36,8 +37,7 @@ function ProjectDetail() {
 
               }
             })
-          }
-
+          } 
         }
       });
     }
@@ -48,7 +48,7 @@ function ProjectDetail() {
 
 
 
-
+  // /applyStudentProject
 
   const getProjectInfo = () => {
     apiCall(`/project/${id}`, "GET").then((res) => {
