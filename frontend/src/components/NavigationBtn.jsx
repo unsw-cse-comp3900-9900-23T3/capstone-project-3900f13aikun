@@ -112,7 +112,8 @@ export const NavigationBtn = () => {
   function logout() {
 
     localStorage.clear();
-    navigate('/')
+    navigate('/');
+    window.location.reload();
   }
 
   function testProfile() {
@@ -182,7 +183,10 @@ export const NavigationBtn = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                <MenuItem onClick={application}>Applied project</MenuItem>
+                {role === 3 ?<MenuItem onClick={application}>Supervised project</MenuItem>
+                :role === 1 ? <MenuItem onClick={application}>applied project</MenuItem>:null}
+                
+                
                 <MenuItem onClick={notification}>Notification</MenuItem>
                 <MenuItem onClick={recommendLists}>Recommended Lists</MenuItem>
                 <MenuItem onClick={savedLists}>Saved Lists</MenuItem>

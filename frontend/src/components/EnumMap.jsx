@@ -68,3 +68,16 @@ export function getWorkRights(workRights) {
     }
     return 'Unknown';
 }
+
+
+export function getUniType(UniType) {
+    const UniTypeMap = {
+        1: 'UNSW',
+        2: 'USYD',
+        3: 'UniMelb',
+        4: 'UTS',
+        5: 'other'
+        
+    };
+    return UniTypeMap[UniType] || 'Unknown';
+}

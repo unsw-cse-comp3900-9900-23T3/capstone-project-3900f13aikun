@@ -95,10 +95,10 @@ function SignUp() {
         alert("Please select a role");
         return;
       }
-      // if (!codeinput) {
-      //   alert("empty code");
-      //   return;
-      // }
+      if (!codeinput) {
+        alert("empty code");
+        return;
+      }
 
       const res = apiCall("/register", "POST", { email: email, password: password1, role: role, name: name, passport: passport, code: codeinput });
       res.then((data) => {
