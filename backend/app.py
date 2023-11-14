@@ -889,7 +889,7 @@ def if_teacher_sup():
             ApplyProject.project_id == projectId
         )
     ).first() 
-    if apply_project:
+    if apply_project and apply_project.apply_status != 2:
         return jsonify({"message": "1"})
     return jsonify({"message": "2"})
 
@@ -954,7 +954,7 @@ def handle_apply_project():
 @app.route("/applyProject/<project_id>", methods=["GET"])
 @jwt_required()
 def get_apply_project_detail(project_id):
-    apply_project = db.session.query(ApplyProject).filter(ApplyProject.project_id == project_id).first()
+    apply_project = db.session.query(ApplyProject).filter(ApplyProject.id == project_id).first()
     return apply_project_sc.jsonify(apply_project)
 
 

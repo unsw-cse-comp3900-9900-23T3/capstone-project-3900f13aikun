@@ -140,7 +140,7 @@ export const NavigationBtn = () => {
 
         <Topselection>
           <div style={{ display: 'flex' }}>
-            <Iconchicken onClick={() => {NavRefresh('/')}}></Iconchicken>
+            <Iconchicken onClick={() => { NavRefresh('/') }}></Iconchicken>
             <div style={{ marginTop: '10px', width: '350px', marginLeft: '10px' }}><b style={{ fontSize: '20px' }}>Student Industry Project Management System</b></div>
           </div>
 
@@ -183,9 +183,7 @@ export const NavigationBtn = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                {role === 3 ?<MenuItem onClick={application}>Supervised project</MenuItem>
-                :role === 1 ? <MenuItem onClick={application}>applied project</MenuItem>:null}
-                
+                {role !== 2 ? <MenuItem onClick={application}>applied project</MenuItem>: null}
                 
                 <MenuItem onClick={notification}>Notification</MenuItem>
                 <MenuItem onClick={recommendLists}>Recommended Lists</MenuItem>

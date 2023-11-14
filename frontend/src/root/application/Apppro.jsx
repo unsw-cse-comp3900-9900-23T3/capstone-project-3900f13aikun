@@ -42,7 +42,7 @@ function Apppro() {
             }
         });
     }
-    
+
     useEffect(() => {
         renderApply();
 
@@ -74,39 +74,45 @@ function Apppro() {
         <NavigationBtn></NavigationBtn>
         <Pagebackground>My apply projects</Pagebackground>
         <div style={{ width: '1000px', borderLeft: '2px black solid', borderRight: '2px black solid', height: '300vh' }}>
-            {applyInfo && applyInfo.map(data => (
-                <Card sx={{ maxWidth: 600, minWidth: 400, border: '2px solid lightgray', margin: 'auto', marginTop: '10%' }}>
-                    <CardContent >
-                        <Typography
-                            sx={{ textDecorationLine: "underline", cursor: "pointer", marginLeft: '42%' }}
-                            gutterBottom
-                            variant="h5"
-                            component="div"
-                        >
-                            {data.project.title}
-                        </Typography>
-                        <Typography variant="body1" gutterBottom>
-                            <b>Location:</b>   {data.project.location}
-                        </Typography>
-                        <Typography variant="body1" gutterBottom>
-                            <b>Project type:</b> {getJobType(data.project.job_classification)}
-                        </Typography>
+            {applyInfo.map(data => (
+                
+                <Card sx={{ maxWidth: 600, minWidth: 400 , margin: 'auto', marginTop: '3%',marginBottom: '3%' }}>
+                    {(data.apply_status === 0 || data.apply_status === 3)
+                        ? <>
+                            <CardContent >
+                                <Typography
+                                    sx={{ textDecorationLine: "underline", cursor: "pointer", marginLeft: '42%' }}
+                                    gutterBottom
+                                    variant="h5"
+                                    component="div"
+                                >
+                                    {data.project.title}
+                                </Typography>
+                                <Typography variant="body1" gutterBottom>
+                                    <b>Location:</b>   {data.project.location}
+                                </Typography>
+                                <Typography variant="body1" gutterBottom>
+                                    <b>Project type:</b> {getJobType(data.project.job_classification)}
+                                </Typography>
 
-                        <Typography variant="body1" gutterBottom>
-                            {getOpportunityType(data.project.opportunity_type)} | {getPaymentType(data.project.payment_type)}
-                        </Typography>
-                        <Typography variant="body1" gutterBottom>
-                            <b>Univeristy:</b>   {(personInfo.role === 3) ? getUniType(data.teacher_uni) : getUniType(data.student_uni)}
-                        </Typography>
-                        <Typography variant="body1" gutterBottom>
-                            <b>resume: </b>        {(personInfo.role === 3) ? data.teacher_resumes : data.student_resumes}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button variant="contained" color="error" sx={{ margin: 'auto' }} onClick={() => deleteApp(data.project.id)}>
-                           {personInfo.role === 3 ? <span>delete supervise</span> : <span>delete apply</span>}       
-                        </Button>
-                    </CardActions>
+                                <Typography variant="body1" gutterBottom>
+                                    {getOpportunityType(data.project.opportunity_type)} | {getPaymentType(data.project.payment_type)}
+                                </Typography>
+                                <Typography variant="body1" gutterBottom>
+                                    <b>Univeristy:</b>   {(personInfo.role === 3) ? getUniType(data.teacher_uni) : getUniType(data.student_uni)}
+                                </Typography>
+                                <Typography variant="body1" gutterBottom>
+                                    <b>resume: </b>        {(personInfo.role === 3) ? data.teacher_resumes : data.student_resumes}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button variant="contained" color="error" sx={{ margin: 'auto' }} onClick={() => deleteApp(data.project.id)}>
+                                    <span>delete apply</span>
+                                </Button>
+                            </CardActions>
+                        </> : null}
+
+
                 </Card>
             ))}
 

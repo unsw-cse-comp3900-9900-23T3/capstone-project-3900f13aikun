@@ -8,9 +8,26 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import { getJobType, getOpportunityType, getPaymentType, getUniType} from "../components/EnumMap";
 
 function ProjectDelivery() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [proInfo, setProInfo] = React.useState({});
+  
+  useEffect(() => {
+    const res = apiCall(`/applyProject/${id}`,'Get');
+    res.then(data => {
+      if(data.error) {
+        alert(data.error);
+      } else {
+        console.log(data);
+        setProInfo(data);
+      }
+    })
+
+
+  },[])
   return (
     <>
       <NavigationBtn></NavigationBtn>
@@ -26,19 +43,17 @@ function ProjectDelivery() {
               gutterBottom
               variant="h5"
               component="div"
-              onClick={() => {
-                navigate();
-              }}>
-              Software Enginnering
+              >
+                {proInfo.project.title}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Location: <span style={{ color: '#555' }}>Sydney</span>
+              Location: <span style={{ color: '#555' }}>{proInfo.project.location}</span>
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Project type: <span style={{ color: '#555' }}>Engineering</span>
+              Project type: <span style={{ color: '#555' }}>{getJobType(proInfo.project.job_classification)}</span>
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Group Project | Paid
+            {getOpportunityType(proInfo.project.opportunity_type)} | {getPaymentType(proInfo.project.payment_type)}
             </Typography>
           </CardContent>
         </Card>

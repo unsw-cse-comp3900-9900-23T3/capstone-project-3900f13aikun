@@ -20,7 +20,7 @@ import { Dashbackground, Dashtextfield } from "../components/StyledElement";
 
 const InitialDash = () => {
   const navigate = useNavigate();
-  // const { id } = useParams();
+  const { id } = useParams();
   const [keyword, setKeyword] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [classification, setClassification] = React.useState("");
@@ -243,7 +243,7 @@ const InitialDash = () => {
         <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
           <Typography>the total numbers of projects: {projectList.length}</Typography>
           {projectList.map((item) => (
-            <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray" }}>
+            <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400 }}>
               <CardContent>
                 <Typography
                   sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -266,18 +266,7 @@ const InitialDash = () => {
                 </Typography>
               </CardContent>
               <CardActions>
-                {(localStorage.getItem("token") && role === 2) ?
-                  (
-                    <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
-                      Apply
-                    </Button>
-                  ) : localStorage.getItem('applied')
-                    ?
-                    <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} disabled>
-                      Apply
-                    </Button> : <Button variant="outlined" onClick={() => navigate(`/application/${item.id}`)} >
-                      Apply
-                    </Button>}
+                
 
                 {localStorage.getItem("token") && !item.is_saved ? (
                   <Button variant="outlined" onClick={() => handleSave(item.id)}>

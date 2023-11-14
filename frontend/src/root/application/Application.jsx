@@ -78,6 +78,7 @@ function Application() {
     // **********
 
     function applyOrSup() {
+        // supervisor can supervise several projects, they can not apply the project which they are applying for
         if (role === 3) {
             const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), teacher_uni: transUni(uni), teacher_resumes: resume });
             res.then((data) => {
