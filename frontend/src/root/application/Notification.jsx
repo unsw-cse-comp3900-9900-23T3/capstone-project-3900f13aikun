@@ -110,53 +110,61 @@ function Notification() {
             <Pagebackground>Notification</Pagebackground>
 
             {applyInfo.map((item) => (
+                item.apply_status === 0 || item.apply_status === 3) ? (
+                <AppBar position="static" sx={{ marginTop: '10px', width: '100%' }}>
+                    <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                        >
+                            {item.apply_status === 0 && <span>
+                                Your project "{item.project.title}" has been applies by the supervisor <u style={{ cursor: "pointer" }} onClick={() => {
+                                    navigate(`/profile-detail/${item.teacher.user_id}`);
+                                }}>{item.teacher.name}</u>
 
-                <AppBar position="static" sx={{ marginTop: '10px', width: '100%' }} >
-                    {(item.apply_status === 0 || item.apply_status === 3) ?
-                        <Toolbar>
-                            <IconButton
-                                size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="open drawer"
-                                sx={{ mr: 2 }}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Typography
-                                variant="h6"
-                                noWrap
-                                component="div"
-                                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                            >
-                                {item.apply_status === 0 ? <span>
-                                    Your project "{item.project.title}" has been applies by the supervisor <u style={{ cursor: "pointer" }} onClick={() => {
-                                        navigate(`/profile-detail/${item.teacher.user_id}`);
-                                    }}>{item.teacher.name}</u>
+                            </span>}
+                            {item.apply_status === 3 && item.project.opportunity_type === 2 ? (
+                                <span>
+                                    Your project "{item.project.title}" has been applies by the student: <u style={{ cursor: "pointer" }} onClick={() => {
+                                        navigate(`/profile-detail/${item.student.user_id}`);
+                                    }}>{item.student.name}</u>
+                                </span>
+                            ) : null}
+
+                            {item.apply_status === 3 && item.project.opportunity_type === 3 ? (
+                                <span>
+                                    Your project "{item.project.title}" has been applies by the student: <u style={{ cursor: "pointer" }} onClick={() => {
+                                        navigate(`/profile-detail/${item.student.user_id}`);
+                                    }}>{item.student.name}</u> and student group: <u style={{ cursor: "pointer" }} onClick={() => {
+                                        navigate(`/group-composition/${item.group.group_id}`);
+                                    }}> {item.group.group_name}</u>
 
                                 </span>
-                                    : <span>
-                                        Your project "{item.project.title}" has been applies by the student: <u style={{ cursor: "pointer" }} onClick={() => {
-                                            navigate(`/profile-detail/${item.student.user_id}`);
-                                        }}>{item.student.name}</u> and student group: <u style={{ cursor: "pointer" }} onClick={() => {
-                                            navigate(`/group-composition/${item.group.group_id}`);
-                                        }}> {item.group.group_name}</u>
+                            ) : null}
 
-                                    </span>}
+                        </Typography>
+                        <Button variant="contained" color="success" sx={{ marginRight: '10px' }} onClick={() => accept(item.id, item.apply_status)}>
+                            Accept
+                        </Button>
+                        <Button variant="outlined" color="error" onClick={() => decline(item.id, item.apply_status)} >
+                            decline
+                        </Button>
+                    </Toolbar>
+                </AppBar>) : null
+            )}
 
-                            </Typography>
-                            <Button variant="contained" color="success" sx={{ marginRight: '10px' }} onClick={() => accept(item.id, item.apply_status)}>
-                                Accept
-                            </Button>
-                            <Button variant="outlined" color="error" onClick={() => decline(item.id, item.apply_status)} >
-                                decline
-                            </Button>
-                        </Toolbar> : null
-                    }
-                </AppBar>
-            ))}
-
-            {personInfo.role === 3 ?
+            {personInfo.role === 3 &&
                 replyInfo.map(data => (
                     <AppBar position="static" sx={{ marginTop: '10px', width: '100%' }} >
                         {data.apply_status === 0 ? null : <Toolbar>
@@ -175,14 +183,18 @@ function Notification() {
                                 component="div"
                                 sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                             >
-                                {data.apply_status !== 2 ? (
+                                {data.apply_status === 1 && (
                                     <span>the project {data.project.title} you applied has been <b style={{ color: 'black' }}>accepted</b></span>
-                                ) : <span>the project {data.project.title} you applied has been <b style={{ color: 'red' }}>declined</b></span>}
+                                )}
+                                {data.apply_status === 2 && (
+                                    <span>the project {data.project.title} you applied has been <b style={{ color: 'red' }}>declined</b></span>
+                                )}
                             </Typography>
                         </Toolbar>}
 
-                    </AppBar>))
-                : replyInfo.map(data => (<AppBar position="static" sx={{ marginTop: '10px', width: '100%' }} >
+                    </AppBar>))}
+            {personInfo.role === 4 &&
+                replyInfo.map(data => (<AppBar position="static" sx={{ marginTop: '10px', width: '100%' }} >
                     {data.apply_status === 3 ? null : <Toolbar>
                         <IconButton
                             size="large"
@@ -199,9 +211,12 @@ function Notification() {
                             component="div"
                             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                         >
-                            {data.apply_status === 4 ? (
+                            {data.apply_status === 4 && (
                                 <span>the project {data.project.title} you applied has been <b style={{ color: 'black' }}>accepted</b></span>
-                            ) : <span>the project {data.project.title} you applied has been <b style={{ color: 'red' }}>declined</b></span>}
+                            )}
+                            {data.apply_status === 5 && (
+                                <span>the project {data.project.title} you applied has been <b style={{ color: 'red' }}>declined</b></span>
+                            )}
                         </Typography>
                     </Toolbar>}
 

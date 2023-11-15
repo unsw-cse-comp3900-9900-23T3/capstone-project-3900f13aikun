@@ -16,6 +16,7 @@ function ProjectDelivery() {
   const [indInfo, setIndInfo] = useState('');
   const [supInfo, setSupInfo] = useState('');
   const [stuInfo, setStuInfo] = useState({});
+  const [groupInfo, setGroupInfo] = useState('');
 
   useEffect(() => {
     const res = apiCall(`/applyProject/${id}`, 'Get');
@@ -31,16 +32,25 @@ function ProjectDelivery() {
           } else {
             setSupInfo(res)
           }
-        })
-
-        apiCall(`/group/${data.group.group_id}`, 'Get').then(res => {
-          if (res.error) {
-            alert(res.error);
-          } else {
-            setStuInfo(res)
-          }
-        })
-
+        });
+        if (data.project.opportunity_type === 2) {
+          apiCall(`/user/${data.student.user_id}`, 'Get').then(res => {
+            if (res.error) {
+              alert(res.error);
+            } else {
+              setStuInfo(res)
+            }
+          });
+        }
+        if (data.project.opportunity_type === 3) {
+          apiCall(`/group/${data.group.group_id}`, 'Get').then(res => {
+            if (res.error) {
+              alert(res.error);
+            } else {
+              setGroupInfo(res)
+            }
+          })
+        }
         apiCall(`/user/${data.project.user_id}`, 'Get').then(res => {
           if (res.error) {
             alert(res.error);
@@ -95,21 +105,24 @@ function ProjectDelivery() {
             variant="body1"
             component="div"
             onClick={() => {
-              navigate(`/group-composition/${stuInfo.group_id}`);
+              navigate(`/group-composition/${groupInfo.group_id}`);
             }}
           >
             <span style={{ marginRight: '20px' }}>&#8226;</span>
-            Student Group Name: <span style={{ textDecoration: "underline" }}>{stuInfo.group_name}</span>
+            Student Group Name: <span style={{ textDecoration: "underline" }}>{groupInfo.group_name}</span>
           </Typography>)}
-        {proInfo.project && proInfo.opportunity_type === 2 && (
+        {proInfo.project && proInfo.project.opportunity_type === 2 && (
           <Typography
             sx={{ cursor: "pointer" }}
             gutterBottom
             variant="body1"
             component="div"
+            onClick={() => {
+              navigate(`/profile-detail/${stuInfo.user_id}`);
+            }}
           >
             <span style={{ marginRight: '20px' }}>&#8226;</span>
-            Student Name: <span style={{ textDecoration: "underline" }}>Jackson</span>
+            Student Name: <span style={{ textDecoration: "underline" }}>{stuInfo.name}</span>{stuInfo.email}
           </Typography>)}
         <Typography
           sx={{ cursor: "pointer" }}

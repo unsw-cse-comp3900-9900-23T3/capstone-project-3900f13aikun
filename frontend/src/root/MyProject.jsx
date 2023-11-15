@@ -35,14 +35,14 @@ function MyProject() {
               setApplyInfo(data2);
             }
           });
-          const res3 = apiCall('/applyStudentGroupProject', "GET");
-          res3.then((data3) => {
-            if (data3.error) {
-              alert(data3.error);
-            } else {
-              setApplyInfo(data3);
-            }
-          });
+          // const res3 = apiCall('/applyStudentGroupProject', "GET");
+          // res3.then((data3) => {
+          //   if (data3.error) {
+          //     alert(data3.error);
+          //   } else {
+          //     setApplyInfo(data3);
+          //   }
+          // });
         } else {
           const res = apiCall(`/applyProject`, 'Get');
           res.then((data2) => {
