@@ -184,10 +184,10 @@ function Notification() {
                                 sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                             >
                                 {data.apply_status === 1 && (
-                                    <span>the project {data.project.title} you applied has been <b style={{ color: 'black' }}>accepted</b></span>
+                                    <span>the project "{data.project.title}" you applied has been <b style={{ color: 'black' }}>accepted</b></span>
                                 )}
                                 {data.apply_status === 2 && (
-                                    <span>the project {data.project.title} you applied has been <b style={{ color: 'red' }}>declined</b></span>
+                                    <span>the project "{data.project.title}" you applied has been <b style={{ color: 'red' }}>declined</b></span>
                                 )}
                             </Typography>
                         </Toolbar>}
@@ -212,10 +212,10 @@ function Notification() {
                             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                         >
                             {data.apply_status === 4 && (
-                                <span>the project {data.project.title} you applied has been <b style={{ color: 'black' }}>accepted</b></span>
+                                <span>the project "{data.project.title}" you applied has been <b style={{ color: 'black' }}>accepted</b></span>
                             )}
                             {data.apply_status === 5 && (
-                                <span>the project {data.project.title} you applied has been <b style={{ color: 'red' }}>declined</b></span>
+                                <span>the project "{data.project.title}" you applied has been <b style={{ color: 'red' }}>declined</b></span>
                             )}
                         </Typography>
                     </Toolbar>}
