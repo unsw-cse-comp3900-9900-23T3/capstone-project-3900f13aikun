@@ -744,16 +744,6 @@ def delete_saved_users_route(user_id):
 
     return jsonify({"message": "success"})
 
-
-
-
-
-
-
-
-
-
-
 @app.route("/applyProject", methods=["POST"])
 @jwt_required()
 def create_apply_project():
@@ -794,6 +784,7 @@ def create_apply_project():
         apply_project.group_id = data["group_id"]
         apply_project.student_uni = data["student_uni"]
         apply_project.student_resumes = data["student_resumes"]
+        apply_project.student_id = current_user_id
         apply_project.apply_status = ApplyStatusType.StudentApplying.value
         db.session.merge(apply_project)
         db.session.commit()
@@ -957,9 +948,6 @@ def handle_apply_project():
 def get_apply_project_detail(project_id):
     apply_project = db.session.query(ApplyProject).filter(ApplyProject.id == project_id).first()
     return apply_project_sc.jsonify(apply_project)
-
-
-
 
 
 

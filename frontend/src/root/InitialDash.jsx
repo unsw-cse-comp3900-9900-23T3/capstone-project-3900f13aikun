@@ -27,9 +27,9 @@ const InitialDash = () => {
   const [opportunityType, setOpportunityType] = React.useState("");
   const [paymentType, setPaymentType] = React.useState("");
   const [publishTime, setPublishTime] = React.useState("");
-  const [projectList, setProjectList] = React.useState([]);
+  const [filterPro, setFilterPro] = React.useState([]);
   const [role, setRole] = React.useState(0);
-  const [recProjects, setRecProjects] = React.useState([]);
+  const [filterRecPro, setFilterRecPro] = React.useState([]);
   const [savedProjects, setSavedProjects] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState('');
   const [recSupervisor, setRecSupervsior] = React.useState([]);
@@ -57,7 +57,8 @@ const InitialDash = () => {
 
   const getRecProjects = () => {
     apiCall(`/recommend/project`, "GET").then((res) => {
-      setRecProjects(res);
+      const filteredData = res.filter(item => item.project_status !== 3 && item.project_status !== 4);
+      setFilterRecPro(filteredData);
     });
   };
 
@@ -104,7 +105,8 @@ const InitialDash = () => {
     });
     const qs = temp.join("&");
     apiCall(`/project?${qs}`, "GET").then((res) => {
-      setProjectList(res);
+      const filteredData = res.filter(item => (item.project_status !== 3 && item.project_status !== 4));
+      setFilterPro(filteredData);
     });
     setCurrentPage(page)
   };
@@ -241,44 +243,49 @@ const InitialDash = () => {
       {/* search results */}
       {currentPage === 'page-search' && (
         <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
-          <Typography>the total numbers of projects: {projectList.length}</Typography>
-          {projectList.map((item) => (
+          <Typography>the total numbers of projects: {filterPro.length}</Typography>
+          {filterPro.map((item) => (
             <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400 }}>
-              <CardContent>
-                <Typography
-                  sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  onClick={() => {
-                    getProjectDetail(item.id);
-                  }}>
-                  {item.title}
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Location: <span style={{ color: "#555" }}>{item.location}</span>
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                
+              {(item.project_status === 3 || item.project_status === 4) ? null :
+                <>
+                  <CardContent>
+                    <Typography
+                      sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      onClick={() => {
+                        getProjectDetail(item.id);
+                      }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Location: <span style={{ color: "#555" }}>{item.location}</span>
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      {getOpportunityType(item.opportunity_type)} | {getPaymentType(item.payment_type)}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
 
-                {localStorage.getItem("token") && !item.is_saved ? (
-                  <Button variant="outlined" onClick={() => handleSave(item.id)}>
-                    Save
-                  </Button>
-                ) : null}
-                {localStorage.getItem("token") && item.is_saved ? (
-                  <Button variant="outlined" onClick={() => handleUnSave(item.id)}>
-                    UnSave
-                  </Button>
-                ) : null}
-              </CardActions>
+
+                    {localStorage.getItem("token") && !item.is_saved ? (
+                      <Button variant="outlined" onClick={() => handleSave(item.id)}>
+                        Save
+                      </Button>
+                    ) : null}
+                    {localStorage.getItem("token") && item.is_saved ? (
+                      <Button variant="outlined" onClick={() => handleUnSave(item.id)}>
+                        UnSave
+                      </Button>
+                    ) : null}
+                  </CardActions>
+                </>}
+
+
             </Card>
           ))}
         </Box>
@@ -291,38 +298,42 @@ const InitialDash = () => {
             <Typography variant="h5" gutterBottom>
               Recommended Projects
             </Typography>
-            {(localStorage.getItem("token") && recProjects.length !== 0) ? (recProjects.slice(0, 3).map((item) => (
-              <Card key={item.id} sx={{ maxWidth: 350, minWidth: 320, border: "2px solid lightgray", borderRadius: "30px" }}>
-                <CardContent sx={{ marginLeft: "10px" }}>
-                  <Typography
-                    sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                    gutterBottom
-                    variant="h5"
-                    component="div"
-                    onClick={() => {
-                      navigate(`/project-detail/${item.id}`);
-                    }}>
-                    {item.title}
-                  </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    Location: <span style={{ color: "#555" }}>{item.location}</span>
-                  </Typography>
-                  <Typography variant="body1" gutterBottom>
-                    Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
-                  </Typography>
-                </CardContent>
+            {(localStorage.getItem("token") && filterRecPro.length !== 0) ? (filterRecPro.slice(0, 3).map((item) => (
+              <Card key={item.id} sx={{ maxWidth: 350, minWidth: 320, borderRadius: "30px" }}>
+                {(item.project_status === 3 || item.project_status === 4) ? null : <>
+                  <CardContent sx={{ marginLeft: "10px" }}>
+                    <Typography
+                      sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                      gutterBottom
+                      variant="h5"
+                      component="div"
+                      onClick={() => {
+                        navigate(`/project-detail/${item.id}`);
+                      }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Location: <span style={{ color: "#555" }}>{item.location}</span>
+                    </Typography>
+                    <Typography variant="body1" gutterBottom>
+                      Project type: <span style={{ color: "#555" }}>{getJobType(item.job_classification)}</span>
+                    </Typography>
+                  </CardContent>
+                </>}
               </Card>
             ))) : (
               <span style={{ color: "gray", width: "400px", fontSize: "20px" }}>Please logged in or there is no project for you.</span>
             )}
-            {(localStorage.getItem("token") && recProjects.length !== 0) ? (
+            {(localStorage.getItem("token") && filterRecPro.length !== 0) ? (
               <Button
                 sx={{ width: "180px", height: "50px", border: "1px solid #1E90FF", borderRadius: "90px" }}
                 onClick={() => { navigate('/recommend-projects'); }}>
-                View All ({recProjects.length})
+                View All ({filterRecPro.length})
               </Button>
             ) : null}
           </Box>
+
+
 
           {/* Saved Projects */}
           <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "100px" }}>
@@ -363,6 +374,7 @@ const InitialDash = () => {
               </Button>
             ) : null}
           </Box>
+
 
           {/* Saved Academic Supervisors*/}
           {role !== 3 ? (

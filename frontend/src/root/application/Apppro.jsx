@@ -46,11 +46,7 @@ function Apppro() {
     useEffect(() => {
         renderApply();
 
-
-
     }, [])
-    console.log(applyInfo);
-
 
     // spec:  after clicking this button, delete this project that applied by the user(show nothing at this page)
     //         
@@ -111,7 +107,6 @@ function Apppro() {
                                 </Button>
                             </CardActions>
                         </> : null}
-
 
                 </Card>
             ))}

@@ -183,8 +183,8 @@ export const NavigationBtn = () => {
                   'aria-labelledby': 'basic-button',
                 }}
               >
-                {role !== 2 ? <MenuItem onClick={application}>applied project</MenuItem>: null}
-                
+                {role !== 2 ? <MenuItem onClick={application}>applied project</MenuItem> : null}
+
                 <MenuItem onClick={notification}>Notification</MenuItem>
                 <MenuItem onClick={recommendLists}>Recommended Lists</MenuItem>
                 <MenuItem onClick={savedLists}>Saved Lists</MenuItem>

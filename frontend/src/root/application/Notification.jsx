@@ -13,7 +13,7 @@ import { apiCall } from '../../components/HelpFunctions';
 function Notification() {
     const [personInfo, setPersonInfo] = React.useState({})
     const [applyInfo, setApplyInfo] = React.useState([])
-
+    const [replyInfo, setReplyInfo] = React.useState([]);
 
 
     function renderPage() {
@@ -36,18 +36,24 @@ function Notification() {
             }
         });
     }
+
     useEffect(() => {
         renderPage();
+        apiCall('/applyProject', 'Get').then(res => {
+            if (res.error) {
+                alert(res.error);
+            } else {
+                setReplyInfo(res);
+            }
+        })
     }, [])
 
-    // console.log(personInfo)
-    // console.log(applyInfo)
 
     // if the industry partner declined the request, the student will recive a message on his notification page that show you has been declined
 
     // the request message will be removed on this notificaiton page 
-    function decline(applyId) {
-        if (personInfo.role === 3) {
+    function decline(applyId, status) {
+        if (status === 0) {
             const res = apiCall("/applyProject", 'Put', { apply_id: applyId, apply_status: 2 })
             res.then(data => {
                 if (data.error) {
@@ -74,8 +80,8 @@ function Notification() {
     // the request message will be removed on this notificaiton page
 
     // on the every student(include group member) and industry partner 'my project page', there will be the paired project
-    function accept(applyId) {
-        if (personInfo.role === 3) {
+    function accept(applyId, status) {
+        if (status === 0) {
             const res = apiCall("/applyProject", 'Put', { apply_id: applyId, apply_status: 1 })
             res.then(data => {
                 if (data.error) {
@@ -85,7 +91,6 @@ function Notification() {
                 }
             })
         } else {
-            console.log('asdsaasds')
             const res = apiCall("/applyProject", 'PUT', { apply_id: applyId, apply_status: 4 })
             res.then(data => {
                 if (data.error) {
@@ -133,10 +138,10 @@ function Notification() {
                                     </span>}
 
                             </Typography>
-                            <Button variant="contained" color="success" sx={{ marginRight: '10px' }} onClick={() => accept(item.id)}>
+                            <Button variant="contained" color="success" sx={{ marginRight: '10px' }} onClick={() => accept(item.id, item.apply_status)}>
                                 Accept
                             </Button>
-                            <Button variant="outlined" color="error" onClick={() => decline(item.id)} >
+                            <Button variant="outlined" color="error" onClick={() => decline(item.id, item.apply_status)} >
                                 decline
                             </Button>
 
@@ -146,6 +151,57 @@ function Notification() {
 
                 </AppBar>
             ))}
+
+            {personInfo.role === 3 ?
+                replyInfo.map(data => (
+                    <AppBar position="static" sx={{ marginTop: '10px', width: '215vh' }} >
+                        {data.apply_status === 0 ? null : <Toolbar>
+                            <IconButton
+                                size="large"
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                sx={{ mr: 2 }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="div"
+                                sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                            >
+                                {data.apply_status !== 2 ? (
+                                    <span>the project {data.project.title} you applied has been <b style={{ color: 'black' }}>accepted</b></span>
+                                ) : <span>the project {data.project.title} you applied has been <b style={{ color: 'red' }}>declined</b></span>}
+                            </Typography>
+                        </Toolbar>}
+
+                    </AppBar>))
+                : replyInfo.map(data => (<AppBar position="static" sx={{ marginTop: '10px', width: '215vh' }} >
+                    {data.apply_status === 3 ? null : <Toolbar>
+                        <IconButton
+                            size="large"
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            sx={{ mr: 2 }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="div"
+                            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                        >
+                            {data.apply_status === 4 ? (
+                                <span>the project {data.project.title} you applied has been <b style={{ color: 'black' }}>accepted</b></span>
+                            ) : <span>the project {data.project.title} you applied has been <b style={{ color: 'red' }}>declined</b></span>}
+                        </Typography>
+                    </Toolbar>}
+
+                </AppBar>))}
 
 
         </>

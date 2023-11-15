@@ -73,7 +73,7 @@ function MyProject() {
 
       {applyInfo.map(data => (<Box sx={{ paddingX: 10, paddingY: 5, marginRight: "100px" }}>
         <Card sx={{ maxWidth: 600, minWidth: 400 }}>
-          {data.apply_status === 1
+          {data.apply_status === 1 || data.apply_status === 4 
             ? <> <CardContent>
               <Typography variant="h5" gutterBottom component="div">
                 {data.project.title}

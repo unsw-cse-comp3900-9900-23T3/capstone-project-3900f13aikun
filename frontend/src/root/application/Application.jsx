@@ -60,10 +60,6 @@ function Application() {
         getJoinedGroups();
     }, [])
 
-    console.log(myGroups)
-    console.log(chooseGroup)
-
-
     // **********
     //submit function
     // spec: After the submit button being clicked, store the resume and university, mark this project which is applied by the corresponding user
@@ -99,11 +95,10 @@ function Application() {
                     }
                 });
             } else {
-    
-                if (myGroups.length === 0){
+                if (myGroups.length === 0) {
                     alert('you have not formed or joined a group')
                 }
-                const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), student_uni: transUni(uni), student_resumes: resume, group_id:chooseGroup.group_id});
+                const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), student_uni: transUni(uni), student_resumes: resume, group_id: chooseGroup.group_id });
                 res.then((data) => {
                     if (data.error) {
                         alert(data.error);
@@ -185,8 +180,6 @@ function Application() {
                                     </Select>
                                 </FormControl>}
                             </div>
-
-
                             <div style={{ fontSize: '23px' }}>Resumes</div>
                             <textarea name="" id="" cols="137" rows="8.3" style={{ marginLeft: '20px' }} onChange={(e) => { setResume(e.target.value) }}></textarea>
                             <div><Button onClick={applyOrSup} variant="contained" sx={{ marginLeft: '450px' }}>submit</Button>
