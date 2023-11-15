@@ -196,8 +196,16 @@ export function checkGroupDescription(groupDescription) {
   return true;
 }
 
+export function checkGroup(group) {
+  if (group.length === 0) {
+    alert("You have not formed or joined a group!!");
+    return false;
+  }
+  return true;
+}
+
 export function checkLimitNumbers(LimitNumber) {
-  if (LimitNumber.length < 2) {
+  if (LimitNumber < 2) {
     alert("The limit numbers of the group you create must large than 2");
     return false;
   }

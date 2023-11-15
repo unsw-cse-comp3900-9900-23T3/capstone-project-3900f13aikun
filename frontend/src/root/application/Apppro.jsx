@@ -37,7 +37,15 @@ function Apppro() {
                         } else {
                             setApplyInfo(data2);
                         }
-                    })
+                    });
+                    const res3 = apiCall('/applyStudentGroupProject', "GET");
+                    res3.then((data3) => {
+                        if (data3.error) {
+                            alert(data3.error);
+                        } else {
+                            setApplyInfo(data3);
+                        }
+                    });
                 }
             }
         });
@@ -71,8 +79,8 @@ function Apppro() {
         <Pagebackground>My apply projects</Pagebackground>
         <div style={{ width: '1000px', borderLeft: '2px black solid', borderRight: '2px black solid', height: '300vh' }}>
             {applyInfo.map(data => (
-                
-                <Card sx={{ maxWidth: 600, minWidth: 400 , margin: 'auto', marginTop: '3%',marginBottom: '3%' }}>
+
+                <Card sx={{ maxWidth: 600, minWidth: 400, margin: 'auto', marginTop: '3%', marginBottom: '3%', border: '2px solid lightgray' }}>
                     {(data.apply_status === 0 || data.apply_status === 3)
                         ? <>
                             <CardContent >

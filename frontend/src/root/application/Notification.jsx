@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useNavigate, useParams } from "react-router-dom";
 import NavigationBtn from '../../components/NavigationBtn';
 import { Pagebackground } from '../../components/StyledElement';
 import AppBar from '@mui/material/AppBar';
@@ -14,7 +15,7 @@ function Notification() {
     const [personInfo, setPersonInfo] = React.useState({})
     const [applyInfo, setApplyInfo] = React.useState([])
     const [replyInfo, setReplyInfo] = React.useState([]);
-
+    const navigate = useNavigate();
 
     function renderPage() {
         const res = apiCall(`/profile`, "GET");
@@ -110,8 +111,8 @@ function Notification() {
 
             {applyInfo.map((item) => (
 
-                <AppBar position="static" sx={{ marginTop: '10px', width: '215vh' }} >
-                    {(item.apply_status === 0 || item.apply_status == 3) ?
+                <AppBar position="static" sx={{ marginTop: '10px', width: '100%' }} >
+                    {(item.apply_status === 0 || item.apply_status === 3) ?
                         <Toolbar>
                             <IconButton
                                 size="large"
@@ -129,11 +130,17 @@ function Notification() {
                                 sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                             >
                                 {item.apply_status === 0 ? <span>
-                                    Your project <u>{item.project.title}</u>  has been applies by the supervisor <u>{item.teacher.name}</u>
+                                    Your project "{item.project.title}" has been applies by the supervisor <u style={{ cursor: "pointer" }} onClick={() => {
+                                        navigate(`/profile-detail/${item.teacher.user_id}`);
+                                    }}>{item.teacher.name}</u>
 
                                 </span>
                                     : <span>
-                                        Your project <u>{item.project.title}</u>  has been applies by the student <u>{item.student.name}</u>
+                                        Your project "{item.project.title}" has been applies by the student: <u style={{ cursor: "pointer" }} onClick={() => {
+                                            navigate(`/profile-detail/${item.student.user_id}`);
+                                        }}>{item.student.name}</u> and student group: <u style={{ cursor: "pointer" }} onClick={() => {
+                                            navigate(`/group-composition/${item.group.group_id}`);
+                                        }}> {item.group.group_name}</u>
 
                                     </span>}
 
@@ -144,17 +151,14 @@ function Notification() {
                             <Button variant="outlined" color="error" onClick={() => decline(item.id, item.apply_status)} >
                                 decline
                             </Button>
-
-
                         </Toolbar> : null
                     }
-
                 </AppBar>
             ))}
 
             {personInfo.role === 3 ?
                 replyInfo.map(data => (
-                    <AppBar position="static" sx={{ marginTop: '10px', width: '215vh' }} >
+                    <AppBar position="static" sx={{ marginTop: '10px', width: '100%' }} >
                         {data.apply_status === 0 ? null : <Toolbar>
                             <IconButton
                                 size="large"
@@ -178,7 +182,7 @@ function Notification() {
                         </Toolbar>}
 
                     </AppBar>))
-                : replyInfo.map(data => (<AppBar position="static" sx={{ marginTop: '10px', width: '215vh' }} >
+                : replyInfo.map(data => (<AppBar position="static" sx={{ marginTop: '10px', width: '100%' }} >
                     {data.apply_status === 3 ? null : <Toolbar>
                         <IconButton
                             size="large"

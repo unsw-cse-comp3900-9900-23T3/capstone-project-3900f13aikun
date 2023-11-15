@@ -8,15 +8,16 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import { getJobType, getOpportunityType, getPaymentType, getUniType } from "../components/EnumMap";
+import { getJobType, getOpportunityType, getPaymentType } from "../components/EnumMap";
 import { Box } from "@mui/material";
 
 
 function MyProject() {
-  const navigate = useNavigate();
-  const [applyInfo, setApplyInfo] = React.useState([]);
-  const [personInfo, setPersonInfo] = React.useState({});
 
+  const navigate = useNavigate();
+  const [applyInfo, setApplyInfo] = useState([]);
+  const [personInfo, setPersonInfo] = useState({});
+  const { id } = useParams();
 
   async function renderApply() {
     const res = apiCall(`/profile`, "GET");
@@ -33,9 +34,17 @@ function MyProject() {
             } else {
               setApplyInfo(data2);
             }
-          })
+          });
+          const res3 = apiCall('/applyStudentGroupProject', "GET");
+          res3.then((data3) => {
+            if (data3.error) {
+              alert(data3.error);
+            } else {
+              setApplyInfo(data3);
+            }
+          });
         } else {
-          const res = apiCall('/applyProject', 'Get');
+          const res = apiCall(`/applyProject`, 'Get');
           res.then((data2) => {
             if (data2.error) {
               alert(data2.error);
@@ -48,32 +57,19 @@ function MyProject() {
     });
   }
 
-
-
-
   useEffect(() => {
     renderApply();
 
-
-
   }, [])
   console.log(applyInfo);
-
-
-
-
-
-
 
   return (
     <>
       <NavigationBtn></NavigationBtn>
       <Pagebackground>My Project</Pagebackground>
-
-
       {applyInfo.map(data => (<Box sx={{ paddingX: 10, paddingY: 5, marginRight: "100px" }}>
         <Card sx={{ maxWidth: 600, minWidth: 400 }}>
-          {data.apply_status === 1 || data.apply_status === 4 
+          {data.apply_status === 1 || data.apply_status === 4
             ? <> <CardContent>
               <Typography variant="h5" gutterBottom component="div">
                 {data.project.title}
@@ -93,13 +89,12 @@ function MyProject() {
                   variant="contained"
                   size="small"
                   onClick={() => {
-                    navigate(`/project-delivery/${data.id}`);
+                    navigate(`/project-delivery/${data.project.id}`);
                   }}>
                   Enter
                 </Button>
               </CardActions></>
             : null}
-
         </Card>
       </Box>))}
 

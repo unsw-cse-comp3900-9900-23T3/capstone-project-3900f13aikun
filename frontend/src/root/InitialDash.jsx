@@ -375,7 +375,6 @@ const InitialDash = () => {
             ) : null}
           </Box>
 
-
           {/* Saved Academic Supervisors*/}
           {role !== 3 ? (
             <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 3, marginLeft: "100px" }}>
