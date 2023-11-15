@@ -112,7 +112,7 @@ export const NavigationBtn = () => {
   function logout() {
 
     localStorage.clear();
-    navigate('/')
+    NavRefresh('/')
   }
 
   function testProfile() {
