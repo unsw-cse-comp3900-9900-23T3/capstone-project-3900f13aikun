@@ -25,9 +25,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # JWT config
-# secret_key = os.urandom(24)
+secret_key = os.urandom(24)
 # JWT config
-app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_SECRET_KEY"] = secret_key
 JWT_ALGORITHM = 'HS256'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=2)
 
@@ -744,7 +744,6 @@ def delete_saved_users_route(user_id):
 
     return jsonify({"message": "success"})
 
-
 @app.route("/applyProject", methods=["POST"])
 @jwt_required()
 def create_apply_project():
@@ -785,6 +784,7 @@ def create_apply_project():
         apply_project.group_id = data["group_id"]
         apply_project.student_uni = data["student_uni"]
         apply_project.student_resumes = data["student_resumes"]
+        apply_project.student_id = current_user_id
         apply_project.apply_status = ApplyStatusType.StudentApplying.value
         db.session.merge(apply_project)
         db.session.commit()
@@ -816,6 +816,17 @@ def get_all_apply_project():
                                                              ApplyProject.project_id == Project.id).filter(
             Project.user_id == current_user_id).all()
         return apply_projects_sc.jsonify(apply_projects)
+    
+    
+@app.route("/applyProject", methods=["Delete"])
+@jwt_required()
+def Delete_apply_project():
+    delete_id = request.json['delete_id']
+    
+    db.session.query(ApplyProject).filter(ApplyProject.project_id == delete_id).delete()
+
+    db.session.commit()
+    return jsonify({"message": "success"})
 
 
 @app.route("/applyStudentProject", methods=["GET"])
@@ -824,6 +835,54 @@ def get_student_apply_individual_project():
     current_user_id = get_jwt_identity()
     apply_projects = db.session.query(ApplyProject).filter(ApplyProject.student_id == current_user_id)
     return apply_projects_sc.jsonify(apply_projects)
+
+
+@app.route("/applyTeacherProject", methods=["GET"])
+@jwt_required()
+def get_teacher_apply_individual_project():
+    current_user_id = get_jwt_identity()
+    apply_projects = db.session.query(ApplyProject).filter(ApplyProject.teacher_id == current_user_id)
+
+    return apply_projects_sc.jsonify(apply_projects)
+
+
+
+
+
+
+@app.route("/applyIndProject", methods=["GET"])
+@jwt_required()
+def get_industry_project_request():
+    current_user_id = get_jwt_identity()
+
+  
+    apply_projects = db.session.query(ApplyProject).join(ApplyProject.project).filter(
+        and_(
+            Project.user_id == current_user_id,
+            or_(ApplyProject.apply_status == 0 ,ApplyProject.apply_status == 3)
+            )
+        )
+
+
+    apply_projects = apply_projects.options(joinedload(ApplyProject.project))
+
+    return apply_projects_sc.jsonify(apply_projects)
+
+
+@app.route("/teacherSup", methods=["POST"])
+@jwt_required()
+def if_teacher_sup():
+    current_user_id = get_jwt_identity()
+    projectId = request.json['project_id']
+    apply_project = db.session.query(ApplyProject).filter(
+        and_(
+            ApplyProject.teacher_id == current_user_id,
+            ApplyProject.project_id == projectId
+        )
+    ).first() 
+    if apply_project and apply_project.apply_status != 2:
+        return jsonify({"message": "1"})
+    return jsonify({"message": "2"})
 
 
 @app.route("/applyStudentGroupProject", methods=["GET"])
@@ -879,6 +938,7 @@ def handle_apply_project():
 
         apply_project.apply_status = data["apply_status"]
         db.session.merge(apply_project)
+        db.session.commit() 
 
     return jsonify({"message": "success"})
 
@@ -886,8 +946,9 @@ def handle_apply_project():
 @app.route("/applyProject/<project_id>", methods=["GET"])
 @jwt_required()
 def get_apply_project_detail(project_id):
-    apply_project = db.session.query(ApplyProject).filter(ApplyProject.project_id == project_id).first()
+    apply_project = db.session.query(ApplyProject).filter(ApplyProject.id == project_id).first()
     return apply_project_sc.jsonify(apply_project)
+
 
 
 @app.route("/feedback", methods=["POST"])

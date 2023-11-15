@@ -18,8 +18,8 @@ function RecommendLists() {
 
   const navigate = useNavigate();
   const [role, setRole] = React.useState(0);
-  const [recProjects, setRecProjects] = React.useState([]);
   const [recSupervisor, setRecSupervsior] = React.useState([]);
+  const [filterPro, setFilterPro] = React.useState([]);
   const [RecPage, setRecPage] = React.useState("/recommend-projects");
   const path = useLocation();
   const handleRecPage = (page) => { setRecPage(page); };
@@ -39,8 +39,9 @@ function RecommendLists() {
 
   // Recmended Projects Function
   const getRecProjects = () => {
-    apiCall(`/recommend/project`, "GET").then((res) => {
-      setRecProjects(res);
+    apiCall(`/recommend/project`, "GET").then((res) => {;
+      const filteredData = res.filter(item => item.project_status !== 3 && item.project_status !== 4);
+      setFilterPro(filteredData);
       if (path.pathname === "/recommend-projects") {
         setRecPage("/recommend-projects")
       }
@@ -86,6 +87,7 @@ function RecommendLists() {
     getRecSupervisors();
   }, []);
 
+  console.log(filterPro)
   return (
     <>
       <NavigationBtn></NavigationBtn>
@@ -98,11 +100,12 @@ function RecommendLists() {
       </Box>
 
       {/* Recommended Projects */}
-      {RecPage === '/recommend-projects' && (recProjects.length !== 0 ? (
+      {RecPage === '/recommend-projects' && (filterPro.length !== 0 ? (
         <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
-          <Typography marginTop="50px">The total numbers of recommend projects: {recProjects.length}</Typography>
-          {recProjects.map((item) => (
+          <Typography marginTop="50px">The total numbers of recommend projects: {filterPro.length}</Typography>
+          {filterPro.map((item) => (
             <Card key={item.id} sx={{ width: 400, border: '2px solid lightgray' }}>
+
               <CardContent>
                 <Typography
                   sx={{ textDecorationLine: "underline", cursor: "pointer" }}
@@ -146,54 +149,54 @@ function RecommendLists() {
 
       {/* Recommended Academic Supervisors */}
       {RecPage === '/recommend-academic-supervisors' && (recSupervisor.length !== 0 ? (
-      <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
-        <Typography marginTop="50px">The total numbers of recommend academic supervisors: {recSupervisor.length}</Typography>
-        {recSupervisor.map((item) => (
-          <Card key={item.user_id} sx={{ width: 400, border: '2px solid lightgray' }}>
-            <CardContent>
-              <Typography
-                sx={{ textDecorationLine: "underline", cursor: "pointer" }}
-                gutterBottom
-                variant="h5"
-                component="div"
-                onClick={() => {
-                  navigate(`/profile-detail/${item.user_id}`);
-                }}>
-                {item.name}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Email: <span style={{ color: '#555' }}>{item.email}</span>
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                WorkRight: <span style={{ color: '#555' }}>
-                  {Array.isArray(item.work_rights) ? item.work_rights.map(getWorkRights).join(', ') : ''}
-                </span>
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Project Intention: <span style={{ color: '#555' }}>
-                  {Array.isArray(item.project_intention) ? item.project_intention.map(getIntention).join(', ') : ''}
-                </span>
-              </Typography>
-            </CardContent>
-            <CardActions>
-              {!item.is_saved && (
-                <Button variant="outlined" onClick={() => handleRecSave(item.user_id)}>
-                  Save
-                </Button>
-              )}
-              {item.is_saved && (
-                <Button variant="outlined" onClick={() => handleRecUnSave(item.user_id)}>
-                  UnSave
-                </Button>
-              )}
-            </CardActions>
-          </Card>
-        ))}
-      </Box>
+        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
+          <Typography marginTop="50px">The total numbers of recommend academic supervisors: {recSupervisor.length}</Typography>
+          {recSupervisor.map((item) => (
+            <Card key={item.user_id} sx={{ width: 400, border: '2px solid lightgray' }}>
+              <CardContent>
+                <Typography
+                  sx={{ textDecorationLine: "underline", cursor: "pointer" }}
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  onClick={() => {
+                    navigate(`/profile-detail/${item.user_id}`);
+                  }}>
+                  {item.name}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Email: <span style={{ color: '#555' }}>{item.email}</span>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  WorkRight: <span style={{ color: '#555' }}>
+                    {Array.isArray(item.work_rights) ? item.work_rights.map(getWorkRights).join(', ') : ''}
+                  </span>
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Project Intention: <span style={{ color: '#555' }}>
+                    {Array.isArray(item.project_intention) ? item.project_intention.map(getIntention).join(', ') : ''}
+                  </span>
+                </Typography>
+              </CardContent>
+              <CardActions>
+                {!item.is_saved && (
+                  <Button variant="outlined" onClick={() => handleRecSave(item.user_id)}>
+                    Save
+                  </Button>
+                )}
+                {item.is_saved && (
+                  <Button variant="outlined" onClick={() => handleRecUnSave(item.user_id)}>
+                    UnSave
+                  </Button>
+                )}
+              </CardActions>
+            </Card>
+          ))}
+        </Box>
       ) : <span style={{ marginTop: "100px", color: "gray", fontSize: "20px" }}>
-      No recommended academic supervisors yet.
-    </span>
-    )}
+        No recommended academic supervisors yet.
+      </span>
+      )}
     </>
   );
 

@@ -14,6 +14,10 @@ function ProjectDetail() {
   const [projectInfo, setProjectInfo] = useState({});
   const navigate = useNavigate();
   const [role, setRole] = React.useState(0);
+  const [projectSup, setProjectSup] = useState([]);
+  const [isSup, setIsSup] = useState(true);
+  const [isApply, setIsApply] = useState(true);
+
 
   React.useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -23,14 +27,46 @@ function ProjectDetail() {
           alert(data.error);
         } else {
           setRole(data.role);
+          if (data.role == 3) {
+            const res = apiCall('/applyTeacherProject', 'Get');
+            res.then((data) => {
+              if (data.error) {
+                alert(data.error);
+              } else {
+                setProjectSup(data)
+
+              }
+            })
+          } 
         }
       });
     }
+
   }, [role]);
+
+  console.log(projectSup)
+
+
+
+  // /applyStudentProject
 
   const getProjectInfo = () => {
     apiCall(`/project/${id}`, "GET").then((res) => {
       setProjectInfo(res);
+      const res2 = apiCall(`/teacherSup`, "POST", { project_id: id });
+      res2.then((data) => {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          if (data.message == 1) {
+            setIsSup(false);
+          } else {
+            setIsSup(true);
+          }
+
+          console.log(data.message)
+        }
+      })
     });
   };
 
@@ -47,7 +83,13 @@ function ProjectDetail() {
 
   useEffect(() => {
     getProjectInfo();
+
+
+
   }, []);
+
+  console.log(projectInfo)
+  console.log(projectInfo.project_status)
 
   return (
     <>
@@ -71,11 +113,26 @@ function ProjectDetail() {
         </Typography>
 
         <Box sx={{ display: "flex", gap: 8, my: 2 }}>
-          {!(role === 2) ? (
-            <Button variant="contained" onClick={() => navigate(`/application/${projectInfo.id}`)}>
+          {role === 1 && (
+            <Button
+              variant="contained"
+              onClick={() => navigate(`/application/${projectInfo.id}`)}
+              disabled={localStorage.getItem('applied') || projectInfo.project_status !== 2}
+            >
               Apply
             </Button>
-          ) : null}
+          )}
+          {role === 3 && (
+            <Button
+              variant="contained"
+              onClick={() => navigate(`/application/${projectInfo.id}`)}
+              disabled={!isSup}
+            >
+              Supervise
+            </Button>
+          )}
+
+
           {localStorage.getItem("token") && !projectInfo.is_saved ? (
             <Button variant="outlined" onClick={() => handleSave()}>
               Save

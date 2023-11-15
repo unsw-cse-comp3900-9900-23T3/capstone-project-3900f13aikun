@@ -8,9 +8,46 @@ import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import { getJobType, getOpportunityType, getPaymentType, getUniType} from "../components/EnumMap";
 
 function ProjectDelivery() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [proInfo, setProInfo] = React.useState({});
+  const [indInfo, setIndInfo] = React.useState('');
+  const [supInfo,setSupInfo] = React.useState('');
+
+  
+  useEffect(() => {
+    const res = apiCall(`/applyProject/${id}`,'Get');
+    res.then(data => {
+      if(data.error) {
+        alert(data.error);
+      } else {
+        console.log(data);
+        setProInfo(data);
+        apiCall(`/user/${data.teacher.user_id}`,'Get').then(res => {
+          if(res.error) {
+            alert(res.error);
+          } else {
+            setSupInfo(res)
+          }
+        })
+
+        apiCall(`/user/${data.project.user_id}`,'Get').then(res => {
+          if(res.error) {
+            alert(res.error);
+          } else {
+            setIndInfo(res)
+            console.log(res)
+          }
+        })
+      }
+    })
+
+ 
+
+  },[])
   return (
     <>
       <NavigationBtn></NavigationBtn>
@@ -26,19 +63,17 @@ function ProjectDelivery() {
               gutterBottom
               variant="h5"
               component="div"
-              onClick={() => {
-                navigate();
-              }}>
-              Software Enginnering
+              >
+                {proInfo.project && proInfo.project.title}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Location: <span style={{ color: '#555' }}>Sydney</span>
+              Location: <span style={{ color: '#555' }}>{proInfo.project && proInfo.project.location}</span>
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Project type: <span style={{ color: '#555' }}>Engineering</span>
+              Project type: <span style={{ color: '#555' }}>{proInfo.project && getJobType( proInfo.project.job_classification)}</span>
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Group Project | Paid
+            {proInfo.project && getOpportunityType(proInfo.project.opportunity_type)} | {proInfo.project && getPaymentType(proInfo.project.payment_type)}
             </Typography>
           </CardContent>
         </Card>
@@ -51,12 +86,9 @@ function ProjectDelivery() {
           gutterBottom
           variant="body1"
           component="div"
-          onClick={() => {
-            navigate();
-          }}
         >
           <span style={{ marginRight: '20px' }}>&#8226;</span>
-          Student Group Name: <span style={{ textDecoration: "underline" }}>Ikun</span>
+          Student Group Name: {proInfo.Group ? <span style={{ textDecoration: "underline" }}>{proInfo.Group.name}</span> : <span>None</span>}
         </Typography>
         <Typography
           sx={{ cursor: "pointer" }}
@@ -67,7 +99,7 @@ function ProjectDelivery() {
             navigate();
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
-          Student Leader: <span style={{ textDecoration: "underline" }}>Jackson</span>(2780327997@qq.com)
+          Student Leader: {proInfo.Group ? <span style={{ textDecoration: "underline" }}>{proInfo.Group.name}</span> : <span>None</span>}
         </Typography>
         <Typography
           sx={{ cursor: "pointer" }}
@@ -78,7 +110,7 @@ function ProjectDelivery() {
             navigate();
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
-          Industry Partner: <span style={{ textDecoration: "underline" }}>Jason</span>(2780327997@qq.com)
+          Industry Partner: <span style={{ textDecoration: "underline" }}>{indInfo.name}</span>({indInfo.email})
         </Typography>
         <Typography
           sx={{ cursor: "pointer" }}
@@ -89,7 +121,7 @@ function ProjectDelivery() {
             navigate();
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
-          Academic Supervisor: <span style={{ textDecoration: "underline" }}>Mike</span>(2780327997@qq.com)
+          Academic Supervisor: <span style={{ textDecoration: "underline" }}>{supInfo.name}</span>({supInfo.email})
         </Typography>
         <br></br>
         <Typography variant="h6" gutterBottom color="royalblue">

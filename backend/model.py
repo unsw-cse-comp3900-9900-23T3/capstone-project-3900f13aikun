@@ -143,6 +143,8 @@ class ProjectSchema(ma.Schema):
             "required_skill",
             "potential_deliverable",
             "expected_delivery_cycle",
+            "user_id"
+            
         )
 
 

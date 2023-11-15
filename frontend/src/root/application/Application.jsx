@@ -3,7 +3,6 @@ import { Pagebackground } from '../../components/StyledElement';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import { useTheme } from '@mui/material/styles';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -11,12 +10,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
-import { apiCall } from '../../components/HelpFunctions';
+import { useNavigate, useParams } from 'react-router-dom';
+import { apiCall, transUni } from '../../components/HelpFunctions';
 import NavigationBtn from '../../components/NavigationBtn';
 
 function Application() {
     const { id } = useParams();
+    const [role, setRole] = useState(0);
     const navigate = useNavigate();
     const Uninames = [
         'UNSW',
@@ -32,9 +32,6 @@ function Application() {
     const [email, setEmail] = React.useState('');
     const [projectInfo, setProjectInfo] = useState({});
     const [myGroups, setMyGroups] = useState([]);
-    
-
-    //the information needed to be stored in database 
     const [resume, setResume] = React.useState('');
     const [uni, setUni] = React.useState([]);
     const [chooseGroup, setChooseGroup] = useState([]);
@@ -44,7 +41,6 @@ function Application() {
         });
     };
 
-
     // project information
     const getProjectInfo = () => {
         apiCall(`/project/${id}`, "GET").then((res) => {
@@ -52,31 +48,17 @@ function Application() {
         });
     };
 
-    // style function
-    function getStyles(name, uniName, theme) {
-        return {
-            fontWeight:
-                uniName.indexOf(name) === -1
-                    ? theme.typography.fontWeightRegular
-                    : theme.typography.fontWeightMedium,
-        };
-    }
 
     useEffect(() => {
         const user = apiCall('/profile', 'GET');
         user.then(data => {
-            setEmail(data.email)
-            setFirstname(data.name)
+            setEmail(data.email);
+            setFirstname(data.name);
+            setRole(data.role)
         })
         getProjectInfo();
         getJoinedGroups();
     }, [])
-
-    console.log(myGroups)
-    console.log(chooseGroup)
-    const theme = useTheme();
-
-
 
     // **********
     //submit function
@@ -91,9 +73,42 @@ function Application() {
     //        the group project can only be applied by the group
     // **********
 
-    function apply() {
-        navigate('/dashboard/industryp')
-        localStorage.setItem('applied', 1);
+    function applyOrSup() {
+        // supervisor can supervise several projects, they can not apply the project which they are applying for
+        if (role === 3) {
+            const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), teacher_uni: transUni(uni), teacher_resumes: resume });
+            res.then((data) => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    navigate('/dashboard/industryp');
+                }
+            });
+        } else if (role === 1) {
+            if (projectInfo.opportunity_type !== 3) {
+                const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), student_uni: transUni(uni), student_resumes: resume });
+                res.then((data) => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        navigate('/dashboard/industryp');
+                    }
+                });
+            } else {
+                if (myGroups.length === 0) {
+                    alert('you have not formed or joined a group')
+                }
+                const res = apiCall(`/applyProject`, "POST", { project_id: parseInt(id), student_uni: transUni(uni), student_resumes: resume, group_id: chooseGroup.group_id });
+                res.then((data) => {
+                    if (data.error) {
+                        alert(data.error);
+                    } else {
+                        navigate('/dashboard/industryp');
+                    }
+                });
+            }
+
+        }
     }
 
 
@@ -116,10 +131,11 @@ function Application() {
                             <div>
                                 <TextField sx={{ margin: '20px', width: '450px' }} label="Email" id="outlined-size-small" value={email} size="first name" />
                             </div>
-                            {projectInfo.opportunity_type === 3 ? 
-                             <div style={{ fontSize: '23px' }}> Choose your Uni and Group</div>:
-                             <div style={{ fontSize: '23px' }}>Choose your Uni</div>}
-                            
+
+                            {projectInfo.opportunity_type === 3 ?
+                                <div style={{ fontSize: '23px' }}> Choose your Uni and Group</div> :
+                                <div style={{ fontSize: '23px' }}>Choose your Uni</div>}
+
                             <div>
                                 <FormControl sx={{ m: 1, width: 450, marginLeft: '20px' }}>
                                     <InputLabel id="demo-multiple-name-label">university</InputLabel>
@@ -135,14 +151,14 @@ function Application() {
                                             <MenuItem
                                                 key={name}
                                                 value={name}
-                                                style={getStyles(name, uni, theme)}
+
                                             >
                                                 {name}
                                             </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
-                                
+
                                 {projectInfo.opportunity_type === 3 && <FormControl sx={{ m: 1, width: 450, marginLeft: '20px' }}>
                                     <InputLabel id="demo-multiple-name-label">Group</InputLabel>
                                     <Select
@@ -157,21 +173,16 @@ function Application() {
                                             <MenuItem
                                                 key={group}
                                                 value={group}
-                                                style={getStyles(group, group.group_name, theme)}
                                             >
                                                 {group.group_name}
                                             </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>}
-
-
                             </div>
-
-
                             <div style={{ fontSize: '23px' }}>Resumes</div>
                             <textarea name="" id="" cols="137" rows="8.3" style={{ marginLeft: '20px' }} onChange={(e) => { setResume(e.target.value) }}></textarea>
-                            <div><Button onClick={apply} variant="contained" sx={{ marginLeft: '450px' }}>submit</Button>
+                            <div><Button onClick={applyOrSup} variant="contained" sx={{ marginLeft: '450px' }}>submit</Button>
                             </div>
                         </div>
                     </Box>

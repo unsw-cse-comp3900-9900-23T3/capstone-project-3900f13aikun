@@ -211,3 +211,22 @@ export function checkStatus(Status) {
   }
   return true;
 }
+
+
+export function transUni(uni) {
+  if (uni === 'UNSW') {
+    return 1;
+  }
+  if (uni === 'USYD') {
+    return 2;
+  }
+  if (uni === 'UniMelb') {
+    return 3;
+  }
+  if (uni === 'UTS') {
+    return 4;
+  }
+  if (uni === 'other') {
+    return 5;
+  }
+}
