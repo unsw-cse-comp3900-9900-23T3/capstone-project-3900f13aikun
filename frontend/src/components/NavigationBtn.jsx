@@ -112,8 +112,7 @@ export const NavigationBtn = () => {
   function logout() {
 
     localStorage.clear();
-    navigate('/');
-    window.location.reload();
+    NavRefresh('/')
   }
 
   function testProfile() {

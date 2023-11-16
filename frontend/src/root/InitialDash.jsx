@@ -69,12 +69,6 @@ const InitialDash = () => {
     });
   }
 
-  function handleApply() {
-    apiCall().then((res) => {
-      navigate("/Application");
-    });
-  }
-
   const handleSave = (id) => {
     apiCall(`/saved/project/${id}`, "GET").then((res) => {
       handleSearch("page-search");
@@ -245,7 +239,7 @@ const InitialDash = () => {
         <Box sx={{ pt: 3, display: "flex", flexDirection: "column", alignItems: "center", gap: 5 }}>
           <Typography>the total numbers of projects: {filterPro.length}</Typography>
           {filterPro.map((item) => (
-            <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400 }}>
+            <Card key={item.id} sx={{ maxWidth: 600, minWidth: 400, border: "2px solid lightgray"}}>
               {(item.project_status === 3 || item.project_status === 4) ? null :
                 <>
                   <CardContent>
@@ -270,8 +264,6 @@ const InitialDash = () => {
                     </Typography>
                   </CardContent>
                   <CardActions>
-
-
                     {localStorage.getItem("token") && !item.is_saved ? (
                       <Button variant="outlined" onClick={() => handleSave(item.id)}>
                         Save
@@ -374,7 +366,6 @@ const InitialDash = () => {
               </Button>
             ) : null}
           </Box>
-
 
           {/* Saved Academic Supervisors*/}
           {role !== 3 ? (

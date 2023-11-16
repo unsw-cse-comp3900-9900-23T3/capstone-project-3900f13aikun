@@ -16,8 +16,6 @@ function ProjectDetail() {
   const [role, setRole] = React.useState(0);
   const [projectSup, setProjectSup] = useState([]);
   const [isSup, setIsSup] = useState(true);
-  const [isApply, setIsApply] = useState(true);
-
 
   React.useEffect(() => {
     if (localStorage.getItem("token")) {

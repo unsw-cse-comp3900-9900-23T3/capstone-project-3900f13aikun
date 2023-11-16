@@ -6,36 +6,53 @@ import { Pagebackground } from "../components/StyledElement";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import { getJobType, getOpportunityType, getPaymentType, getUniType} from "../components/EnumMap";
+import { getJobType, getOpportunityType, getPaymentType } from "../components/EnumMap";
 
 function ProjectDelivery() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [proInfo, setProInfo] = React.useState({});
-  const [indInfo, setIndInfo] = React.useState('');
-  const [supInfo,setSupInfo] = React.useState('');
+  const [proInfo, setProInfo] = useState({});
+  const [indInfo, setIndInfo] = useState('');
+  const [supInfo, setSupInfo] = useState('');
+  const [stuInfo, setStuInfo] = useState({});
+  const [groupInfo, setGroupInfo] = useState('');
 
-  
   useEffect(() => {
-    const res = apiCall(`/applyProject/${id}`,'Get');
+    const res = apiCall(`/applyProject/${id}`, 'Get');
     res.then(data => {
-      if(data.error) {
+      if (data.error) {
         alert(data.error);
       } else {
         console.log(data);
         setProInfo(data);
-        apiCall(`/user/${data.teacher.user_id}`,'Get').then(res => {
-          if(res.error) {
+        apiCall(`/user/${data.teacher.user_id}`, 'Get').then(res => {
+          if (res.error) {
             alert(res.error);
           } else {
             setSupInfo(res)
           }
-        })
-
-        apiCall(`/user/${data.project.user_id}`,'Get').then(res => {
-          if(res.error) {
+        });
+        if (data.project.opportunity_type !== 3) {
+          apiCall(`/user/${data.student.user_id}`, 'Get').then(res => {
+            if (res.error) {
+              alert(res.error);
+            } else {
+              setStuInfo(res)
+            }
+          });
+        }
+        if (data.project.opportunity_type === 3) {
+          apiCall(`/group/${data.group.group_id}`, 'Get').then(res => {
+            if (res.error) {
+              alert(res.error);
+            } else {
+              setGroupInfo(res)
+            }
+          })
+        }
+        apiCall(`/user/${data.project.user_id}`, 'Get').then(res => {
+          if (res.error) {
             alert(res.error);
           } else {
             setIndInfo(res)
@@ -44,10 +61,8 @@ function ProjectDelivery() {
         })
       }
     })
+  }, [])
 
- 
-
-  },[])
   return (
     <>
       <NavigationBtn></NavigationBtn>
@@ -63,17 +78,19 @@ function ProjectDelivery() {
               gutterBottom
               variant="h5"
               component="div"
-              >
-                {proInfo.project && proInfo.project.title}
+              onClick={() => {
+                navigate(`/project-detail/${proInfo.id}`);
+              }}>
+              {proInfo.project && proInfo.project.title}
             </Typography>
             <Typography variant="body1" gutterBottom>
               Location: <span style={{ color: '#555' }}>{proInfo.project && proInfo.project.location}</span>
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Project type: <span style={{ color: '#555' }}>{proInfo.project && getJobType( proInfo.project.job_classification)}</span>
+              Project type: <span style={{ color: '#555' }}>{proInfo.project && getJobType(proInfo.project.job_classification)}</span>
             </Typography>
             <Typography variant="body1" gutterBottom>
-            {proInfo.project && getOpportunityType(proInfo.project.opportunity_type)} | {proInfo.project && getPaymentType(proInfo.project.payment_type)}
+              {proInfo.project && getOpportunityType(proInfo.project.opportunity_type)} | {proInfo.project && getPaymentType(proInfo.project.payment_type)}
             </Typography>
           </CardContent>
         </Card>
@@ -81,33 +98,39 @@ function ProjectDelivery() {
         <Typography variant="h6" gutterBottom color="royalblue">
           Project Members Information:
         </Typography>
-        <Typography
-          sx={{ cursor: "pointer" }}
-          gutterBottom
-          variant="body1"
-          component="div"
-        >
-          <span style={{ marginRight: '20px' }}>&#8226;</span>
-          Student Group Name: {proInfo.Group ? <span style={{ textDecoration: "underline" }}>{proInfo.Group.name}</span> : <span>None</span>}
-        </Typography>
+        {proInfo.project && proInfo.project.opportunity_type === 3 && (
+          <Typography
+            sx={{ cursor: "pointer" }}
+            gutterBottom
+            variant="body1"
+            component="div"
+            onClick={() => {
+              navigate(`/group-composition/${groupInfo.group_id}`);
+            }}
+          >
+            <span style={{ marginRight: '20px' }}>&#8226;</span>
+            Student Group Name: <span style={{ textDecoration: "underline" }}>{groupInfo.group_name}</span>
+          </Typography>)}
+        {proInfo.project && proInfo.project.opportunity_type === 2 && (
+          <Typography
+            sx={{ cursor: "pointer" }}
+            gutterBottom
+            variant="body1"
+            component="div"
+            onClick={() => {
+              navigate(`/profile-detail/${stuInfo.user_id}`);
+            }}
+          >
+            <span style={{ marginRight: '20px' }}>&#8226;</span>
+            Student Name: <span style={{ textDecoration: "underline" }}>{stuInfo.name}</span>{stuInfo.email}
+          </Typography>)}
         <Typography
           sx={{ cursor: "pointer" }}
           gutterBottom
           variant="body1"
           component="div"
           onClick={() => {
-            navigate();
-          }}>
-          <span style={{ marginRight: '20px' }}>&#8226;</span>
-          Student Leader: {proInfo.Group ? <span style={{ textDecoration: "underline" }}>{proInfo.Group.name}</span> : <span>None</span>}
-        </Typography>
-        <Typography
-          sx={{ cursor: "pointer" }}
-          gutterBottom
-          variant="body1"
-          component="div"
-          onClick={() => {
-            navigate();
+            navigate(`/profile-detail/${indInfo.user_id}`);
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           Industry Partner: <span style={{ textDecoration: "underline" }}>{indInfo.name}</span>({indInfo.email})
@@ -118,7 +141,7 @@ function ProjectDelivery() {
           variant="body1"
           component="div"
           onClick={() => {
-            navigate();
+            navigate(`/profile-detail/${supInfo.user_id}`);
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           Academic Supervisor: <span style={{ textDecoration: "underline" }}>{supInfo.name}</span>({supInfo.email})
@@ -153,7 +176,7 @@ function ProjectDelivery() {
           variant="body1"
           component="div"
           onClick={() => {
-            navigate("/supervisor-feedback");
+            navigate(`/supervisor-feedback/${proInfo.project.id}`);
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           <span style={{ textDecoration: "underline", color: "#8000FF" }}>Academic Supervisor Feedback</span>
@@ -164,7 +187,7 @@ function ProjectDelivery() {
           variant="body1"
           component="div"
           onClick={() => {
-            navigate("/supervisor-accessment");
+            navigate(`/supervisor-accessment/${proInfo.project_id}`);
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           <span style={{ textDecoration: "underline", color: "#8000FF" }}>Academic Supervisor Accessment</span>
@@ -175,7 +198,7 @@ function ProjectDelivery() {
           variant="body1"
           component="div"
           onClick={() => {
-            navigate("/industry-accessment");
+            navigate(`/industry-accessment/${proInfo.project.id}`);
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           <span style={{ textDecoration: "underline", color: "#8000FF" }}>Industry Partner Accessment</span>

@@ -4,7 +4,6 @@ import NavigationBtn from "../components/NavigationBtn"
 import { apiCall } from "../components/HelpFunctions";
 import { Pagebackground } from "../components/StyledElement";
 import Box from "@mui/material/Box";
-import { FormControl, FormLabel } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -13,9 +12,11 @@ function SupervisorAccessment() {
   const [evaluation, setEvaluation] = useState(""); // evaluating_deliverables 
   const [problems, setProblrms] = useState("");     // problems
   const [contributions, setContributions] = useState(""); // contributions
-  const [role, setRole] = useState("")
+  const [role, setRole] = useState("");
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (localStorage.getItem("token")) {
       const res = apiCall(`/profile`, "GET");
       res.then((data) => {
@@ -27,6 +28,31 @@ function SupervisorAccessment() {
       });
     }
   }, [role]);
+
+  const handleSubmit = () => {
+    apiCall(`/feedback`, "POST", {
+      project_id: id,
+      evaluating_deliverables: evaluation,
+      problems,
+      contributions,
+    }).then((res) => {
+      navigate(`/project-delivery/${id}`)
+    });
+  };
+
+  const getAssessmentInfo = () => {
+    apiCall(`/feedback/${id}`, "GET").then((res) => {
+      setEvaluation(res.evaluating_deliverables);
+      setProblrms(res.problems);
+      setContributions(res.contributions);
+    });
+  };
+
+  React.useEffect(() => {
+    if (id) {
+      getAssessmentInfo();
+    }
+  }, []);
 
   return (
     <>
@@ -95,7 +121,7 @@ function SupervisorAccessment() {
             color="success"
             sx={{ marginTop: "30px" }}
             onClick={() => {
-              // checkProjects();
+              handleSubmit();
             }}>
             Submit
           </Button>

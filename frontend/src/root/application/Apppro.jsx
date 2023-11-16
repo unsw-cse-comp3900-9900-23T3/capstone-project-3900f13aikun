@@ -30,14 +30,13 @@ function Apppro() {
                         }
                     })
                 } else if (data.role === 1) {
-                    const res = apiCall('/applyStudentProject', 'Get');
-                    res.then((data2) => {
-                        if (data2.error) {
-                            alert(data2.error);
-                        } else {
-                            setApplyInfo(data2);
-                        }
-                    })
+                    Promise.all( [apiCall("/applyStudentProject", "Get"),apiCall("/applyStudentGroupProject", "Get")]).then(d => {
+                        console.log(d);
+                        setApplyInfo([
+                          ...d[0],
+                          ...d[1]
+                        ])
+                        })
                 }
             }
         });
@@ -71,8 +70,8 @@ function Apppro() {
         <Pagebackground>My apply projects</Pagebackground>
         <div style={{ width: '1000px', borderLeft: '2px black solid', borderRight: '2px black solid', height: '300vh' }}>
             {applyInfo.map(data => (
-                
-                <Card sx={{ maxWidth: 600, minWidth: 400 , margin: 'auto', marginTop: '3%',marginBottom: '3%' }}>
+
+                <Card sx={{ maxWidth: 600, minWidth: 400, margin: 'auto', marginTop: '3%', marginBottom: '3%' }}>
                     {(data.apply_status === 0 || data.apply_status === 3)
                         ? <>
                             <CardContent >

@@ -72,7 +72,7 @@ function SignUp() {
       if (data.error) {
         alert(data.error);
       } else {
-        console.log(data);
+        setCodeinput(data.code);
       }
     });
     setIsButtonDisabled(true);
@@ -171,9 +171,9 @@ function SignUp() {
 
           <Box sx={{ minWidth: 160, marginLeft: "60px" }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">role</InputLabel>
-              <Select labelId="demo-simple-select-label" id="demo-simple-select" value={role} onChange={handleChange} sx={{ width: "200px" }}>
-                <MenuItem value={1}>student</MenuItem>
+              <InputLabel id="demo-simple-select-helper-label">role</InputLabel>
+              <Select labelId="demo-simple-select-helper-label" id="demo-simple-select-helper" label='role' value={role} onChange={handleChange} sx={{ width: "200px" }}>
+                <MenuItem value={1}>Student</MenuItem>
                 <MenuItem value={2}>Industry partner</MenuItem>
                 <MenuItem value={3}>Academic supervisor</MenuItem>
               </Select>

@@ -4,7 +4,6 @@ import NavigationBtn from "../components/NavigationBtn"
 import { apiCall } from "../components/HelpFunctions";
 import { Pagebackground } from "../components/StyledElement";
 import Box from "@mui/material/Box";
-import { FormControl, FormLabel } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
@@ -12,9 +11,11 @@ import Button from "@mui/material/Button";
 function SupervisorFeedback() {
   const [demoFeedback, setDemoFeedback] = useState(""); // demo_feedback
   const [finalFeedback, setFinalFeedback] = useState(""); // final_feedback
-  const [role, setRole] = useState("")
+  const [role, setRole] = useState("");
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (localStorage.getItem("token")) {
       const res = apiCall(`/profile`, "GET");
       res.then((data) => {
@@ -26,6 +27,29 @@ function SupervisorFeedback() {
       });
     }
   }, [role]);
+
+  const handleSubmit = () => {
+    apiCall(`/feedback`, "POST", {
+      project_id: id,
+      demo_feedback: demoFeedback,
+      final_feedback: finalFeedback,
+    }).then((res) => {
+      navigate(`/project-delivery/${id}`)
+    });
+  }
+
+  const getFeedbackInfo = () => {
+    apiCall(`/feedback/${id}`, "GET").then((res) => {
+      setDemoFeedback(res.demo_feedback);
+      setFinalFeedback(res.final_feedback);
+    });
+  }
+
+  useEffect(() => {
+    if (id) {
+      getFeedbackInfo();
+    }
+  }, []);
 
   return (
     <>
@@ -51,7 +75,7 @@ function SupervisorFeedback() {
           multiline
           rows={8}
           value={demoFeedback}
-          style={{ width: "500px"}}
+          style={{ width: "500px", color: role !== 3 ? "black" : "inherit" }}
           disabled={role !== 3}
           onChange={(e) => {
             setDemoFeedback(e.target.value);
@@ -80,7 +104,7 @@ function SupervisorFeedback() {
             color="success"
             sx={{ marginTop: "30px" }}
             onClick={() => {
-              // checkProjects();
+              handleSubmit();
             }}>
             Submit
           </Button>

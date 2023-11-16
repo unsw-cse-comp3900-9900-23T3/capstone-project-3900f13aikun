@@ -18,18 +18,21 @@ function MyGroup() {
         getOthersGroups();
     }, []);
 
+    // groups you are in
     const getJoinedGroups = () => {
         apiCall(`/joinedGroup`, "GET").then((res) => {
             setMyGroups(res);
         });
     };
 
+    // other joinable group
     const getOthersGroups = () => {
         apiCall(`/notInGroup`, "GET").then((res) => {
             setOtherGroups(res);
         });
     };
 
+    // leave the group
     const handleLeave = (groupId) => {
         apiCall(`/group/leave/${groupId}`, "GET").then((res) => {
             if (res.message === "success") {
@@ -38,7 +41,7 @@ function MyGroup() {
             }
         });
     };
-
+    // join the group
     const handleJoin = (groupId) => {
         apiCall(`/group/join/${groupId}`, "GET").then((res) => {
             if (res.message === "success") {
@@ -48,6 +51,7 @@ function MyGroup() {
         });
     };
 
+    // delete the group
     const hanldeDeleteGroup = (groupId) => {
         apiCall(`/group/${groupId}`, "DELETE").then((res) => {
             if (res.message === "success") {
@@ -87,7 +91,10 @@ function MyGroup() {
                     </TableHead>
                     <TableBody>
                         {myGroups.map((item) => (
+                            
                             <TableRow key={item.group_id}>
+                                
+                                
                                 <TableCell
                                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                     onClick={() => {

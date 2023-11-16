@@ -196,9 +196,17 @@ export function checkGroupDescription(groupDescription) {
   return true;
 }
 
+export function checkGroup(group) {
+  if (group.length === 0) {
+    alert("You have not formed or joined a group!!");
+    return false;
+  }
+  return true;
+}
+
 export function checkLimitNumbers(LimitNumber) {
-  if (LimitNumber.length < 2) {
-    alert("The limit numbers of the group you create must large than 2");
+  if (isNaN(LimitNumber) || LimitNumber < 2) {
+    alert("The limit number of the group is not a number or smaller than 2");
     return false;
   }
   return true;
