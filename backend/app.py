@@ -792,7 +792,6 @@ def create_apply_project():
         db.session.commit()
         return jsonify({"message": "success"})
 
-
     apply_project = db.session.query(ApplyProject).filter(
         and_(ApplyProject.project_id == project_id,
              ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
@@ -941,6 +940,16 @@ def handle_apply_project():
         apply_project.apply_status = data["apply_status"]
         db.session.merge(apply_project)
         db.session.commit()
+
+        if data["apply_status"] == ApplyStatusType.StudentFail.value:
+            new_apply_project = ApplyProject()
+            new_apply_project.project_id = apply_project.project_id
+            new_apply_project.teacher_id = apply_project.teacher_id
+            new_apply_project.apply_status = ApplyStatusType.StudentApplying.value
+            new_apply_project.teacher_uni = apply_project.teacher_uni
+            new_apply_project.teacher_resumes = apply_project.teacher_resumes
+            db.session.merge(new_apply_project)
+            db.session.commit()
 
     return jsonify({"message": "success"})
 
