@@ -205,8 +205,8 @@ export function checkGroup(group) {
 }
 
 export function checkLimitNumbers(LimitNumber) {
-  if (LimitNumber < 2) {
-    alert("The limit numbers of the group you create must large than 2");
+  if (isNaN(LimitNumber) || LimitNumber < 2) {
+    alert("The limit number of the group is not a number or smaller than 2");
     return false;
   }
   return true;

@@ -116,8 +116,8 @@ def register():
     if not user_code:
         return jsonify({"msg": "You haven't sent the code yet"}), 400
 
-    # if code != user_code.vcode:
-    #     return jsonify({"msg": "Error input code"}), 400
+    if code != user_code.vcode:
+        return jsonify({"msg": "Error input code"}), 400
 
     user = User(role, email, hashpw(password.encode(), gensalt()).decode(), name, passport)
     db.session.add(user)

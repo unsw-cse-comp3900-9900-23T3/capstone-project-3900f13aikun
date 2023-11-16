@@ -144,14 +144,14 @@ function Notification() {
                             {item.apply_status === 0 && <span>
                                 Your project "{item.project.title}" has been applies by the supervisor <u style={{ cursor: "pointer" }} onClick={() => {
                                     navigate(`/profile-detail/${item.teacher.user_id}`);
-                                }}>{item.teacher.name}</u>
+                                }}>{item.teacher.name}</u>.
 
                             </span>}
                             {item.apply_status === 3 && item.project.opportunity_type !== 3 ? (
                                 <span>
                                     Your project "{item.project.title}" has been applies by the student: <u style={{ cursor: "pointer" }} onClick={() => {
                                         navigate(`/profile-detail/${item.student.user_id}`);
-                                    }}>{item.student.name}</u>
+                                    }}>{item.student.name}</u>.
                                 </span>
                             ) : null}
 
@@ -161,7 +161,7 @@ function Notification() {
                                         navigate(`/profile-detail/${item.student.user_id}`);
                                     }}>{item.student.name}</u> and student group: <u style={{ cursor: "pointer" }} onClick={() => {
                                         navigate(`/group-composition/${item.group.group_id}`);
-                                    }}> {item.group.group_name}</u>
+                                    }}> {item.group.group_name}</u>.
 
                                 </span>
                             ) : null}
@@ -197,10 +197,10 @@ function Notification() {
                                 sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                             >
                                 {(data.apply_status === 1 || data.apply_status === 4) && (
-                                    <span>the project "{data.project.title}" you applied has been <b style={{ color: 'black' }}>accepted</b></span>
+                                    <span>The project "{data.project.title}" you applied has been <b style={{ color: 'black' }}>accepted.</b></span>
                                 )}
                                 {data.apply_status === 2 && (
-                                    <span>the project "{data.project.title}" you applied has been <b style={{ color: 'red' }}>declined</b></span>
+                                    <span>The project "{data.project.title}" you applied has been <b style={{ color: 'red' }}>declined.</b></span>
                                 )}
                             </Typography>
                         </Toolbar>}
@@ -225,12 +225,19 @@ function Notification() {
                             component="div"
                             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
                         >
-                            {data.apply_status === 4 && (
-                                <span>the project "{data.project.title}" you applied has been <b style={{ color: 'black' }}>accepted</b></span>
+                            {data.apply_status === 4 && data.project.opportunity_type !== 3 && (
+                                <span>The project "{data.project.title}" you applied has been <b style={{ color: 'black' }}>accepted.</b></span>
                             )}
-                            {data.apply_status === 5 && (
-                                <span>the project "{data.project.title}" you applied has been <b style={{ color: 'red' }}>declined</b></span>
+                            {data.apply_status === 5 && data.project.opportunity_type !== 3 && (
+                                <span>The project "{data.project.title}" you applied has been <b style={{ color: 'red' }}>declined.</b></span>
                             )}
+                            {data.apply_status === 4 && data.project.opportunity_type === 3 && (
+                                <span>The project "{data.project.title}" you group applied has been <b style={{ color: 'black' }}>accepted.</b></span>
+                            )}
+                            {data.apply_status === 5 && data.project.opportunity_type === 3 && (
+                                <span>The project "{data.project.title}" you group applied has been <b style={{ color: 'red' }}>declined.</b></span>
+                            )}
+                            
                         </Typography>
                     </Toolbar>}
 

@@ -118,7 +118,7 @@ function MyCreateGroup() {
                         onChange={(e) => {
                             setIsPrivate(e.target.value);
                         }}>
-                        <FormControlLabel value="0" control={<Radio />} label="public" />
+                        <FormControlLabel value="0" control={<Radio />} label="Public" />
                         <FormControlLabel value="1" control={<Radio />} label="Private" />
                     </RadioGroup>
                 </FormControl>
