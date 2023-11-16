@@ -67,7 +67,7 @@ function Application() {
                 if (data.error) {
                     alert(data.error);
                 } else {
-                    navigate('/dashboard/industryp');
+                    navigate('/');
                 }
             });
         } else if (role === 1) {
@@ -77,7 +77,7 @@ function Application() {
                     if (data.error) {
                         alert(data.error);
                     } else {
-                        navigate('/dashboard/industryp');
+                        navigate('/');
                     }
                 });
             } else {
@@ -87,7 +87,7 @@ function Application() {
                         if (data.error) {
                             alert(data.error);
                         } else {
-                            navigate('/dashboard/industryp');
+                            navigate('/');
                         }
                     });
                 }

@@ -33,7 +33,7 @@ function ProjectDelivery() {
             setSupInfo(res)
           }
         });
-        if (data.project.opportunity_type === 2) {
+        if (data.project.opportunity_type !== 3) {
           apiCall(`/user/${data.student.user_id}`, 'Get').then(res => {
             if (res.error) {
               alert(res.error);

@@ -147,7 +147,7 @@ function Notification() {
                                 }}>{item.teacher.name}</u>
 
                             </span>}
-                            {item.apply_status === 3 && item.project.opportunity_type === 2 ? (
+                            {item.apply_status === 3 && item.project.opportunity_type !== 3 ? (
                                 <span>
                                     Your project "{item.project.title}" has been applies by the student: <u style={{ cursor: "pointer" }} onClick={() => {
                                         navigate(`/profile-detail/${item.student.user_id}`);
