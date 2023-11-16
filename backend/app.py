@@ -792,9 +792,14 @@ def create_apply_project():
         db.session.commit()
         return jsonify({"message": "success"})
 
+
     apply_project = db.session.query(ApplyProject).filter(
         and_(ApplyProject.project_id == project_id,
              ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
+
+    if apply_project is None:
+        return {"msg": "You cannot apply for this project again"}, 400
+
     apply_project.student_id = current_user_id
     apply_project.student_uni = data["student_uni"]
     apply_project.student_resumes = data["student_resumes"]

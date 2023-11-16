@@ -30,22 +30,29 @@ function Apppro() {
                         }
                     })
                 } else if (data.role === 1) {
-                    const res = apiCall('/applyStudentProject', 'Get');
-                    res.then((data2) => {
-                        if (data2.error) {
-                            alert(data2.error);
-                        } else {
-                            setApplyInfo(data2);
-                        }
-                    });
-                    const res3 = apiCall('/applyStudentGroupProject', "GET");
-                    res3.then((data3) => {
-                        if (data3.error) {
-                            alert(data3.error);
-                        } else {
-                            setApplyInfo(data3);
-                        }
-                    });
+                    Promise.all( [apiCall("/applyStudentProject", "Get"),apiCall("/applyStudentGroupProject", "Get")]).then(d => {
+                        console.log(d);
+                        setApplyInfo([
+                          ...d[0],
+                          ...d[1]
+                        ])
+                        })
+                    // const res = apiCall('/applyStudentProject', 'Get');
+                    // res.then((data2) => {
+                    //     if (data2.error) {
+                    //         alert(data2.error);
+                    //     } else {
+                    //         setApplyInfo(data2);
+                    //     }
+                    // });
+                    // const res3 = apiCall('/applyStudentGroupProject', "GET");
+                    // res3.then((data3) => {
+                    //     if (data3.error) {
+                    //         alert(data3.error);
+                    //     } else {
+                    //         setApplyInfo(data3);
+                    //     }
+                    // });
                 }
             }
         });
