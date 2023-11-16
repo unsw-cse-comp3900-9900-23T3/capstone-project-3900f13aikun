@@ -25,10 +25,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # JWT config
-# secret_key = os.urandom(24)
+secret_key = os.urandom(24)
 # JWT config
 # app.config["JWT_SECRET_KEY"] = secret_key
-app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_SECRET_KEY"] = secret_key
 JWT_ALGORITHM = 'HS256'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=2)
 
@@ -958,6 +958,13 @@ def handle_apply_project():
 @jwt_required()
 def get_apply_project_detail(project_id):
     apply_project = db.session.query(ApplyProject).filter(ApplyProject.project_id == project_id).first()
+    return apply_project_sc.jsonify(apply_project)
+
+@app.route("/applyProjectId/<id>", methods=["GET"])
+@jwt_required()
+def get_apply_project_detail_id(id):
+    apply_project = db.session.query(ApplyProject).filter(ApplyProject.id == id).first()
+    print(apply_project)
     return apply_project_sc.jsonify(apply_project)
 
 
