@@ -57,7 +57,7 @@ function MyProject() {
       <NavigationBtn></NavigationBtn>
       <Pagebackground>My Project</Pagebackground>
       {applyInfo.map((data) => (
-        <Box sx={{ paddingX: 10, paddingY: 5, marginRight: "100px" }}>
+        <Box sx={{ pt: 3, display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
           {data.apply_status === 4 ? (
             <>
               <Card sx={{ maxWidth: 600, minWidth: 400, border: '2px solid lightgray' }}>
