@@ -91,7 +91,10 @@ function MyGroup() {
                     </TableHead>
                     <TableBody>
                         {myGroups.map((item) => (
+                            
                             <TableRow key={item.group_id}>
+                                
+                                
                                 <TableCell
                                     sx={{ textDecorationLine: "underline", cursor: "pointer" }}
                                     onClick={() => {

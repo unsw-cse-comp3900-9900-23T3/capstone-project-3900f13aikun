@@ -71,7 +71,7 @@ function Apppro() {
         <div style={{ width: '1000px', borderLeft: '2px black solid', borderRight: '2px black solid', height: '300vh' }}>
             {applyInfo.map(data => (
 
-                <Card sx={{ maxWidth: 600, minWidth: 400, margin: 'auto', marginTop: '3%', marginBottom: '3%', border: '2px solid lightgray' }}>
+                <Card sx={{ maxWidth: 600, minWidth: 400, margin: 'auto', marginTop: '3%', marginBottom: '3%' }}>
                     {(data.apply_status === 0 || data.apply_status === 3)
                         ? <>
                             <CardContent >
