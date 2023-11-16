@@ -11,3 +11,21 @@ We plan to schedule a new meeting next Sunday to discuss the sprint and front-en
 
 week4
 We started taking charge of our own section and had an offline discussion on Sunday to discuss the current progress and the reallocation of sprints. We showed the code we have written so far, put forward our own feedback and suggestions, and hope to complete all goals and then make modifications during the meeting next Wednesday.
+
+week5
+we successfully finished the sprint 1 part and improved the problems in sprint 1.In addition, we conducted a thorough review and summary of the work process for Demo A delivery, concluding with the Retrospective A.For me, I fixed the problem in create project part and improved the style of frontend.
+
+Week 6
+We held a meeting to determine the scope of Sprint 2 and allocate tasks to group members. For me ,I am responsible for the search part of the project.We have scheduled a meeting for next week to check the progress of each team member's work and find out what we should do more specifically and the problems encountered in the meantime.
+
+Week 7
+In the project search part, I improved the content of project detail in the front-end and expanded the scope of search methods from 3 to the original 6. Therefore, I also updated and modified the back-end.Our current goal is to complete the initial iteration of Sprint 2 by next Tuesday and improve our system based on any potential issues identified in the meeting.
+
+Week8
+We completed Sprint 2 and presented Demo 2 in class, showcasing most of the project's intended functionalities.As for the project search part, I have three search methods that have not been completely improved, which makes it impossible to search the corresponding project through these three options. I improved them and added the functions of deleting and modifying the project, and then started to make the recommendation system which means match the corresponding project according to the student's profile.
+
+Week9
+The part of project search and the part of recommendation system have been preliminatively completed. As for the part of recommendation system, I choose to match the intention in profile and the keywords in project with the things in project detail to get the results, and the front and back ends are basically completed.Then I began to take charge of the group part of the back-end problem repair and improve the back-end problems.
+
+Week10
+I started to improve the front and back end problems of apply and feedback. Then we had a discussion on the assignment of report and had a last meeting on Thursday to discuss the current progress and the code problems still to be solved. As well as the improvement of the report and the final distribution of the presentation, we made the last major revision and improvement.
