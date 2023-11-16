@@ -773,6 +773,7 @@ def create_apply_project():
         db.session.commit()
         return jsonify({"message": "success"})
 
+    # group project
     if project.opportunity_type == OpportunityType.GroupProject.value:
         group_id = data["group_id"]
         group = db.session.get(Group, group_id)
@@ -783,28 +784,63 @@ def create_apply_project():
             and_(ApplyProject.project_id == project_id,
                  ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
 
-        apply_project.group_id = data["group_id"]
-        apply_project.student_uni = data["student_uni"]
-        apply_project.student_resumes = data["student_resumes"]
-        apply_project.student_id = current_user_id
-        apply_project.apply_status = ApplyStatusType.StudentApplying.value
-        db.session.merge(apply_project)
-        db.session.commit()
-        return jsonify({"message": "success"})
+        if apply_project is not None:
 
+            apply_project.group_id = data["group_id"]
+            apply_project.student_uni = data["student_uni"]
+            apply_project.student_resumes = data["student_resumes"]
+            apply_project.student_id = current_user_id
+            apply_project.apply_status = ApplyStatusType.StudentApplying.value
+            db.session.merge(apply_project)
+            db.session.commit()
+            return jsonify({"message": "success"})
+
+        else:
+            apply_project = db.session.query(ApplyProject).filter(
+                and_(ApplyProject.project_id == project_id,
+                     ApplyProject.apply_status == ApplyStatusType.StudentApplying.value)).first()
+            new_apply_project = ApplyProject()
+            new_apply_project.group_id = data["group_id"]
+            new_apply_project.student_id = current_user_id
+            new_apply_project.student_uni = data["student_uni"]
+            new_apply_project.student_resumes = data["student_resumes"]
+            new_apply_project.project_id = apply_project.project_id
+            new_apply_project.teacher_id = apply_project.teacher_id
+            new_apply_project.apply_status =  ApplyStatusType.StudentApplying.value
+            new_apply_project.teacher_uni = apply_project.teacher_uni
+            new_apply_project.teacher_resumes = apply_project.teacher_resumes
+            db.session.merge(new_apply_project)
+            db.session.commit()
+            return jsonify({"message": "success"})
+
+    # Individual Project
     apply_project = db.session.query(ApplyProject).filter(
         and_(ApplyProject.project_id == project_id,
              ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).first()
 
-    if apply_project is None:
-        return {"msg": "You cannot apply for this project again"}, 400
-
-    apply_project.student_id = current_user_id
-    apply_project.student_uni = data["student_uni"]
-    apply_project.student_resumes = data["student_resumes"]
-    apply_project.apply_status = ApplyStatusType.StudentApplying.value
-    db.session.commit()
-    return jsonify({"message": "success"})
+    if apply_project is not None:
+        apply_project.student_id = current_user_id
+        apply_project.student_uni = data["student_uni"]
+        apply_project.student_resumes = data["student_resumes"]
+        apply_project.apply_status = ApplyStatusType.StudentApplying.value
+        db.session.commit()
+        return jsonify({"message": "success"})
+    else:
+        apply_project = db.session.query(ApplyProject).filter(
+            and_(ApplyProject.project_id == project_id,
+                 ApplyProject.apply_status == ApplyStatusType.StudentApplying.value)).first()
+        new_apply_project = ApplyProject()
+        new_apply_project.student_id = current_user_id
+        new_apply_project.student_uni = data["student_uni"]
+        new_apply_project.student_resumes = data["student_resumes"]
+        new_apply_project.project_id = apply_project.project_id
+        new_apply_project.teacher_id = apply_project.teacher_id
+        new_apply_project.apply_status = ApplyStatusType.StudentApplying.value
+        new_apply_project.teacher_uni = apply_project.teacher_uni
+        new_apply_project.teacher_resumes = apply_project.teacher_resumes
+        db.session.merge(new_apply_project)
+        db.session.commit()
+        return jsonify({"message": "success"})
 
 
 @app.route("/applyProject", methods=["GET"])
@@ -933,7 +969,7 @@ def handle_apply_project():
             project = db.session.get(Project, apply_project.project_id)
             project.project_status = ProjectStatusType.Started.value
             db.session.query(ApplyProject).filter(and_(ApplyProject.project_id == apply_project.project_id,
-                                                       ApplyProject.apply_status == ApplyStatusType.TeacherPass.value)).update(
+                                                       ApplyProject.apply_status == ApplyStatusType.StudentApplying.value)).update(
                 {ApplyProject.apply_status: ApplyStatusType.StudentFail.value}, synchronize_session='fetch')
             db.session.commit()
 
@@ -957,7 +993,8 @@ def handle_apply_project():
 @app.route("/applyProject/<project_id>", methods=["GET"])
 @jwt_required()
 def get_apply_project_detail(project_id):
-    apply_project = db.session.query(ApplyProject).filter(ApplyProject.project_id == project_id).first()
+    apply_project = db.session.query(ApplyProject).filter(and_(ApplyProject.project_id == project_id,
+                                                               ApplyProject.apply_status == ApplyStatusType.StudentPass.value)).first()
     return apply_project_sc.jsonify(apply_project)
 
 
