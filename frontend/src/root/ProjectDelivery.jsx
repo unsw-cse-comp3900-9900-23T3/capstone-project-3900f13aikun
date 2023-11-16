@@ -187,7 +187,7 @@ function ProjectDelivery() {
           variant="body1"
           component="div"
           onClick={() => {
-            navigate(`/supervisor-accessment/${proInfo.project_id}`);
+            navigate(`/supervisor-accessment/${proInfo.project.id}`);
           }}>
           <span style={{ marginRight: '20px' }}>&#8226;</span>
           <span style={{ textDecoration: "underline", color: "#8000FF" }}>Academic Supervisor Accessment</span>
