@@ -15,7 +15,6 @@ function Notification() {
     const [personInfo, setPersonInfo] = React.useState({})
     const [applyInfo, setApplyInfo] = React.useState([])
     const [replyInfo, setReplyInfo] = React.useState([]);
-    const [replyStuInfo, setReplyStuInfo] = React.useState([]);
     const navigate = useNavigate();
 
     function renderPage() {
@@ -117,6 +116,7 @@ function Notification() {
         }
     }
 
+    console.log(applyInfo)
     return (
         <>
             <NavigationBtn></NavigationBtn>
@@ -144,14 +144,16 @@ function Notification() {
                             {item.apply_status === 0 && <span>
                                 Your project "{item.project.title}" has been applies by the supervisor <u style={{ cursor: "pointer" }} onClick={() => {
                                     navigate(`/profile-detail/${item.teacher.user_id}`);
-                                }}>{item.teacher.name}</u>.
+                                }}>{item.teacher.name}</u>.    <u style={{ cursor: "pointer" }} onClick={() => 
+                                    navigate(`/resume/teacher/${item.id}`)}>  applicant's resume </u>
 
                             </span>}
                             {item.apply_status === 3 && item.project.opportunity_type !== 3 ? (
                                 <span>
                                     Your project "{item.project.title}" has been applies by the student: <u style={{ cursor: "pointer" }} onClick={() => {
                                         navigate(`/profile-detail/${item.student.user_id}`);
-                                    }}>{item.student.name}</u>.
+                                    }}>{item.student.name}</u>. <u style={{ cursor: "pointer" }} onClick={() => 
+                                        navigate(`/resume/student/${item.id}`)}>  applicant's resume </u>
                                 </span>
                             ) : null}
 

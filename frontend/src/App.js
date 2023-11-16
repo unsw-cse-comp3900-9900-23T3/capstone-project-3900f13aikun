@@ -26,6 +26,7 @@ import MyProject from './root/MyProject';
 import ProjectDelivery from './root/ProjectDelivery';
 import RecommendLists from './root/RecommendLists';
 import SavedLists from './root/SavedLists';
+import Resume from './root/application/Resume';
 
 
 export const TotalContainer = styled('div')({
@@ -70,6 +71,7 @@ function App () {
             <Route path="/supervisor-accessment/:id" element={<SupervisorAccessment/>}></Route>
             <Route path="/industry-accessment/:id" element={<IndustryAccessment/>}></Route>
             <Route path="/recommend-projects" element={<RecommendLists/>}></Route>
+            <Route path="/resume/:role/:id" element={<Resume/>}></Route>
             <Route path="/recommend-academic-supervisors" element={<RecommendLists/>}></Route>
           </Routes>
         </BrowserRouter>
