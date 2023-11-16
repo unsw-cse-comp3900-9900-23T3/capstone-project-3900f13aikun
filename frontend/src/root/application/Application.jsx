@@ -104,13 +104,13 @@ function Application() {
                 <Container sx={{ border: '2px solid black', margin: '20px' }}>
                     <Box sx={{ bgcolor: '#F0F0F0', height: '80vh', fontSize: '30px', display: 'flex', justifyContent: 'center' }}>
                         <div>
-                            <div style={{ position: 'relative', left: '240px' }}><b >Apply to this project <u>{projectInfo.title}</u></b></div>
+                            <div style={{ position: 'relative', left: '280px'}}><b >Apply to this project <u>{projectInfo.title}</u></b></div>
                             <br></br>
                             <div>
-                                <TextField sx={{ marginTop: '10px',marginLeft:'20px', width: '900px' }} label="First name" id="outlined-size-small" value={firstname} />
+                                <TextField sx={{ marginTop: '10px',marginLeft:'20px', width: '450px' }} label="Name" id="outlined-size-small" value={firstname} />
                             </div>
                             <div>
-                                <TextField sx={{ marginTop: '20px',marginLeft:'20px',  width: '450px' }} label="Email" id="outlined-size-small" value={email} size="first name" />
+                                <TextField sx={{ marginTop: '20px',marginLeft:'20px',  width: '450px' }} label="Email" id="outlined-size-small" value={email} size="Name" />
                             </div>
                             <br></br>
                             {projectInfo.opportunity_type === 3 && role !== 3 ?
@@ -158,7 +158,6 @@ function Application() {
                                     </Select>
                                 </FormControl>}
                             </div>
-                
                             <div style={{ fontSize: '23px' }}>Resumes</div>
                             <textarea name="" id="" cols="137" rows="6" style={{ marginLeft: '20px' }} onChange={(e) => { setResume(e.target.value) }}></textarea>
                             <div><Button onClick={applyOrSup} variant="contained" sx={{ marginLeft: '450px' }}>submit</Button>
