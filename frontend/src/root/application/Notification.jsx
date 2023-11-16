@@ -163,7 +163,8 @@ function Notification() {
                                         navigate(`/profile-detail/${item.student.user_id}`);
                                     }}>{item.student.name}</u> and student group: <u style={{ cursor: "pointer" }} onClick={() => {
                                         navigate(`/group-composition/${item.group.group_id}`);
-                                    }}> {item.group.group_name}</u>.
+                                    }}> {item.group.group_name}</u>. <u style={{ cursor: "pointer" }} onClick={() => 
+                                        navigate(`/resume/student/${item.id}`)}>  applicant's resume </u>
 
                                 </span>
                             ) : null}
