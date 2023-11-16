@@ -15,6 +15,7 @@ function Notification() {
     const [personInfo, setPersonInfo] = React.useState({})
     const [applyInfo, setApplyInfo] = React.useState([])
     const [replyInfo, setReplyInfo] = React.useState([]);
+    const [replyStuInfo, setReplyStuInfo] = React.useState([]);
     const navigate = useNavigate();
 
     function renderPage() {
@@ -35,18 +36,30 @@ function Notification() {
                     })
                 }
             }
+            if (data.role === 1) {
+                // eslint-disable-next-line no-unused-expressions
+                Promise.all([apiCall("/applyStudentProject", "Get"), apiCall("/applyStudentGroupProject", "Get")]).then(d => {
+                  console.log(d);
+                  setReplyInfo([
+                    ...d[0],
+                    ...d[1]
+                  ])
+                })
+              } else {
+                const res = apiCall(`/applyProject`, "Get");
+                res.then((data2) => {
+                  if (data2.error) {
+                    alert(data2.error);
+                  } else {
+                    setReplyInfo(data2);
+                  }
+                });
+              }
         });
     }
 
     useEffect(() => {
         renderPage();
-        apiCall('/applyProject', 'Get').then(res => {
-            if (res.error) {
-                alert(res.error);
-            } else {
-                setReplyInfo(res);
-            }
-        })
     }, [])
 
 
@@ -193,7 +206,8 @@ function Notification() {
                         </Toolbar>}
 
                     </AppBar>))}
-            {personInfo.role === 4 &&
+
+            {personInfo.role === 1 &&
                 replyInfo.map(data => (<AppBar position="static" sx={{ marginTop: '10px', width: '100%' }} >
                     {data.apply_status === 3 ? null : <Toolbar>
                         <IconButton

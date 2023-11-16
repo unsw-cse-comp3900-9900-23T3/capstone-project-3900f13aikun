@@ -12,7 +12,6 @@ import Card from "@mui/material/Card";
 import Divider from '@mui/material/Divider';
 import ListItemIcon from "@mui/material/ListItemIcon";
 import CardContent from "@mui/material/CardContent";
-import { create } from "@mui/material/styles/createTransitions";
 
 function GroupComposition() {
     const { groupId } = useParams();
@@ -27,8 +26,6 @@ function GroupComposition() {
             setGroupDetail(res);
         });
     };
-
-
 
     return (
         <>

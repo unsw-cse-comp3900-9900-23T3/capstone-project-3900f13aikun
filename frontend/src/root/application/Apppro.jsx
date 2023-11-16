@@ -37,22 +37,6 @@ function Apppro() {
                           ...d[1]
                         ])
                         })
-                    // const res = apiCall('/applyStudentProject', 'Get');
-                    // res.then((data2) => {
-                    //     if (data2.error) {
-                    //         alert(data2.error);
-                    //     } else {
-                    //         setApplyInfo(data2);
-                    //     }
-                    // });
-                    // const res3 = apiCall('/applyStudentGroupProject', "GET");
-                    // res3.then((data3) => {
-                    //     if (data3.error) {
-                    //         alert(data3.error);
-                    //     } else {
-                    //         setApplyInfo(data3);
-                    //     }
-                    // });
                 }
             }
         });
