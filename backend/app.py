@@ -945,7 +945,7 @@ def handle_apply_project():
             new_apply_project = ApplyProject()
             new_apply_project.project_id = apply_project.project_id
             new_apply_project.teacher_id = apply_project.teacher_id
-            new_apply_project.apply_status = ApplyStatusType.StudentApplying.value
+            new_apply_project.apply_status = ApplyStatusType.TeacherPass.value
             new_apply_project.teacher_uni = apply_project.teacher_uni
             new_apply_project.teacher_resumes = apply_project.teacher_resumes
             db.session.merge(new_apply_project)
