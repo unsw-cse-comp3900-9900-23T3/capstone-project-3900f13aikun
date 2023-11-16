@@ -299,7 +299,7 @@ const InitialDash = () => {
               Recommended Projects
             </Typography>
             {(localStorage.getItem("token") && filterRecPro.length !== 0) ? (filterRecPro.slice(0, 3).map((item) => (
-              <Card key={item.id} sx={{ maxWidth: 350, minWidth: 320, borderRadius: "30px" }}>
+              <Card key={item.id} sx={{ maxWidth: 350, minWidth: 320, borderRadius: "30px", border: '2px solid lightgray' }}>
                 {(item.project_status === 3 || item.project_status === 4) ? null : <>
                   <CardContent sx={{ marginLeft: "10px" }}>
                     <Typography
