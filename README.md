@@ -1,22 +1,38 @@
 # capstone-project-3900f13aikun
+
 capstone-project-3900f13aikun created by GitHub Classroom
-# capstone-project-3900f13aikun
-## eee
-Student Industry Project Management System
-3900-F13A-ikun
 
-Dependencies
-Docker (Installation Instructions here: https://docs.docker.com/get-docker/)
-Note: All these dependencies are automatically installed in the startup script for the vm, however this may not be the case if running on a host machine.
+## Installation/User document/manual
+### Environment:
+#### Backend:
 
-Steps
-Download or clone this repo from github / WebCMS. (This step is assumed knowledge as project is submiteed on WebCMS - For specifics of downloading from github, see the report doucmentation section.
+1. Install postgresql
+2. Installation dependencies 
+3. pip install -r requirements.txt 
+4. Config .env
 
-Run the system using the startup script by typing ./run_system.sh in the root directory of this repo
+#### Frontend:
 
-Depending on your internet connection and computer performance, this can take between 2-10 minutes.
+1. Install node.js and npm
 
-View the application at http://localhost/
+#### envsample file
+  DATABASE_URI=postgresql://postgres:Yj042889@localhost:5432/postgres
+  JWT_SECRET_KEY=iKun3900
+  MAIL_SERVER=smtp.qq.com
+  MAIL_PORT=465
+  MAIL_USERNAME=867105725@qq.com
+  MAIL_PASSWORD=nxyevhedviufbecc
+### step
+1. cd backend
+2. Python -m flask run
+3. cd frontend
+4. npm install
+5. npm start
 
-Please refer to the project report for significantly more detailed instructions and screenshots.
+
+
+
+
+
+
 
