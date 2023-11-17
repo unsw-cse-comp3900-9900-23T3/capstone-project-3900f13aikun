@@ -25,7 +25,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DATABASE_URI')
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # JWT config
+jwt_s= 'iKun3900'
 app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET_KEY')
+app.config["JWT_SECRET_KEY"] = jwt_s
 JWT_ALGORITHM = 'HS256'
 app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=2)
 
