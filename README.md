@@ -17,10 +17,15 @@ capstone-project-3900f13aikun created by GitHub Classroom
 
 #### envsample file
   DATABASE_URI=postgresql://postgres:Yj042889@localhost:5432/postgres
+  
   JWT_SECRET_KEY=iKun3900
+  
   MAIL_SERVER=smtp.qq.com
+  
   MAIL_PORT=465
+  
   MAIL_USERNAME=867105725@qq.com
+  
   MAIL_PASSWORD=nxyevhedviufbecc
 ### step
 1. cd backend
