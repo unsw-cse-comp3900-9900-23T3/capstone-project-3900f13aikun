@@ -4,3 +4,42 @@ Site. Decided on the topic with other group members. Done some
 brainstorming on what the novel functions will be. I also found 
 and discussed with the team all available software tools and 
 libraries that we can use for the project.
+
+Week 2
+we chose the suitable project and had a meeting to discuss the setup of our project. I also
+started to finish some part of our proposal.
+
+Week 3
+This week we had some meeting and work hard on our proposal. I was responsable for the background and discribing overall functionality 
+of our system in proposal. I also finished the software architecture part.
+
+week 4
+we started to work with the sprint 1. I finished the backend setup using flask and an overall web page using react.In the end of this week,
+I completed some basic functions of our system. For example, user register,login.
+
+week 5
+we successfully completed the sprint 1. I fixed some database problems. I wrote some backend functions which can make it easier for frontend
+to retrive the data.
+
+Week 6
+In week 6, we have a rest for few days and the held some meetings to discuss the user stories in sprint 2. we finished to allocate the task to everyone.
+I started to write some frontend pages to make the web page look beautiful.
+
+Week 7
+I finished all web pages using react and fix the UI desigin to reduce incongruous lines on web pages. I debug some backend code to make the data
+such as user profile information, project detail and group information successfully send to the frontend. I also started to work with the project application
+part.
+
+Week 8
+I finished some part of the project application part but there is still some bug in our system. I also updated some part of student group functionality and make the 
+web page look cleaner.
+
+Week 9
+This week, we held multiple meeting to discuss final outcome of our project and start to prepare for our final demo demonstration and final report. I wrote some functionality
+discription in our final report.For backend , I fixed some bug and wrote more function to make the frontend and backend interact better.
+
+
+week10 
+I finish my part of our system and our project is basically done. I finshed my part of our report and prepared well for our finally demo. 
+
+
