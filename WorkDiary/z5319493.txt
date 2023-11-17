@@ -2,3 +2,38 @@ Week1
 Group formed and named. Selected Scrum Master. Created the Jira Site. 
 Decided on the topic with other group members. Done some brainstorming on what the novel functions will be.
 I conceived the User Story and was mainly responsible for the academic supervision part of the project.
+
+Week2
+This week, I focused on different user stories in the proposal, and I was mainly responsible for the academic supervision part.
+
+Week3
+This week, my team members and I improved the proposal. 
+I was mainly responsible for the initial sample of the project (user flow) and introduced the functions in detail.
+
+Week4
+At the beginning of this week, we arranged the tasks of each sprint1 through meetings. 
+I was mainly responsible for the profile and forgetpsaaword content of the project
+
+Week5
+This week I successfully completed the part I was responsible for and beautified and improved the front page. 
+I also discussed the specific improvement with my classmates through group meetings.
+
+Week6
+This week, we allocated the tasks of sprint2 and summarized the improvement areas of sprint1 through the meeting (tutor's feedback).
+I was mainly responsible for searching part of the student group section on the front end.
+
+Week7
+This week, our team held a meeting to discuss where the current content needs to be improved and what needs attention. 
+I mainly worked with Chenkai Shen on the front and back end of the search and team.
+
+Week8
+This week, I improved the tasks of the front end and integrated and improved the contents of other team members through group meetings.
+
+Week9
+This week, I allocated the tasks of sprint3 and improved the remaining problems of sprint2 through a team meeting. 
+I am mainly responsible for the recommendation system, save folders, ProjectDelivery and Feedback.
+I finished saving bolder and recommand sysytem this week.
+
+Week10
+This week, I completed Project Delivery and feedback in sprint3. And merge with team members and check for bugs in the code through team meetings.
+The tasks in the group report were assigned through the group meeting this week. I was mainly responsible for the screenshot of the front-end page, the function introduction of Project Delivery and Feedback, and part of the content of the Third Party Services.
