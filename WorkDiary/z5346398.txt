@@ -47,3 +47,14 @@ We completed Sprint 2 and presented Demo 2 in class, showcasing most of the proj
 However, I encountered an unusual challenge related to data type consistency when handling data stored in the database, which prevented me from delivering all the expected results as initially designed. 
 As a response, I will explore alternative solutions for the current data processing model and create a contingency plan for the worst-case scenario, such as modifying the data value to indicate removal.
 In light of the challenges faced during Sprint 2, we conducted an in-depth meeting, and we are now planning to deliver our initial project demo by the upcoming Monday.
+
+Week 9 
+I addressed the issues encountered in Sprint 2 and verified that the backend code successfully passes tests on Postman.
+I also shifted my attention the group report and initiated work on it.
+As we await the finalization of the frontend design while the reoprt requires screenshots demonstrating functionality application in the system,
+I've temporarily included the old version screenshot and mark them as "updated required" to inform my teammates.
+Moving forward, my focus remains on completing the report as quickly as possible.
+
+
+Week 10
+I've prepared the final demo presentation and wrapped up my section of the report.
